@@ -8,6 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- FontAwesome for layout icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -22,7 +27,7 @@
                 <div class="hidden md:flex space-x-8 font-semibold text-sm">
                     <a href="#" class="text-indigo-600">Home</a>
                     <a href="#catalog-section" class="text-gray-600 hover:text-indigo-600 transition">Marketplace Catalog</a>
-                    <a href="#footer-contact" class="text-gray-600 hover:text-indigo-600 transition">Corporate Office</a>
+                    <a href="#corporate-office-section" class="text-gray-600 hover:text-indigo-600 transition">Corporate Office</a>
                 </div>
                 <div>
                     <button class="bg-slate-900 hover:bg-indigo-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs">Secure Vault Portal</button>
@@ -86,7 +91,7 @@
             <!-- Dynamic data cards render here instantly -->
         </div>
 
-        <!-- PAGINATION NAVIGATION CONTROL CONTROLLER INTERFACE -->
+        <!-- PAGINATION CONTROLS -->
         <div class="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
             <button onclick="previousPage()" id="btn-prev" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
                 <i class="fa-solid fa-arrow-left"></i> Previous Page
@@ -99,6 +104,59 @@
             </button>
         </div>
     </main>
+
+    <!-- DETAILED CORPORATE OFFICE PROFILE SECTION -->
+    <section id="corporate-office-section" class="bg-white border-t border-b border-gray-200 py-16 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-1 rounded-md text-xxs font-extrabold uppercase tracking-wider">
+                        <i class="fa-solid fa-building"></i> Skyview Operations Hub
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-gray-900">National Headquarters & Brokerage Desk</h2>
+                    <p class="text-sm text-gray-600 leading-relaxed max-w-2xl">
+                        Our primary corporate office orchestrates algorithmic market pacing, secure physical custody processing, and high-level client verification across all fifty states. Designed as a strict privacy environment, walk-in broker routing is restricted exclusively to pre-vetted legal entities.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                        <div class="flex gap-3 items-start">
+                            <div class="bg-gray-100 p-2.5 rounded-lg text-indigo-600"><i class="fa-solid fa-map-location-dot"></i></div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-900 uppercase">Physical Inquiries</h4>
+                                <p class="text-xs text-gray-500 mt-0.5">750 Lexington Avenue, Floor 24<br>New York, NY 10022</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 items-start">
+                            <div class="bg-gray-100 p-2.5 rounded-lg text-indigo-600"><i class="fa-solid fa-clock"></i></div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-900 uppercase">Operational Window</h4>
+                                <p class="text-xs text-gray-500 mt-0.5">Mon - Fri: 08:00 EST - 18:00 EST<br>Sat - Sun: Secured Digital Intercom Only</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border border-slate-800 space-y-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400"><i class="fa-solid fa-network-wired mr-2"></i>Branch Node Directory</h3>
+                    <div class="divide-y divide-slate-800 text-xs">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">Midwest Operations Desk</span>
+                            <span class="text-slate-400 font-mono text-xxs">Chicago, IL</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">Pacific Logistics Bureau</span>
+                            <span class="text-slate-400 font-mono text-xxs">Los Angeles, CA</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">Southern Housing Intake</span>
+                            <span class="text-slate-400 font-mono text-xxs">Austin, TX</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/60 text-xxs text-slate-400 leading-normal">
+                        <i class="fa-solid fa-circle-info text-indigo-400 mr-1"></i> For instantaneous brokerage alignment, execute an intake dispatch down via the secure terminal widget directly below.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- PROPERTY INSPECTION DETAILS MODAL -->
     <div id="details-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
