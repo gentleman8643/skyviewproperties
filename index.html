@@ -12,17 +12,25 @@
         html {
             scroll-behavior: smooth;
         }
+        @keyframes pulse-gentle {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.6); }
+        }
+        .animate-pulse-gentle {
+            animation: pulse-gentle 3s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
 
-    <!-- FLOATING WHATSAPP CONTACT BUTTON -->
-    <a href="https://wa.me/12139420224" target="_blank" rel="noopener noreferrer" 
-       class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center gap-2 group border border-emerald-400/20">
+    <!-- FLOATING WHATSAPP CONTACT BUTTON (PROMINENT TEXT + LOGO) -->
+    <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20am%20interested%20in%20inquiring%20about%20your%20available%20listings." 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3.5 rounded-full shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-3 border border-emerald-400/20 animate-pulse-gentle group">
+        <span class="text-xs font-black uppercase tracking-wider">Contact Us</span>
+        <div class="h-5 w-px bg-white/20"></div>
         <i class="fa-brands fa-whatsapp text-2xl font-bold"></i>
-        <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-in-out text-xs font-black uppercase tracking-wider whitespace-nowrap">
-            Contact Us
-        </span>
     </a>
 
     <!-- NAVIGATION BAR -->
@@ -249,7 +257,31 @@
             </div>
             <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-3xl flex gap-3">
                 <button onclick="closeModal()" class="w-1/3 bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-sm py-3 rounded-xl transition cursor-pointer">Close Portfolio</button>
-                <button type="button" class="w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer">Initiate Confidential Inquiry</button>
+                <button id="modal-whatsapp-trigger" type="button" class="w-2/3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Initiate Confidential Inquiry
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHATSAPP REDIRECT NOTICE MODAL -->
+    <div id="whatsapp-notice-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md w-full text-center text-white space-y-6 shadow-2xl transform scale-95 transition-all">
+            <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
+                <i class="fa-brands fa-whatsapp text-4xl font-bold animate-pulse"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-black tracking-tight">Swift Response Connection</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">For an immediate reply from our operational desk, please scroll down slightly and execute your communication directly through our secure WhatsApp channels.</p>
+            </div>
+            <div class="pt-2">
+                <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20just%20completed%20the%20intake%20desk%20form%20and%20would%20like%20to%20connect%20for%20a%20swift%20response." 
+                   target="_blank" 
+                   onclick="closeNoticeModal()"
+                   class="w-full bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black uppercase tracking-wider py-3 px-4 rounded-xl block transition duration-200 shadow-md">
+                    Open Secure WhatsApp Chat
+                </a>
+                <button onclick="closeNoticeModal()" class="text-slate-500 hover:text-slate-300 text-xxs uppercase tracking-widest font-bold mt-4 transition cursor-pointer block mx-auto">Stay on Website</button>
             </div>
         </div>
     </div>
@@ -294,10 +326,10 @@
             <!-- COLUMN 3: INTAKE INQUIRY TERMINAL -->
             <div>
                 <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Secure Intake Messaging Desk</h4>
-                <form class="space-y-3" onsubmit="event.preventDefault(); alert('Transmission secured. Brokerage desk will contact you shortly.');">
+                <form class="space-y-3" onsubmit="event.preventDefault(); showWhatsAppNotice();">
                     <input type="email" placeholder="Corporate Encryption Email..." required class="w-full text-xs p-2.5 rounded-lg bg-slate-800 border border-slate-700 focus:outline-hidden text-white placeholder-gray-500 focus:border-indigo-500">
                     <textarea rows="2" placeholder="Input Asset Code ID and contact phone..." required class="w-full text-xs p-2.5 rounded-lg bg-slate-800 border border-slate-700 focus:outline-hidden text-white placeholder-gray-500 focus:border-indigo-500"></textarea>
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg transition tracking-wider uppercase">Transmit Inquiry Message</button>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg transition tracking-wider uppercase cursor-pointer">Transmit Inquiry Message</button>
                 </form>
             </div>
         </div>
@@ -501,6 +533,13 @@
             document.getElementById('gallery-right').src = house.right;
             document.getElementById('gallery-interior').src = house.interior;
 
+            // Configure dynamic modal WhatsApp route handler
+            const whatsappTrigger = document.getElementById('modal-whatsapp-trigger');
+            const encodedText = encodeURIComponent(`Hello, I am interested in property ID #${house.id} listed at ${house.priceDisplay}. Please send configuration files.`);
+            whatsappTrigger.onclick = function() {
+                window.open(`https://wa.me/12139420224?text=${encodedText}`, '_blank');
+            };
+
             document.getElementById('details-modal').classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
         }
@@ -508,6 +547,15 @@
         function closeModal() {
             document.getElementById('details-modal').classList.add('hidden');
             document.body.classList.remove('overflow-hidden');
+        }
+
+        // Intake Form Notification Handlers
+        function showWhatsAppNotice() {
+            document.getElementById('whatsapp-notice-modal').classList.remove('hidden');
+        }
+
+        function closeNoticeModal() {
+            document.getElementById('whatsapp-notice-modal').classList.add('hidden');
         }
 
         window.addEventListener('DOMContentLoaded', buildAssetDatabase);
