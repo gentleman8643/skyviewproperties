@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skyview Properties | Nationwide Portfolios</title>
+    <!-- Tailwind CSS for high-fidelity styling -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for layout icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         html {
@@ -21,6 +23,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
 
+    <!-- FLOATING WHATSAPP CONTACT BUTTON -->
     <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20am%20interested%20in%20inquiring%20about%20your%20available%20listings." 
        target="_blank" 
        rel="noopener noreferrer" 
@@ -30,6 +33,7 @@
         <i class="fa-brands fa-whatsapp text-2xl font-bold"></i>
     </a>
 
+    <!-- NAVIGATION BAR -->
     <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -49,6 +53,7 @@
         </div>
     </nav>
 
+    <!-- HEADER TITLE BANNER -->
     <header class="bg-slate-900 text-white py-12 text-center relative overflow-hidden">
         <div class="absolute inset-0 opacity-20">
             <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover" alt="Banner background">
@@ -59,6 +64,7 @@
         </div>
     </header>
 
+    <!-- INTERACTIVE FILTER CONSOLE -->
     <section class="bg-white border-b border-gray-200 md:sticky md:top-16 z-40 shadow-2xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
@@ -87,6 +93,7 @@
                 </div>
             </div>
 
+            <!-- TIER TOGGLE SWITCHES -->
             <div class="flex flex-wrap gap-2 mt-4 border-t border-gray-100 pt-3">
                 <button onclick="changeTier('all')" id="tab-all" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs">All Assets</button>
                 <button onclick="changeTier('luxury')" id="tab-luxury" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-indigo-600 bg-gray-100">Elite Luxury</button>
@@ -95,10 +102,13 @@
         </div>
     </section>
 
+    <!-- LIVE CATALOG GRID -->
     <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow scroll-mt-36">
         <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
+            <!-- Dynamic data cards render here instantly -->
+        </div>
 
+        <!-- PAGINATION CONTROLS -->
         <div class="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
             <button onclick="previousPage()" id="btn-prev" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
                 <i class="fa-solid fa-arrow-left"></i> Prev
@@ -112,6 +122,7 @@
         </div>
     </main>
 
+    <!-- DETAILED CORPORATE OFFICE PROFILE SECTION -->
     <section id="corporate-office-section" class="bg-white border-t border-b border-gray-200 py-16 scroll-mt-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
@@ -124,6 +135,7 @@
                         Our primary corporate office orchestrates algorithmic market pacing, secure physical custody processing, and high-level client verification across all fifty states. Designed as a strict privacy environment, walk-in broker routing is restricted exclusively to pre-vetted legal entities.
                     </p>
                     
+                    <!-- EXECUTIVE ROSTER DIRECTORY -->
                     <div class="border-t border-b border-gray-100 py-4">
                         <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Corporate Leadership Profile</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -183,6 +195,7 @@
         </div>
     </section>
 
+    <!-- PROPERTY INSPECTION DETAILS MODAL -->
     <div id="details-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition duration-300 transform scale-95 relative flex flex-col">
             <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 rounded-t-3xl">
@@ -247,6 +260,7 @@
         </div>
     </div>
 
+    <!-- WHATSAPP REDIRECT NOTICE MODAL -->
     <div id="whatsapp-notice-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-md w-full text-center text-white space-y-6 shadow-2xl transform scale-95 transition-all">
             <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
@@ -268,9 +282,9 @@
         </div>
     </div>
 
+    <!-- CORPORATE FOOTER -->
     <footer id="footer-contact" class="bg-slate-900 text-gray-300 pt-16 pb-8 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-            
             <div class="space-y-4">
                 <div>
                     <div class="flex items-center gap-2 text-white mb-2">
@@ -279,7 +293,6 @@
                     </div>
                     <p class="text-xs text-gray-400 leading-relaxed max-w-sm">Marilyn Alvarado's corporate desk coordinates low-latency acquisition protocols for luxury estate portfolios and domestic housing tiers.</p>
                 </div>
-                
                 <div class="space-y-2 text-xs border-t border-slate-800/80 pt-3">
                     <div class="flex items-center gap-2 text-gray-300">
                         <i class="fa-solid fa-phone text-indigo-400 w-4"></i>
@@ -291,7 +304,6 @@
                     </div>
                 </div>
             </div>
-            
             <div>
                 <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Regulatory & Privacy Disclaimers</h4>
                 <ul class="space-y-2 text-xs text-gray-400">
@@ -300,7 +312,6 @@
                     <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-building-shield mr-2 text-indigo-400"></i>Fair Housing Act Compliance Statement</a></li>
                 </ul>
             </div>
-            
             <div>
                 <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Secure Intake Messaging Desk</h4>
                 <form class="space-y-3" onsubmit="event.preventDefault(); showWhatsAppNotice();">
@@ -315,6 +326,7 @@
         </div>
     </footer>
 
+    <!-- REAL ESTATE ENGINE CODE -->
     <script>
         const galleryFront = [
             "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80",
@@ -332,7 +344,6 @@
         const recordsPerPage = 12; 
         let currentActiveTier = "all";
 
-        // Performance Optimized Generation
         function buildAssetDatabase() {
             masterDatabase = [];
             for (let i = 1; i <= 2100; i++) {
@@ -376,6 +387,7 @@
 
         function renderCatalogGrid() {
             const grid = document.getElementById('master-catalog-grid');
+            if (!grid) return; // Guard clause
             grid.innerHTML = "";
 
             const startIdx = (currentPage - 1) * recordsPerPage;
@@ -384,7 +396,7 @@
 
             if (operationalPageSlice.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-3 text-center py-12">
+                    <div class="col-span-1 md:col-span-3 text-center py-12">
                         <i class="fa-solid fa-filter text-gray-300 text-4xl mb-2"></i>
                         <p class="text-gray-500 font-medium text-sm">No properties found inside those search fields. Try broadening your parameters.</p>
                     </div>`;
@@ -432,19 +444,106 @@
             document.getElementById('page-indicator').innerText = `Catalog Page ${currentPage}`;
         }
 
-        // Search Parameters Filters Engine
         function applyFilters() {
             const minPrice = parseInt(document.getElementById('filter-min-price').value) || 0;
             const maxPrice = parseInt(document.getElementById('filter-max-price').value) || Infinity;
             const bedsSelect = document.getElementById('filter-beds').value;
 
-            // First isolate by current active layout category tier
             let initialSlice = [...masterDatabase];
             if (currentActiveTier !== "all") {
                 initialSlice = masterDatabase.filter(house => house.tier === currentActiveTier);
             }
 
-            // Refine by custom structural metrics fields
             filteredSelection = initialSlice.filter(house => {
                 const matchesPrice = house.priceRaw >= minPrice && house.priceRaw <= maxPrice;
-                const matchesBeds = bedsSelect === "all
+                const matchesBeds = bedsSelect === "all" || house.beds >= parseInt(bedsSelect);
+                return matchesPrice && matchesBeds;
+            });
+
+            currentPage = 1; 
+            renderCatalogGrid();
+
+            // Auto-Scroll Feature to view listings instantly on dynamic actions
+            document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function changeTier(tier) {
+            currentActiveTier = tier;
+            
+            ['all', 'luxury', 'affordable'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 bg-gray-100 hover:bg-gray-200";
+            });
+
+            const activeBtn = document.getElementById(`tab-${tier}`);
+            if (activeBtn) activeBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs";
+
+            applyFilters();
+        }
+
+        function nextPage() {
+            const maxPages = Math.ceil(filteredSelection.length / recordsPerPage);
+            if (currentPage < maxPages) {
+                currentPage++;
+                renderCatalogGrid();
+                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderCatalogGrid();
+                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function openModal(id) {
+            const house = masterDatabase.find(item => item.id === id);
+            if (!house) return;
+
+            document.getElementById('modal-id').innerText = `ID #${house.id}`;
+            document.getElementById('modal-price').innerText = house.priceDisplay;
+            document.getElementById('modal-tag').innerText = house.tagText;
+            document.getElementById('modal-title').innerText = house.title;
+            
+            const tagBadge = document.getElementById('modal-tag');
+            tagBadge.className = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${house.tagColor}`;
+
+            document.getElementById('modal-beds').innerText = `${house.beds} Beds`;
+            document.getElementById('modal-baths').innerText = `${house.baths} Baths`;
+            document.getElementById('modal-sqft').innerText = `${house.sqft.toLocaleString()} sqft`;
+            document.getElementById('modal-type').innerText = house.tier === 'luxury' ? 'Premium Mansion' : 'Affordable Unit';
+
+            document.getElementById('gallery-main').src = house.front;
+            document.getElementById('gallery-left').src = house.left;
+            document.getElementById('gallery-right').src = house.right;
+            document.getElementById('gallery-interior').src = house.interior;
+
+            const whatsappTrigger = document.getElementById('modal-whatsapp-trigger');
+            const encodedText = encodeURIComponent(`Hello, I am interested in property ID #${house.id} listed at ${house.priceDisplay}. Please send configuration files.`);
+            whatsappTrigger.onclick = function() {
+                window.open(`https://wa.me/12139420224?text=${encodedText}`, '_blank');
+            };
+
+            document.getElementById('details-modal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('details-modal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        function showWhatsAppNotice() {
+            document.getElementById('whatsapp-notice-modal').classList.remove('hidden');
+        }
+
+        function closeNoticeModal() {
+            document.getElementById('whatsapp-notice-modal').classList.add('hidden');
+        }
+
+        window.addEventListener('DOMContentLoaded', buildAssetDatabase);
+    </script>
+</body>
+</html>
