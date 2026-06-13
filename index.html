@@ -3,171 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyview Properties | Smart Search</title>
-    <!-- Tailwind CSS for modern styling -->
+    <title>Skyview Properties | Premium Marketplace</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased">
 
-    <!-- NAVIGATION BAR -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-building-user text-indigo-600 text-2xl"></i>
                     <span class="text-xl font-bold tracking-tight text-gray-950">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
                 </div>
-                <div class="hidden md:flex space-x-8 font-medium">
-                    <a href="#" class="text-indigo-600">Home</a>
-                    <a href="#search-section" class="text-gray-600 hover:text-indigo-600 transition">Search Houses</a>
-                    <a href="#services" class="text-gray-600 hover:text-indigo-600 transition">Services</a>
-                    <a href="#contact" class="text-gray-600 hover:text-indigo-600 transition">Contact</a>
-                </div>
-                <div>
-                    <a href="#contact" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-xs transition">Get Started</a>
+                <div class="flex items-center gap-4">
+                    <span id="global-counter" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-xs">Loading Catalog...</span>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- HERO & SEARCH SECTION -->
-    <header id="search-section" class="relative bg-slate-900 text-white py-24 sm:py-32">
-        <div class="absolute inset-0 overflow-hidden opacity-30">
-            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80" alt="Skyview Highrise" class="w-full h-full object-cover">
+    <header class="bg-slate-900 text-white py-12 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover" alt="Banner background">
         </div>
-        <div class="relative max-w-5xl mx-auto px-4 text-center">
-            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">Find Your Perfect View With Skyview</h1>
-            <p class="text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto mb-10">Type any full state, abbreviation, city, or zip code below to see it filter instantly.</p>
-            
-            <!-- Smart Search Bar -->
-            <div class="bg-white p-4 rounded-xl shadow-lg max-w-3xl mx-auto text-gray-900 text-left">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Search Region</label>
-                        <input type="text" id="search-input" placeholder="Try 'California', 'NY', 'Miami', or '90210'..." class="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Property Type</label>
-                        <select id="type-filter" class="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden text-sm">
-                            <option value="all">All Types</option>
-                            <option value="Penthouse">Penthouse</option>
-                            <option value="Apartment">Apartment</option>
-                            <option value="Villa">Villa</option>
-                            <option value="House">House</option>
-                        </select>
-                    </div>
-                    <div class="flex items-end">
-                        <button type="button" onclick="filterProperties()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-md transition shadow-xs flex items-center justify-center gap-2 text-sm h-[38px]">
-                            <i class="fa-solid fa-magnifying-glass"></i> Filter Results
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div class="relative max-w-3xl mx-auto px-4">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">Infinite Luxury Real Estate Catalog</h1>
+            <p class="text-indigo-200 text-sm sm:text-base">Browse through our entire live collection of premium residential estates, high-rises, and modern architectural spaces.</p>
         </div>
     </header>
 
-    <!-- LIVE DYNAMIC GRID SECTION -->
-    <section class="py-20 bg-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center mb-12">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-950">Available Properties</h2>
-                    <p class="text-gray-600 text-sm mt-1">Smart matching system updated live.</p>
-                </div>
-                <span id="results-count" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Loading...</span>
+    <main class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
-            
-            <!-- Real Estate Cards Container -->
-            <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- JavaScript automatically inserts items here -->
-            </div>
-        </div>
-    </section>
+    </main>
 
-    <!-- SIMPLE FOOTER -->
-    <footer class="bg-slate-900 text-gray-400 py-8 text-center text-sm">
+    <footer class="bg-slate-900 text-gray-400 py-8 text-center text-sm border-t border-slate-800">
         <p>&copy; 2026 SKYVIEW PROPERTIES. All rights reserved.</p>
     </footer>
 
-    <!-- REAL ESTATE ENGINE CORE CODE -->
     <script>
-        // Expanded Database supporting Full State Name, State Abbreviation, and Zip Code
-        const propertyDatabase = [
-            { id: 1, price: 1450000, title: "The Apex Horizon Villa", type: "Villa", stateFull: "california", stateShort: "ca", zip: "90210", city: "beverly hills", displayCity: "Beverly Hills", displayState: "CA", beds: 5, baths: 4, sqft: 4500, img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" },
-            { id: 2, price: 620000, title: "Skyview Luxury Loft", type: "Penthouse", stateFull: "new york", stateShort: "ny", zip: "10001", city: "manhattan", displayCity: "Manhattan", displayState: "NY", beds: 2, baths: 2, sqft: 1800, img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80" },
-            { id: 3, price: 2100000, title: "Panoramic Glass Estate", type: "Villa", stateFull: "florida", stateShort: "fl", zip: "33101", city: "miami", displayCity: "Miami", displayState: "FL", beds: 6, baths: 5.5, sqft: 5300, img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80" },
-            { id: 4, price: 340000, title: "Sunny Highrise Unit", type: "Apartment", stateFull: "florida", stateShort: "fl", zip: "33139", city: "miami beach", displayCity: "Miami Beach", displayState: "FL", beds: 1, baths: 1.5, sqft: 950, img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80" },
-            { id: 5, price: 485000, title: "Suburban Family House", type: "House", stateFull: "texas", stateShort: "tx", zip: "73301", city: "austin", displayCity: "Austin", displayState: "TX", beds: 3, baths: 2, sqft: 2100, img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80" },
-            { id: 6, price: 1250000, title: "Metropolitan Sky Penthouse", type: "Penthouse", stateFull: "illinois", stateShort: "il", zip: "60601", city: "chicago", displayCity: "Chicago", displayState: "IL", beds: 3, baths: 3, sqft: 2900, img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80" },
-            { id: 7, price: 890000, title: "Sunset Boulevard Residence", type: "House", stateFull: "california", stateShort: "ca", zip: "90026", city: "los angeles", displayCity: "Los Angeles", displayState: "CA", beds: 4, baths: 3, sqft: 3100, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" },
-            { id: 8, price: 550000, title: "Brooklyn Modernist Studio", type: "Apartment", stateFull: "new york", stateShort: "ny", zip: "11201", city: "brooklyn", displayCity: "Brooklyn", displayState: "NY", beds: 2, baths: 1, sqft: 1200, img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80" }
+        // Array of professional real estate architectural images to cycle through
+        const luxuryImages = [
+            "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80"
         ];
 
-        function renderCards(propertiesList) {
-            const grid = document.getElementById('properties-grid');
-            const countBadge = document.getElementById('results-count');
+        // Core compilation building function
+        function generateMassiveCatalog(totalHousesNeeded) {
+            const grid = document.getElementById('master-catalog-grid');
+            const counter = document.getElementById('global-counter');
             
-            grid.innerHTML = '';
-            countBadge.innerText = `Showing ${propertiesList.length} listing(s)`;
+            let htmlBuffer = ""; // Hold elements in memory for faster processing layout rendering
 
-            if (propertiesList.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-3 text-center py-12">
-                        <i class="fa-solid fa-circle-question text-gray-300 text-5xl mb-4"></i>
-                        <p class="text-gray-500 font-medium">No properties found. Try typing 'California', 'FL', 'Miami', or a specific zip code like '10001'.</p>
-                    </div>`;
-                return;
-            }
+            for (let i = 1; i <= totalHousesNeeded; i++) {
+                // Alternates half of the database as sale, half as rent
+                const isForSale = i % 2 === 0; 
+                const tagText = isForSale ? "FOR SALE" : "FOR RENT";
+                const tagColor = isForSale ? "bg-indigo-600" : "bg-emerald-600";
 
-            propertiesList.forEach(house => {
-                grid.innerHTML += `
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200 hover:shadow-md transition">
-                        <div class="relative h-56">
-                            <img src="${house.img}" alt="${house.title}" class="w-full h-full object-cover">
-                            <span class="absolute top-4 left-4 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">FOR SALE</span>
+                // Mathematical formulas creating dynamic ranges for layout realism
+                const randomPrice = isForSale 
+                    ? Math.floor(450000 + (i * 4850)) 
+                    : Math.floor(1800 + (i * 12));
+                    
+                const priceString = isForSale 
+                    ? `$${randomPrice.toLocaleString()}` 
+                    : `$${randomPrice.toLocaleString()} / mo`;
+
+                const beds = (i % 4) + 2; // Cycle bedrooms dynamically between 2 and 5
+                const baths = (i % 3) + 1.5; // Cycle bathrooms dynamically between 1.5 and 3.5
+                const dimensionsSqft = Math.floor(1100 + (i * 15)); // Build scaled dimensions
+
+                // Smoothly cycle through the image bank array cleanly
+                const selectedImage = luxuryImages[i % luxuryImages.length];
+
+                // Append the complete high-fidelity card component markup structural logic
+                htmlBuffer += `
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200 hover:shadow-md transition duration-300">
+                        <div class="relative h-60 bg-gray-100">
+                            <img src="${selectedImage}" alt="Skyview Premium Property Listing" class="w-full h-full object-cover">
+                            <span class="absolute top-4 left-4 ${tagColor} text-white text-xs font-bold px-3 py-1 rounded-full tracking-wider shadow-xs">${tagText}</span>
+                            <span class="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md font-medium">ID #SK-${2000 + i}</span>
                         </div>
                         <div class="p-6">
-                            <div class="text-indigo-600 font-bold text-xl mb-2">$${house.price.toLocaleString()}</div>
-                            <h3 class="text-lg font-bold text-gray-950 mb-2">${house.title}</h3>
-                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-location-dot mr-1"></i> ${house.displayCity}, ${house.displayState} ${house.zip}</p>
-                            <div class="flex justify-between text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium">
-                                <span><i class="fa-solid fa-bed text-indigo-600 mr-1"></i> ${house.beds} Beds</span>
-                                <span><i class="fa-solid fa-bath text-indigo-600 mr-1"></i> ${house.baths} Baths</span>
-                                <span><i class="fa-solid fa-ruler-combined text-indigo-600 mr-1"></i> ${house.sqft} sqft</span>
+                            <div class="text-indigo-600 font-extrabold text-2xl mb-2">${priceString}</div>
+                            <h3 class="text-lg font-bold text-gray-950 mb-1 truncate">Skyview Elite Asset Residence</h3>
+                            <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-4">Premium Location Grid Tier</p>
+                            
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium">
+                                <div class="bg-gray-50 py-2 rounded-xl">
+                                    <i class="fa-solid fa-bed text-indigo-600 mb-1 block text-sm"></i>
+                                    <span>${beds} Beds</span>
+                                </div>
+                                <div class="bg-gray-50 py-2 rounded-xl">
+                                    <i class="fa-solid fa-bath text-indigo-600 mb-1 block text-sm"></i>
+                                    <span>${baths} Baths</span>
+                                </div>
+                                <div class="bg-gray-50 py-2 rounded-xl">
+                                    <i class="fa-solid fa-ruler-combined text-indigo-600 mb-1 block text-sm"></i>
+                                    <span>${dimensionsSqft} sqft</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-5 pt-1">
+                                <button type="button" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-semibold text-sm py-2.5 rounded-xl transition duration-200 shadow-xs cursor-pointer">
+                                    Inquire Details
+                                </button>
                             </div>
                         </div>
                     </div>
                 `;
-            });
+            }
+
+            // Draw all compiled elements instantly to the browser window DOM layout
+            grid.innerHTML = htmlBuffer;
+            counter.innerText = `Total Catalog Portfolio: ${totalHousesNeeded} Properties`;
         }
 
-        function filterProperties() {
-            const query = document.getElementById('search-input').value.toLowerCase().trim();
-            const selectedType = document.getElementById('type-filter').value;
-
-            const filtered = propertyDatabase.filter(house => {
-                // Smart check matching against full name, 2-letter abbreviation, zip code, or city string
-                const matchesSearch = query === "" || 
-                                      house.zip.includes(query) || 
-                                      house.stateFull.includes(query) || 
-                                      house.stateShort === query || 
-                                      house.city.includes(query);
-
-                const matchesType = selectedType === "all" || house.type === selectedType;
-
-                return matchesSearch && matchesType;
-            });
-
-            renderCards(filtered);
-        }
-
-        // Monitors user typing inputs to update the screen instantly like Zillow
-        document.getElementById('search-input').addEventListener('input', filterProperties);
-
-        // Display database houses immediately when the page finishes loading
-        window.onload = () => renderCards(propertyDatabase);
+        // Initialize and fire execution pipeline to build 320 houses automatically on load
+        window.addEventListener('DOMContentLoaded', () => {
+            generateMassiveCatalog(320);
+        });
     </script>
 </body>
 </html>
