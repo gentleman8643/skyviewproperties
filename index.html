@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skyview Properties | Nationwide Portfolios</title>
-    <!-- Tailwind CSS for high-fidelity styling -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome for layout icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         html {
@@ -23,7 +21,6 @@
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
 
-    <!-- FLOATING WHATSAPP CONTACT BUTTON (PROMINENT TEXT + LOGO) -->
     <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20am%20interested%20in%20inquiring%20about%20your%20available%20listings." 
        target="_blank" 
        rel="noopener noreferrer" 
@@ -33,7 +30,6 @@
         <i class="fa-brands fa-whatsapp text-2xl font-bold"></i>
     </a>
 
-    <!-- NAVIGATION BAR -->
     <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -53,7 +49,6 @@
         </div>
     </nav>
 
-    <!-- HEADER TITLE BANNER -->
     <header class="bg-slate-900 text-white py-12 text-center relative overflow-hidden">
         <div class="absolute inset-0 opacity-20">
             <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover" alt="Banner background">
@@ -64,10 +59,9 @@
         </div>
     </header>
 
-    <!-- INTERACTIVE PRICE & BEDROOM FILTER SYSTEM CONSOLE -->
-    <section class="bg-white border-b border-gray-200 sticky top-16 z-40 shadow-2xs">
+    <section class="bg-white border-b border-gray-200 md:sticky md:top-16 z-40 shadow-2xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
                 <div>
                     <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Minimum Budget ($)</label>
                     <input type="number" id="filter-min-price" placeholder="e.g. 500" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
@@ -93,36 +87,31 @@
                 </div>
             </div>
 
-            <!-- TIER TOGGLE SWITCHES -->
-            <div class="flex gap-2 mt-4 border-t border-gray-100 pt-3">
-                <button onclick="changeTier('all')" id="tab-all" class="px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs">All Asset Portfolios</button>
-                <button onclick="changeTier('luxury')" id="tab-luxury" class="px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-indigo-600 bg-gray-100">Elite Luxury Estates</button>
-                <button onclick="changeTier('affordable')" id="tab-affordable" class="px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-emerald-600 bg-gray-100">Affordable Housing Tiers</button>
+            <div class="flex flex-wrap gap-2 mt-4 border-t border-gray-100 pt-3">
+                <button onclick="changeTier('all')" id="tab-all" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs">All Assets</button>
+                <button onclick="changeTier('luxury')" id="tab-luxury" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-indigo-600 bg-gray-100">Elite Luxury</button>
+                <button onclick="changeTier('affordable')" id="tab-affordable" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-emerald-600 bg-gray-100">Affordable Housing</button>
             </div>
         </div>
     </section>
 
-    <!-- LIVE CATALOG GRID -->
-    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow">
+    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow scroll-mt-36">
         <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Dynamic data cards render here instantly -->
-        </div>
+            </div>
 
-        <!-- PAGINATION CONTROLS -->
         <div class="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
             <button onclick="previousPage()" id="btn-prev" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i> Previous Page
+                <i class="fa-solid fa-arrow-left"></i> Prev
             </button>
             <span id="page-indicator" class="text-xs font-bold text-gray-500 bg-gray-100 px-4 py-1.5 rounded-full border border-gray-200">
                 Page 1
             </span>
             <button onclick="nextPage()" id="btn-next" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
-                Next Page <i class="fa-solid fa-arrow-right"></i>
+                Next <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
     </main>
 
-    <!-- DETAILED CORPORATE OFFICE & OWNERSHIP PROFILE SECTION -->
     <section id="corporate-office-section" class="bg-white border-t border-b border-gray-200 py-16 scroll-mt-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
@@ -135,7 +124,6 @@
                         Our primary corporate office orchestrates algorithmic market pacing, secure physical custody processing, and high-level client verification across all fifty states. Designed as a strict privacy environment, walk-in broker routing is restricted exclusively to pre-vetted legal entities.
                     </p>
                     
-                    <!-- EXECUTIVE ROSTER DIRECTORY -->
                     <div class="border-t border-b border-gray-100 py-4">
                         <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Corporate Leadership Profile</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -195,7 +183,6 @@
         </div>
     </section>
 
-    <!-- PROPERTY INSPECTION DETAILS MODAL -->
     <div id="details-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition duration-300 transform scale-95 relative flex flex-col">
             <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 rounded-t-3xl">
@@ -208,65 +195,60 @@
                 </button>
             </div>
             <div class="p-6 overflow-y-auto space-y-6">
-                <div class="flex justify-between items-start gap-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                     <div>
-                        <h2 id="modal-title" class="text-2xl font-extrabold text-gray-950">Skyview Architectural Estate</h2>
-                        <p class="text-indigo-600 font-bold text-sm uppercase tracking-wide mt-1">Location Verified Portfolio • <span class="text-rose-500 bg-rose-50 text-xs px-2 py-0.5 rounded-sm font-semibold">Address Restricted For Privacy Security</span></p>
+                        <h2 id="modal-title" class="text-xl sm:text-2xl font-extrabold text-gray-950">Skyview Architectural Estate</h2>
+                        <p class="text-indigo-600 font-bold text-xs uppercase tracking-wide mt-1">Location Verified Portfolio • <span class="text-rose-500 bg-rose-50 text-xs px-2 py-0.5 rounded-sm font-semibold">Address Restricted</span></p>
                     </div>
-                    <div id="modal-price" class="text-3xl font-black text-indigo-600 tracking-tight">PRICE</div>
+                    <div id="modal-price" class="text-2xl sm:text-3xl font-black text-indigo-600 tracking-tight">PRICE</div>
                 </div>
                 <div>
-                    <h3 class="text-sm font-extrabold text-gray-950 uppercase tracking-wider mb-3"><i class="fa-solid fa-camera-retro mr-1.5 text-indigo-600"></i> Structural Elevations & Spatial View Angles</h3>
+                    <h3 class="text-sm font-extrabold text-gray-950 uppercase tracking-wider mb-3"><i class="fa-solid fa-camera-retro mr-1.5 text-indigo-600"></i> Structural Elevations</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="md:col-span-3 h-72 rounded-2xl overflow-hidden bg-gray-100 relative">
+                        <div class="md:col-span-3 h-48 sm:h-72 rounded-2xl overflow-hidden bg-gray-100 relative">
                             <img id="gallery-main" src="" class="w-full h-full object-cover" alt="Front Elevation">
-                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md">Front Elevation Profile</div>
                         </div>
-                        <div class="h-44 rounded-2xl overflow-hidden bg-gray-100 relative">
+                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
                             <img id="gallery-left" src="" class="w-full h-full object-cover" alt="Left View">
-                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md">Left Lateral Aspect</div>
                         </div>
-                        <div class="h-44 rounded-2xl overflow-hidden bg-gray-100 relative">
+                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
                             <img id="gallery-right" src="" class="w-full h-full object-cover" alt="Right View">
-                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md">Right Lateral Aspect</div>
                         </div>
-                        <div class="h-44 rounded-2xl overflow-hidden bg-gray-100 relative">
+                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
                             <img id="gallery-interior" src="" class="w-full h-full object-cover" alt="Interior View">
-                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md">Interior Living Architecture</div>
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
-                        <i class="fa-solid fa-bed text-indigo-600 text-lg mb-1 block"></i>
-                        <span id="modal-beds" class="text-base font-extrabold text-gray-950">X Beds</span>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-bed text-indigo-600 text-sm mb-1 block"></i>
+                        <span id="modal-beds" class="font-extrabold text-gray-950">X Beds</span>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
-                        <i class="fa-solid fa-bath text-indigo-600 text-lg mb-1 block"></i>
-                        <span id="modal-baths" class="text-base font-extrabold text-gray-950">X Baths</span>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-bath text-indigo-600 text-sm mb-1 block"></i>
+                        <span id="modal-baths" class="font-extrabold text-gray-950">X Baths</span>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
-                        <i class="fa-solid fa-ruler-combined text-indigo-600 text-lg mb-1 block"></i>
-                        <span id="modal-sqft" class="text-base font-extrabold text-gray-950">X sqft</span>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-ruler-combined text-indigo-600 text-sm mb-1 block"></i>
+                        <span id="modal-sqft" class="font-extrabold text-gray-950">X sqft</span>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
-                        <i class="fa-solid fa-compass-drafting text-indigo-600 text-lg mb-1 block"></i>
-                        <span id="modal-type" class="text-base font-extrabold text-gray-950">Type</span>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-compass-drafting text-indigo-600 text-sm mb-1 block"></i>
+                        <span id="modal-type" class="font-extrabold text-gray-950">Type</span>
                     </div>
                 </div>
             </div>
             <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-3xl flex gap-3">
-                <button onclick="closeModal()" class="w-1/3 bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-sm py-3 rounded-xl transition cursor-pointer">Close Portfolio</button>
-                <button id="modal-whatsapp-trigger" type="button" class="w-2/3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> Initiate Confidential Inquiry
+                <button onclick="closeModal()" class="w-1/3 bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-xs py-3 rounded-xl transition cursor-pointer">Close</button>
+                <button id="modal-whatsapp-trigger" type="button" class="w-2/3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Confidential Inquiry
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- WHATSAPP REDIRECT NOTICE MODAL -->
     <div id="whatsapp-notice-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md w-full text-center text-white space-y-6 shadow-2xl transform scale-95 transition-all">
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-md w-full text-center text-white space-y-6 shadow-2xl transform scale-95 transition-all">
             <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
                 <i class="fa-brands fa-whatsapp text-4xl font-bold animate-pulse"></i>
             </div>
@@ -286,11 +268,9 @@
         </div>
     </div>
 
-    <!-- CORPORATE FOOTER WITH VERIFIED CHANNELS -->
     <footer id="footer-contact" class="bg-slate-900 text-gray-300 pt-16 pb-8 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             
-            <!-- COLUMN 1: CORPORATE CHANNELS -->
             <div class="space-y-4">
                 <div>
                     <div class="flex items-center gap-2 text-white mb-2">
@@ -300,7 +280,6 @@
                     <p class="text-xs text-gray-400 leading-relaxed max-w-sm">Marilyn Alvarado's corporate desk coordinates low-latency acquisition protocols for luxury estate portfolios and domestic housing tiers.</p>
                 </div>
                 
-                <!-- CONTACT HUB BLOCK -->
                 <div class="space-y-2 text-xs border-t border-slate-800/80 pt-3">
                     <div class="flex items-center gap-2 text-gray-300">
                         <i class="fa-solid fa-phone text-indigo-400 w-4"></i>
@@ -313,7 +292,6 @@
                 </div>
             </div>
             
-            <!-- COLUMN 2: COMPLIANCE -->
             <div>
                 <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Regulatory & Privacy Disclaimers</h4>
                 <ul class="space-y-2 text-xs text-gray-400">
@@ -323,7 +301,6 @@
                 </ul>
             </div>
             
-            <!-- COLUMN 3: INTAKE INQUIRY TERMINAL -->
             <div>
                 <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Secure Intake Messaging Desk</h4>
                 <form class="space-y-3" onsubmit="event.preventDefault(); showWhatsAppNotice();">
@@ -338,7 +315,6 @@
         </div>
     </footer>
 
-    <!-- REAL ESTATE ENGINE CODE -->
     <script>
         const galleryFront = [
             "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80",
@@ -471,94 +447,4 @@
             // Refine by custom structural metrics fields
             filteredSelection = initialSlice.filter(house => {
                 const matchesPrice = house.priceRaw >= minPrice && house.priceRaw <= maxPrice;
-                const matchesBeds = bedsSelect === "all" || house.beds >= parseInt(bedsSelect);
-                return matchesPrice && matchesBeds;
-            });
-
-            currentPage = 1; 
-            renderCatalogGrid();
-        }
-
-        function changeTier(tier) {
-            currentActiveTier = tier;
-            
-            ['all', 'luxury', 'affordable'].forEach(t => {
-                const btn = document.getElementById(`tab-${t}`);
-                btn.className = "px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 bg-gray-100 hover:bg-gray-200";
-            });
-
-            const activeBtn = document.getElementById(`tab-${tier}`);
-            activeBtn.className = "px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs";
-
-            // Re-apply values to drop custom ranges on switch cleanly
-            applyFilters();
-        }
-
-        function nextPage() {
-            const maxPages = Math.ceil(filteredSelection.length / recordsPerPage);
-            if (currentPage < maxPages) {
-                currentPage++;
-                renderCatalogGrid();
-                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        function previousPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderCatalogGrid();
-                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        function openModal(id) {
-            const house = masterDatabase.find(item => item.id === id);
-            if (!house) return;
-
-            document.getElementById('modal-id').innerText = `ID #${house.id}`;
-            document.getElementById('modal-price').innerText = house.priceDisplay;
-            document.getElementById('modal-tag').innerText = house.tagText;
-            document.getElementById('modal-title').innerText = house.title;
-            
-            const tagBadge = document.getElementById('modal-tag');
-            tagBadge.className = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${house.tagColor}`;
-
-            document.getElementById('modal-beds').innerText = `${house.beds} Bed Spaces`;
-            document.getElementById('modal-baths').innerText = `${house.baths} Bathrooms`;
-            document.getElementById('modal-sqft').innerText = `${house.sqft.toLocaleString()} Sq Ft Dimensions`;
-            document.getElementById('modal-type').innerText = house.tier === 'luxury' ? 'Premium Mansion Asset' : 'Affordable Housing Unit';
-
-            document.getElementById('gallery-main').src = house.front;
-            document.getElementById('gallery-left').src = house.left;
-            document.getElementById('gallery-right').src = house.right;
-            document.getElementById('gallery-interior').src = house.interior;
-
-            // Configure dynamic modal WhatsApp route handler
-            const whatsappTrigger = document.getElementById('modal-whatsapp-trigger');
-            const encodedText = encodeURIComponent(`Hello, I am interested in property ID #${house.id} listed at ${house.priceDisplay}. Please send configuration files.`);
-            whatsappTrigger.onclick = function() {
-                window.open(`https://wa.me/12139420224?text=${encodedText}`, '_blank');
-            };
-
-            document.getElementById('details-modal').classList.remove('hidden');
-            document.body.classList.add('overflow-hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('details-modal').classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        }
-
-        // Intake Form Notification Handlers
-        function showWhatsAppNotice() {
-            document.getElementById('whatsapp-notice-modal').classList.remove('hidden');
-        }
-
-        function closeNoticeModal() {
-            document.getElementById('whatsapp-notice-modal').classList.add('hidden');
-        }
-
-        window.addEventListener('DOMContentLoaded', buildAssetDatabase);
-    </script>
-</body>
-</html>
+                const matchesBeds = bedsSelect === "all
