@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyview Properties | Nationwide Search</title>
+    <title>Skyview Properties | Smart Search</title>
+    <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased">
 
+    <!-- NAVIGATION BAR -->
     <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -29,19 +32,21 @@
         </div>
     </nav>
 
+    <!-- HERO & SEARCH SECTION -->
     <header id="search-section" class="relative bg-slate-900 text-white py-24 sm:py-32">
         <div class="absolute inset-0 overflow-hidden opacity-30">
             <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80" alt="Skyview Highrise" class="w-full h-full object-cover">
         </div>
         <div class="relative max-w-5xl mx-auto px-4 text-center">
             <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">Find Your Perfect View With Skyview</h1>
-            <p class="text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto mb-10">Search across states or enter a zip code to test our unlimited, high-speed real estate index.</p>
+            <p class="text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto mb-10">Type any full state, abbreviation, city, or zip code below to see it filter instantly.</p>
             
+            <!-- Smart Search Bar -->
             <div class="bg-white p-4 rounded-xl shadow-lg max-w-3xl mx-auto text-gray-900 text-left">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Where are you looking?</label>
-                        <input type="text" id="search-input" placeholder="Type State (e.g., CA, NY, FL) or Zip Code (e.g., 90210)..." class="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden text-sm">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Search Region</label>
+                        <input type="text" id="search-input" placeholder="Try 'California', 'NY', 'Miami', or '90210'..." class="w-full border border-gray-200 rounded-md p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Property Type</label>
@@ -63,51 +68,55 @@
         </div>
     </header>
 
+    <!-- LIVE DYNAMIC GRID SECTION -->
     <section class="py-20 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center mb-12">
                 <div>
                     <h2 class="text-2xl sm:text-3xl font-bold text-gray-950">Available Properties</h2>
-                    <p class="text-gray-600 text-sm mt-1">Showing matching listings based on your search metrics.</p>
+                    <p class="text-gray-600 text-sm mt-1">Smart matching system updated live.</p>
                 </div>
-                <span id="results-count" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Showing 6 listings</span>
+                <span id="results-count" class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Loading...</span>
             </div>
             
+            <!-- Real Estate Cards Container -->
             <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                </div>
+                <!-- JavaScript automatically inserts items here -->
+            </div>
         </div>
     </section>
 
+    <!-- SIMPLE FOOTER -->
     <footer class="bg-slate-900 text-gray-400 py-8 text-center text-sm">
         <p>&copy; 2026 SKYVIEW PROPERTIES. All rights reserved.</p>
     </footer>
 
+    <!-- REAL ESTATE ENGINE CORE CODE -->
     <script>
-        // Massive Nationwide Property Index Array (Completely customizable & free)
+        // Expanded Database supporting Full State Name, State Abbreviation, and Zip Code
         const propertyDatabase = [
-            { id: 1, price: 1450000, title: "The Apex Horizon Villa", type: "Villa", state: "CA", zip: "90210", city: "Beverly Hills", beds: 5, baths: 4, sqft: 4500, img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" },
-            { id: 2, price: 620000, title: "Skyview Luxury Loft", type: "Penthouse", state: "NY", zip: "10001", city: "Manhattan", beds: 2, baths: 2, sqft: 1800, img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80" },
-            { id: 3, price: 2100000, title: "Panoramic Glass Estate", type: "Villa", state: "FL", zip: "33101", city: "Miami", beds: 6, baths: 5.5, sqft: 5300, img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80" },
-            { id: 4, price: 340000, title: "Sunny Highrise Unit", type: "Apartment", state: "FL", zip: "33139", city: "Miami Beach", beds: 1, baths: 1.5, sqft: 950, img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80" },
-            { id: 5, price: 485000, title: "Suburban Family House", type: "House", state: "TX", zip: "73301", city: "Austin", beds: 3, baths: 2, sqft: 2100, img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80" },
-            { id: 6, price: 1250000, title: "Metropolitan Sky Penthouse", type: "Penthouse", state: "IL", zip: "60601", city: "Chicago", beds: 3, baths: 3, sqft: 2900, img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80" },
-            { id: 7, price: 890000, title: "Sunset Boulevard Residence", type: "House", state: "CA", zip: "90026", city: "Los Angeles", beds: 4, baths: 3, sqft: 3100, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" },
-            { id: 8, price: 550000, title: "Brooklyn Modernist Studio", type: "Apartment", state: "NY", zip: "11201", city: "Brooklyn", beds: 2, baths: 1, sqft: 1200, img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80" }
+            { id: 1, price: 1450000, title: "The Apex Horizon Villa", type: "Villa", stateFull: "california", stateShort: "ca", zip: "90210", city: "beverly hills", displayCity: "Beverly Hills", displayState: "CA", beds: 5, baths: 4, sqft: 4500, img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" },
+            { id: 2, price: 620000, title: "Skyview Luxury Loft", type: "Penthouse", stateFull: "new york", stateShort: "ny", zip: "10001", city: "manhattan", displayCity: "Manhattan", displayState: "NY", beds: 2, baths: 2, sqft: 1800, img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80" },
+            { id: 3, price: 2100000, title: "Panoramic Glass Estate", type: "Villa", stateFull: "florida", stateShort: "fl", zip: "33101", city: "miami", displayCity: "Miami", displayState: "FL", beds: 6, baths: 5.5, sqft: 5300, img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80" },
+            { id: 4, price: 340000, title: "Sunny Highrise Unit", type: "Apartment", stateFull: "florida", stateShort: "fl", zip: "33139", city: "miami beach", displayCity: "Miami Beach", displayState: "FL", beds: 1, baths: 1.5, sqft: 950, img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80" },
+            { id: 5, price: 485000, title: "Suburban Family House", type: "House", stateFull: "texas", stateShort: "tx", zip: "73301", city: "austin", displayCity: "Austin", displayState: "TX", beds: 3, baths: 2, sqft: 2100, img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80" },
+            { id: 6, price: 1250000, title: "Metropolitan Sky Penthouse", type: "Penthouse", stateFull: "illinois", stateShort: "il", zip: "60601", city: "chicago", displayCity: "Chicago", displayState: "IL", beds: 3, baths: 3, sqft: 2900, img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80" },
+            { id: 7, price: 890000, title: "Sunset Boulevard Residence", type: "House", stateFull: "california", stateShort: "ca", zip: "90026", city: "los angeles", displayCity: "Los Angeles", displayState: "CA", beds: 4, baths: 3, sqft: 3100, img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" },
+            { id: 8, price: 550000, title: "Brooklyn Modernist Studio", type: "Apartment", stateFull: "new york", stateShort: "ny", zip: "11201", city: "brooklyn", displayCity: "Brooklyn", displayState: "NY", beds: 2, baths: 1, sqft: 1200, img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80" }
         ];
 
-        // Function to render houses smoothly onto the grid layout
         function renderCards(propertiesList) {
             const grid = document.getElementById('properties-grid');
             const countBadge = document.getElementById('results-count');
             
-            grid.innerHTML = ''; // Clear previous display layout
+            grid.innerHTML = '';
             countBadge.innerText = `Showing ${propertiesList.length} listing(s)`;
 
             if (propertiesList.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-3 text-center py-12">
                         <i class="fa-solid fa-circle-question text-gray-300 text-5xl mb-4"></i>
-                        <p class="text-gray-500 font-medium">No properties found matching your criteria. Try searching 'CA', '33101', or 'NY'.</p>
+                        <p class="text-gray-500 font-medium">No properties found. Try typing 'California', 'FL', 'Miami', or a specific zip code like '10001'.</p>
                     </div>`;
                 return;
             }
@@ -122,7 +131,7 @@
                         <div class="p-6">
                             <div class="text-indigo-600 font-bold text-xl mb-2">$${house.price.toLocaleString()}</div>
                             <h3 class="text-lg font-bold text-gray-950 mb-2">${house.title}</h3>
-                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-location-dot mr-1"></i> ${house.city}, ${house.state} ${house.zip}</p>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-location-dot mr-1"></i> ${house.displayCity}, ${house.displayState} ${house.zip}</p>
                             <div class="flex justify-between text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium">
                                 <span><i class="fa-solid fa-bed text-indigo-600 mr-1"></i> ${house.beds} Beds</span>
                                 <span><i class="fa-solid fa-bath text-indigo-600 mr-1"></i> ${house.baths} Baths</span>
@@ -134,19 +143,18 @@
             });
         }
 
-        // Logic routing user text search and property drop-down values
         function filterProperties() {
             const query = document.getElementById('search-input').value.toLowerCase().trim();
             const selectedType = document.getElementById('type-filter').value;
 
             const filtered = propertyDatabase.filter(house => {
-                // Check match for Zip Code, State abbreviation, or City name
-                const matchesSearch = house.zip.includes(query) || 
-                                      house.state.toLowerCase() === query || 
-                                      house.city.toLowerCase().includes(query) ||
-                                      query === "";
+                // Smart check matching against full name, 2-letter abbreviation, zip code, or city string
+                const matchesSearch = query === "" || 
+                                      house.zip.includes(query) || 
+                                      house.stateFull.includes(query) || 
+                                      house.stateShort === query || 
+                                      house.city.includes(query);
 
-                // Check match for dropdown property types
                 const matchesType = selectedType === "all" || house.type === selectedType;
 
                 return matchesSearch && matchesType;
@@ -155,10 +163,10 @@
             renderCards(filtered);
         }
 
-        // Listen to active keystrokes for real-time Zillow-like search filtering
+        // Monitors user typing inputs to update the screen instantly like Zillow
         document.getElementById('search-input').addEventListener('input', filterProperties);
 
-        // Initial default view showing available database houses on load
+        // Display database houses immediately when the page finishes loading
         window.onload = () => renderCards(propertyDatabase);
     </script>
 </body>
