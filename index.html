@@ -16,8 +16,15 @@
                     <i class="fa-solid fa-building-user text-indigo-600 text-2xl"></i>
                     <span class="text-xl font-bold tracking-tight text-gray-950">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <span id="global-counter" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-xs">Loading Catalog...</span>
+                <div class="hidden md:flex space-x-8 font-semibold text-sm">
+                    <a href="#" class="text-indigo-600">Home</a>
+                    <a href="#catalog-section" class="text-gray-600 hover:text-indigo-600 transition">Buy/Rent Marketplace</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Luxury High-Rises</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600 transition">Exclusive Penthouses</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600 transition">About Company</a>
+                </div>
+                <div>
+                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs">VIP Portal</button>
                 </div>
             </div>
         </div>
@@ -29,93 +36,189 @@
         </div>
         <div class="relative max-w-3xl mx-auto px-4">
             <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">Infinite Luxury Real Estate Catalog</h1>
-            <p class="text-indigo-200 text-sm sm:text-base">Browse through our entire live collection of premium residential estates, high-rises, and modern architectural spaces.</p>
+            <p class="text-indigo-200 text-sm sm:text-base">Click any premium asset listing below to inspect interior design dimensions, multiple view angles, and structural breakdowns.</p>
         </div>
     </header>
 
-    <main class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
     </main>
 
-    <footer class="bg-slate-900 text-gray-400 py-8 text-center text-sm border-t border-slate-800">
+    <div id="details-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition duration-300 transform scale-95 relative flex flex-col">
+            
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 rounded-t-3xl">
+                <div>
+                    <span id="modal-tag" class="text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2">TAG</span>
+                    <span id="modal-id" class="text-gray-400 text-xs font-bold font-mono">ID</span>
+                </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-rose-600 transition bg-white p-2 rounded-full border border-gray-200 shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto space-y-6">
+                <div class="flex justify-between items-start gap-4">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-gray-950">Skyview Premium Architectural Estate</h2>
+                        <p class="text-indigo-600 font-bold text-sm uppercase tracking-wide mt-1">Location Verified Asset Niche • <span class="text-rose-500 bg-rose-50 text-xs px-2 py-0.5 rounded-sm font-semibold">Address Restricted For Security</span></p>
+                    </div>
+                    <div id="modal-price" class="text-3xl font-black text-indigo-600 tracking-tight">PRICE</div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-extrabold text-gray-950 uppercase tracking-wider mb-3"><i class="fa-solid fa-camera-retro mr-1.5 text-indigo-600"></i> Property View Angles & Elevations</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-3 h-72 rounded-2xl overflow-hidden bg-gray-100 group relative">
+                            <img id="gallery-main" src="" class="w-full h-full object-cover transition duration-300 group-hover:scale-102" alt="Primary Structural Front View Image">
+                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md">Front Elevation</div>
+                        </div>
+                        <div class="h-44 rounded-2xl overflow-hidden bg-gray-100 group relative">
+                            <img id="gallery-left" src="" class="w-full h-full object-cover transition duration-300 group-hover:scale-102" alt="Left Lateral Side Elevation Image">
+                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md">Left Lateral Aspect</div>
+                        </div>
+                        <div class="h-44 rounded-2xl overflow-hidden bg-gray-100 group relative">
+                            <img id="gallery-right" src="" class="w-full h-full object-cover transition duration-300 group-hover:scale-102" alt="Right Lateral Side Elevation Image">
+                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md">Right Lateral Aspect</div>
+                        </div>
+                        <div class="h-44 rounded-2xl overflow-hidden bg-gray-100 group relative">
+                            <img id="gallery-interior" src="" class="w-full h-full object-cover transition duration-300 group-hover:scale-102" alt="Interior Architecture Spatial Image Layout">
+                            <div class="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md">Interior Architecture Spatial View</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-bed text-indigo-600 text-lg mb-1 block"></i>
+                        <span class="block text-gray-400 text-xxs font-bold uppercase tracking-wider">Bedrooms</span>
+                        <span id="modal-beds" class="text-base font-extrabold text-gray-950">X Beds</span>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-bath text-indigo-600 text-lg mb-1 block"></i>
+                        <span class="block text-gray-400 text-xxs font-bold uppercase tracking-wider">Bathrooms</span>
+                        <span id="modal-baths" class="text-base font-extrabold text-gray-950">X Baths</span>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-ruler-combined text-indigo-600 text-lg mb-1 block"></i>
+                        <span class="block text-gray-400 text-xxs font-bold uppercase tracking-wider">Dimensions</span>
+                        <span id="modal-sqft" class="text-base font-extrabold text-gray-950">X sqft</span>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-compass-drafting text-indigo-600 text-lg mb-1 block"></i>
+                        <span class="block text-gray-400 text-xxs font-bold uppercase tracking-wider">Property Type</span>
+                        <span id="modal-type" class="text-base font-extrabold text-gray-950">Type</span>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-100 pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <h4 class="font-extrabold text-gray-950 uppercase tracking-wider text-xs mb-3">Asset Technical Infrastructure</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li><i class="fa-solid fa-circle-check text-indigo-600 mr-2"></i><strong>HVAC Zone Control:</strong> Modern Smart Central Air & Heat</li>
+                            <li><i class="fa-solid fa-circle-check text-indigo-600 mr-2"></i><strong>Foundation Matrix:</strong> Reinforced Premium Cast Concrete Floor</li>
+                            <li><i class="fa-solid fa-circle-check text-indigo-600 mr-2"></i><strong>Smart Controls:</strong> Integrated Security System Panels Installed</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold text-gray-950 uppercase tracking-wider text-xs mb-3">Financial Terms & Policy</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li><i class="fa-solid fa-shield-halved text-indigo-600 mr-2"></i><strong>Escrow Routing:</strong> Fully Managed Digital Asset Escrow</li>
+                            <li><i class="fa-solid fa-shield-halved text-indigo-600 mr-2"></i><strong>Inspection Clearance:</strong> Tier 1 Structural Clearance Certified</li>
+                            <li><i class="fa-solid fa-shield-halved text-indigo-600 mr-2"></i><strong>Legal Disclaimers:</strong> High-Privacy Transactional Terms Apply</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-3xl flex gap-3">
+                <button onclick="closeModal()" class="w-1/3 bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-sm py-3 rounded-xl transition cursor-pointer">Close Portfolio</button>
+                <button type="button" class="w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer">Initiate Confidential Inquiry</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-slate-900 text-gray-400 py-8 text-center text-sm">
         <p>&copy; 2026 SKYVIEW PROPERTIES. All rights reserved.</p>
     </footer>
 
     <script>
-        // Array of professional real estate architectural images to cycle through
-        const luxuryImages = [
+        // Array matrices holding distinct collections for cycling front, side profiles, and interior specs smoothly
+        const frontViews = [
             "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80"
+        ];
+        const sideViewsLeft = [
             "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80"
+        ];
+        const sideViewsRight = [
+            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80"
+        ];
+        const interiorViews = [
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80",
-            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80"
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=600&q=80"
         ];
 
-        // Core compilation building function
-        function generateMassiveCatalog(totalHousesNeeded) {
+        // Global dataset allocation array in-memory
+        let generatedPropertiesMemory = [];
+
+        function generateAndRenderCatalog(count) {
             const grid = document.getElementById('master-catalog-grid');
-            const counter = document.getElementById('global-counter');
-            
-            let htmlBuffer = ""; // Hold elements in memory for faster processing layout rendering
+            let htmlBuffer = "";
 
-            for (let i = 1; i <= totalHousesNeeded; i++) {
-                // Alternates half of the database as sale, half as rent
-                const isForSale = i % 2 === 0; 
-                const tagText = isForSale ? "FOR SALE" : "FOR RENT";
-                const tagColor = isForSale ? "bg-indigo-600" : "bg-emerald-600";
+            for (let i = 1; i <= count; i++) {
+                const isForSale = i % 2 === 0;
+                const typeOptions = ["Penthouse", "Apartment", "Villa", "House"];
+                const selectedType = typeOptions[i % typeOptions.length];
+                
+                const randomPrice = isForSale ? Math.floor(450000 + (i * 4850)) : Math.floor(1800 + (i * 12));
+                const priceFormatted = isForSale ? `$${randomPrice.toLocaleString()}` : `$${randomPrice.toLocaleString()} / mo`;
+                
+                const beds = (i % 4) + 2;
+                const baths = (i % 3) + 1.5;
+                const sqft = Math.floor(1100 + (i * 15));
+                const propertyId = `SK-${2000 + i}`;
 
-                // Mathematical formulas creating dynamic ranges for layout realism
-                const randomPrice = isForSale 
-                    ? Math.floor(450000 + (i * 4850)) 
-                    : Math.floor(1800 + (i * 12));
-                    
-                const priceString = isForSale 
-                    ? `$${randomPrice.toLocaleString()}` 
-                    : `$${randomPrice.toLocaleString()} / mo`;
+                // Extract cross-index view strings mathematically 
+                const imgFront = frontViews[i % frontViews.length];
+                const imgLeft = sideViewsLeft[i % sideViewsLeft.length];
+                const imgRight = sideViewsRight[i % sideViewsRight.length];
+                const imgIn = interiorViews[i % interiorViews.length];
 
-                const beds = (i % 4) + 2; // Cycle bedrooms dynamically between 2 and 5
-                const baths = (i % 3) + 1.5; // Cycle bathrooms dynamically between 1.5 and 3.5
-                const dimensionsSqft = Math.floor(1100 + (i * 15)); // Build scaled dimensions
+                // Create individual object structure and save inside global layout index
+                const propertyObject = {
+                    id: propertyId, price: priceFormatted, tagText: isForSale ? "FOR SALE" : "FOR RENT",
+                    tagColor: isForSale ? "bg-indigo-600" : "bg-emerald-600", type: selectedType,
+                    beds: beds, baths: baths, sqft: sqft, front: imgFront, left: imgLeft, right: imgRight, interior: imgIn
+                };
+                
+                generatedPropertiesMemory.push(propertyObject);
 
-                // Smoothly cycle through the image bank array cleanly
-                const selectedImage = luxuryImages[i % luxuryImages.length];
-
-                // Append the complete high-fidelity card component markup structural logic
                 htmlBuffer += `
-                    <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200 hover:shadow-md transition duration-300">
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200 hover:shadow-md transition duration-300 flex flex-col justify-between">
                         <div class="relative h-60 bg-gray-100">
-                            <img src="${selectedImage}" alt="Skyview Premium Property Listing" class="w-full h-full object-cover">
-                            <span class="absolute top-4 left-4 ${tagColor} text-white text-xs font-bold px-3 py-1 rounded-full tracking-wider shadow-xs">${tagText}</span>
-                            <span class="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md font-medium">ID #SK-${2000 + i}</span>
+                            <img src="${imgFront}" alt="Skyview Premium Property Listing" class="w-full h-full object-cover">
+                            <span class="absolute top-4 left-4 ${propertyObject.tagColor} text-white text-xs font-bold px-3 py-1 rounded-full tracking-wider shadow-xs">${propertyObject.tagText}</span>
+                            <span class="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md font-medium">ID #${propertyId}</span>
                         </div>
-                        <div class="p-6">
-                            <div class="text-indigo-600 font-extrabold text-2xl mb-2">${priceString}</div>
-                            <h3 class="text-lg font-bold text-gray-950 mb-1 truncate">Skyview Elite Asset Residence</h3>
-                            <p class="text-gray-400 text-xs font-semibold uppercase tracking-wider mb-4">Premium Location Grid Tier</p>
-                            
-                            <div class="grid grid-cols-3 gap-2 text-center text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium">
-                                <div class="bg-gray-50 py-2 rounded-xl">
-                                    <i class="fa-solid fa-bed text-indigo-600 mb-1 block text-sm"></i>
-                                    <span>${beds} Beds</span>
-                                </div>
-                                <div class="bg-gray-50 py-2 rounded-xl">
-                                    <i class="fa-solid fa-bath text-indigo-600 mb-1 block text-sm"></i>
-                                    <span>${baths} Baths</span>
-                                </div>
-                                <div class="bg-gray-50 py-2 rounded-xl">
-                                    <i class="fa-solid fa-ruler-combined text-indigo-600 mb-1 block text-sm"></i>
-                                    <span>${dimensionsSqft} sqft</span>
-                                </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <div class="text-indigo-600 font-extrabold text-2xl mb-1">${priceFormatted}</div>
+                                <h3 class="text-lg font-bold text-gray-950 mb-4 truncate">Skyview Elite Asset Residence</h3>
                             </div>
                             
-                            <div class="mt-5 pt-1">
-                                <button type="button" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-semibold text-sm py-2.5 rounded-xl transition duration-200 shadow-xs cursor-pointer">
+                            <div>
+                                <div class="grid grid-cols-3 gap-2 text-center text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium mb-5">
+                                    <div class="bg-gray-50 py-2 rounded-xl"><span>${beds} Beds</span></div>
+                                    <div class="bg-gray-50 py-2 rounded-xl"><span>${baths} Baths</span></div>
+                                    <div class="bg-gray-50 py-2 rounded-xl"><span>${sqft} sqft</span></div>
+                                </div>
+                                <button type="button" onclick="openModal('${propertyId}')" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-semibold text-sm py-2.5 rounded-xl transition duration-200 shadow-xs cursor-pointer">
                                     Inquire Details
                                 </button>
                             </div>
@@ -123,15 +226,47 @@
                     </div>
                 `;
             }
-
-            // Draw all compiled elements instantly to the browser window DOM layout
             grid.innerHTML = htmlBuffer;
-            counter.innerText = `Total Catalog Portfolio: ${totalHousesNeeded} Properties`;
         }
 
-        // Initialize and fire execution pipeline to build 320 houses automatically on load
+        // Logic routing target array attributes down onto modal layout selectors safely
+        function openModal(id) {
+            const property = generatedPropertiesMemory.find(item => item.id === id);
+            if (!property) return;
+
+            document.getElementById('modal-id').innerText = `ID #${property.id}`;
+            document.getElementById('modal-price').innerText = property.price;
+            document.getElementById('modal-tag').innerText = property.tagText;
+            
+            // Apply corresponding stylistic tracking colors
+            const tagBadge = document.getElementById('modal-tag');
+            tagBadge.className = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${property.tagColor}`;
+
+            document.getElementById('modal-beds').innerText = `${property.beds} Bedrooms`;
+            document.getElementById('modal-baths').innerText = `${property.baths} Bathrooms`;
+            document.getElementById('modal-sqft').innerText = `${property.sqft.toLocaleString()} Sq Ft`;
+            document.getElementById('modal-type').innerText = property.type;
+
+            // Load Multi-Angle Image Array Profiles directly into individual DOM slots
+            document.getElementById('gallery-main').src = property.front;
+            document.getElementById('gallery-left').src = property.left;
+            document.getElementById('gallery-right').src = property.right;
+            document.getElementById('gallery-interior').src = property.interior;
+
+            // Display backdrop modal
+            const modal = document.getElementById('details-modal');
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); // Block double outer window layout scrolls
+        }
+
+        function closeModal() {
+            document.getElementById('details-modal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Generate complete runtime data parameters tracking 310 total structures on mount
         window.addEventListener('DOMContentLoaded', () => {
-            generateMassiveCatalog(320);
+            generateAndRenderCatalog(310);
         });
     </script>
 </body>
