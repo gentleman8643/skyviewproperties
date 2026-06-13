@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skyview Properties | Nationwide Portfolios</title>
+    <!-- Tailwind CSS for high-fidelity styling -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for layout icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
 
+    <!-- NAVIGATION BAR -->
     <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
@@ -28,52 +31,76 @@
         </div>
     </nav>
 
+    <!-- HEADER TITLE BANNER -->
     <header class="bg-slate-900 text-white py-12 text-center relative overflow-hidden">
         <div class="absolute inset-0 opacity-20">
             <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover" alt="Banner background">
         </div>
         <div class="relative max-w-3xl mx-auto px-4">
             <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">Unified United States Housing Index</h1>
-            <p class="text-indigo-200 text-sm sm:text-base">Inspecting a verified portfolio of 2,000+ active residential assets spanning premium tiers and community assistance classes.</p>
+            <p class="text-indigo-200 text-sm sm:text-base">Inspecting a verified portfolio of active residential assets spanning premium tiers and community assistance classes.</p>
         </div>
     </header>
 
+    <!-- INTERACTIVE PRICE & BEDROOM FILTER SYSTEM CONSOLE -->
     <section class="bg-white border-b border-gray-200 sticky top-16 z-40 shadow-2xs">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap gap-3 items-center justify-between">
-            <div class="flex bg-gray-100 p-1 rounded-xl border border-gray-200">
-                <button onclick="changeTier('all')" id="tab-all" class="px-4 py-2 text-xs font-bold rounded-lg transition duration-150 cursor-pointer bg-white text-indigo-600 shadow-2xs">
-                    <i class="fa-solid fa-layer-group mr-1.5"></i> All Portfolios (2,000+)
-                </button>
-                <button onclick="changeTier('luxury')" id="tab-luxury" class="px-4 py-2 text-xs font-bold rounded-lg transition duration-150 cursor-pointer text-gray-600 hover:text-indigo-600">
-                    <i class="fa-solid fa-crown mr-1.5 text-amber-500"></i> Elite Luxury Estates
-                </button>
-                <button onclick="changeTier('affordable')" id="tab-affordable" class="px-4 py-2 text-xs font-bold rounded-lg transition duration-150 cursor-pointer text-gray-600 hover:text-emerald-600">
-                    <i class="fa-solid fa-hand-holding-heart mr-1.5 text-emerald-500"></i> Affordable Housing Tiers
-                </button>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+                <div>
+                    <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Minimum Budget ($)</label>
+                    <input type="number" id="filter-min-price" placeholder="e.g. 500" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Maximum Budget ($)</label>
+                    <input type="number" id="filter-max-price" placeholder="e.g. 1500000" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Size Requirements</label>
+                    <select id="filter-beds" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
+                        <option value="all">Any Bedroom Count</option>
+                        <option value="1">1+ Bedrooms</option>
+                        <option value="2">2+ Bedrooms</option>
+                        <option value="3">3+ Bedrooms</option>
+                        <option value="4">4+ Bedrooms</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="button" onclick="applyFilters()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg transition uppercase tracking-wider shadow-2xs cursor-pointer h-[34px]">
+                        <i class="fa-solid fa-sliders mr-1"></i> Apply Parameters
+                    </button>
+                </div>
             </div>
-            <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider" id="filter-status">
-                Compiling structural assets...
+
+            <!-- TIER TOGGLE SWITCHES -->
+            <div class="flex gap-2 mt-4 border-t border-gray-100 pt-3">
+                <button onclick="changeTier('all')" id="tab-all" class="px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs">All Asset Portfolios</button>
+                <button onclick="changeTier('luxury')" id="tab-luxury" class="px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-indigo-600 bg-gray-100">Elite Luxury Estates</button>
+                <button onclick="changeTier('affordable')" id="tab-affordable" class="px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-emerald-600 bg-gray-100">Affordable Housing Tiers</button>
             </div>
         </div>
     </section>
 
+    <!-- LIVE CATALOG GRID -->
     <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow">
         <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
+            <!-- Dynamic data cards render here instantly -->
+        </div>
 
+        <!-- PAGINATION NAVIGATION CONTROL CONTROLLER INTERFACE -->
         <div class="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
             <button onclick="previousPage()" id="btn-prev" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i> Previous Tier
+                <i class="fa-solid fa-arrow-left"></i> Previous Page
             </button>
-            <span id="page-indicator" class="text-sm font-bold text-gray-600 bg-gray-100 px-4 py-1.5 rounded-full border border-gray-200">
-                Page 1 of X
+            <span id="page-indicator" class="text-xs font-bold text-gray-500 bg-gray-100 px-4 py-1.5 rounded-full border border-gray-200">
+                Page 1
             </span>
             <button onclick="nextPage()" id="btn-next" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
-                Next Tier <i class="fa-solid fa-arrow-right"></i>
+                Next Page <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
     </main>
 
+    <!-- PROPERTY INSPECTION DETAILS MODAL -->
     <div id="details-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition duration-300 transform scale-95 relative flex flex-col">
             <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 rounded-t-3xl">
@@ -134,13 +161,14 @@
                 </div>
             </div>
             <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-3xl flex gap-3">
-                <button onclick="closeModal()" class="w-1/3 bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-sm py-3 rounded-xl transition cursor-pointer">Close Matrix</button>
+                <button onclick="closeModal()" class="w-1/3 bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-sm py-3 rounded-xl transition cursor-pointer">Close Portfolio</button>
                 <button type="button" class="w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer">Initiate Confidential Inquiry</button>
             </div>
         </div>
     </div>
 
-    <footer id="footer-contact" class="bg-slate-900 text-gray-300 pt-16 pb-8 border-t border-slate-800">
+    <!-- CORPORATE FOOTER -->
+    <footer id="footer-contact" class="bg-slate-900 text-gray-300 pt-16 pb-8 border-t border-slate-800 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             <div>
                 <div class="flex items-center gap-2 text-white mb-4">
@@ -171,8 +199,8 @@
         </div>
     </footer>
 
+    <!-- REAL ESTATE ENGINE CODE -->
     <script>
-        // Photo view configurations matrices
         const galleryFront = [
             "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80",
             "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80",
@@ -183,56 +211,51 @@
         const galleryRight = ["https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80"];
         const galleryIn = ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80"];
 
-        // Runtime Storage Registers
         let masterDatabase = [];
         let filteredSelection = [];
         let currentPage = 1;
-        const recordsPerPage = 12; // Render grid size block caps
+        const recordsPerPage = 12; 
         let currentActiveTier = "all";
 
-        // Auto-generation loop running upon boot configuration
-        function compileRealEstateNetwork() {
-            masterDatabase = []; // Empty system index
-            
-            // Build 2,150 distinct houses procedurally alternating metrics completely free
-            for (let i = 1; i <= 2150; i++) {
-                const isAffordable = i % 2 === 0; // Split data evenly between brackets
+        // Performance Optimized Generation
+        function buildAssetDatabase() {
+            masterDatabase = [];
+            for (let i = 1; i <= 2100; i++) {
+                const isAffordable = i % 2 === 0;
                 const tierClass = isAffordable ? "affordable" : "luxury";
-                const isForSale = i % 3 !== 0; // Alternates sales tags
+                const isForSale = i % 3 !== 0;
                 const tagText = isForSale ? "FOR SALE" : "FOR RENT";
 
-                let price, priceFormatted, title;
+                let numericPrice, priceFormatted, title;
                 
                 if (tierClass === "luxury") {
-                    price = Math.floor(850000 + (i * 1200));
-                    priceFormatted = isForSale ? `$${price.toLocaleString()}` : `$${Math.floor(3500 + (i * 4)).toLocaleString()} / mo`;
+                    numericPrice = Math.floor(450000 + (i * 950));
+                    priceFormatted = isForSale ? `$${numericPrice.toLocaleString()}` : `$${Math.floor(3500 + (i * 2)).toLocaleString()} / mo`;
                     title = "Skyview Elite Premium Estate";
                 } else {
-                    // Affordable, low-income tier ranges
-                    price = Math.floor(85000 + (i * 95));
-                    priceFormatted = isForSale ? `$${price.toLocaleString()}` : `$${Math.floor(750 + (i * 0.5)).toLocaleString()} / mo`;
+                    numericPrice = Math.floor(400 + (i * 110));
+                    priceFormatted = isForSale ? `$${numericPrice.toLocaleString()}` : `$${Math.floor(650 + (i * 0.4)).toLocaleString()} / mo`;
                     title = "Skyview Community Urban Residence";
                 }
 
-                const beds = isAffordable ? (i % 2) + 1 : (i % 3) + 4; // Low-income compact properties vs vast layouts
-                const baths = isAffordable ? (i % 2) + 1 : (i % 2) + 3;
-                const sqft = isAffordable ? Math.floor(750 + (i * 0.5)) : Math.floor(2800 + (i * 3));
-                const assetId = `SK-${4000 + i}`;
-
                 masterDatabase.push({
-                    id: assetId, price: priceFormatted, tagText: tagText,
+                    id: `SK-${5000 + i}`,
+                    priceRaw: numericPrice,
+                    priceDisplay: priceFormatted,
+                    tagText: tagText,
                     tagColor: tierClass === "luxury" ? "bg-indigo-600" : "bg-emerald-600",
-                    title: title, tier: tierClass, beds: beds, baths: baths, sqft: sqft,
+                    title: title, 
+                    tier: tierClass, 
+                    beds: isAffordable ? (i % 2) + i % 2 + 1 : (i % 3) + 3, 
+                    baths: isAffordable ? 1 : 3, 
+                    sqft: isAffordable ? Math.floor(650 + (i * 0.4)) : Math.floor(2500 + (i * 2)),
                     front: galleryFront[i % galleryFront.length],
                     left: galleryLeft[i % galleryLeft.length],
                     right: galleryRight[i % galleryRight.length],
                     interior: galleryIn[i % galleryIn.length]
                 });
             }
-            
-            // Mirror array pointer down to display filter cache registers
             filteredSelection = [...masterDatabase];
-            updateDashboardMetrics();
             renderCatalogGrid();
         }
 
@@ -240,13 +263,16 @@
             const grid = document.getElementById('master-catalog-grid');
             grid.innerHTML = "";
 
-            // Calculate exact algorithmic layout indices slice window boundaries
             const startIdx = (currentPage - 1) * recordsPerPage;
             const endIdx = startIdx + recordsPerPage;
             const operationalPageSlice = filteredSelection.slice(startIdx, endIdx);
 
             if (operationalPageSlice.length === 0) {
-                grid.innerHTML = '<p class="col-span-3 text-center text-gray-500 py-12">No regional structural properties match the designated tier indices.</p>';
+                grid.innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <i class="fa-solid fa-filter text-gray-300 text-4xl mb-2"></i>
+                        <p class="text-gray-500 font-medium text-sm">No properties found inside those search fields. Try broadening your parameters.</p>
+                    </div>`;
                 return;
             }
 
@@ -261,7 +287,7 @@
                         </div>
                         <div class="p-6 flex-grow flex flex-col justify-between">
                             <div>
-                                <div class="text-indigo-600 font-extrabold text-2xl mb-1">${house.price}</div>
+                                <div class="text-indigo-600 font-extrabold text-2xl mb-1">${house.priceDisplay}</div>
                                 <h3 class="text-base font-bold text-gray-950 mb-4 truncate">${house.title}</h3>
                             </div>
                             <div>
@@ -281,7 +307,6 @@
 
             grid.innerHTML = htmlBuffer;
             
-            // Adjust core button visibility registers based on limits boundaries
             document.getElementById('btn-prev').disabled = currentPage === 1;
             document.getElementById('btn-prev').style.opacity = currentPage === 1 ? "0.4" : "1";
             
@@ -289,28 +314,96 @@
             document.getElementById('btn-next').disabled = currentPage === maxPages || maxPages === 0;
             document.getElementById('btn-next').style.opacity = (currentPage === maxPages || maxPages === 0) ? "0.4" : "1";
 
-            document.getElementById('page-indicator').innerText = `Catalog Page ${currentPage} of ${maxPages || 1}`;
+            document.getElementById('page-indicator').innerText = `Catalog Page ${currentPage}`;
         }
 
-        // Tier filtering state routers
+        // Search Parameters Filters Engine
+        function applyFilters() {
+            const minPrice = parseInt(document.getElementById('filter-min-price').value) || 0;
+            const maxPrice = parseInt(document.getElementById('filter-max-price').value) || Infinity;
+            const bedsSelect = document.getElementById('filter-beds').value;
+
+            // First isolate by current active layout category tier
+            let initialSlice = [...masterDatabase];
+            if (currentActiveTier !== "all") {
+                initialSlice = masterDatabase.filter(house => house.tier === currentActiveTier);
+            }
+
+            // Refine by custom structural metrics fields
+            filteredSelection = initialSlice.filter(house => {
+                const matchesPrice = house.priceRaw >= minPrice && house.priceRaw <= maxPrice;
+                const matchesBeds = bedsSelect === "all" || house.beds >= parseInt(bedsSelect);
+                return matchesPrice && matchesBeds;
+            });
+
+            currentPage = 1; 
+            renderCatalogGrid();
+        }
+
         function changeTier(tier) {
             currentActiveTier = tier;
-            currentPage = 1; // Always reset pagination indexes back to foundation index upon switch
-
-            // Remove previous active element tailwind classes
+            
             ['all', 'luxury', 'affordable'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
-                btn.className = "px-4 py-2 text-xs font-bold rounded-lg transition duration-150 cursor-pointer text-gray-600 hover:text-indigo-600";
+                btn.className = "px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 bg-gray-100 hover:bg-gray-200";
             });
 
             const activeBtn = document.getElementById(`tab-${tier}`);
-            if (tier === 'affordable') {
-                activeBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition duration-150 cursor-pointer bg-emerald-50 text-emerald-600 shadow-2xs border border-emerald-200";
-            } else if (tier === 'luxury') {
-                activeBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition duration-150 cursor-pointer bg-amber-50 text-amber-700 shadow-2xs border border-amber-200";
-            } else {
-                activeBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition duration-150 cursor-pointer bg-white text-indigo-600 shadow-2xs border border-gray-200";
-            }
+            activeBtn.className = "px-4 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs";
 
-            if (tier === "all") {
-                filteredSelection =
+            // Re-apply values to drop custom ranges on switch cleanly
+            applyFilters();
+        }
+
+        function nextPage() {
+            const maxPages = Math.ceil(filteredSelection.length / recordsPerPage);
+            if (currentPage < maxPages) {
+                currentPage++;
+                renderCatalogGrid();
+                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderCatalogGrid();
+                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function openModal(id) {
+            const house = masterDatabase.find(item => item.id === id);
+            if (!house) return;
+
+            document.getElementById('modal-id').innerText = `ID #${house.id}`;
+            document.getElementById('modal-price').innerText = house.priceDisplay;
+            document.getElementById('modal-tag').innerText = house.tagText;
+            document.getElementById('modal-title').innerText = house.title;
+            
+            const tagBadge = document.getElementById('modal-tag');
+            tagBadge.className = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${house.tagColor}`;
+
+            document.getElementById('modal-beds').innerText = `${house.beds} Bed Spaces`;
+            document.getElementById('modal-baths').innerText = `${house.baths} Bathrooms`;
+            document.getElementById('modal-sqft').innerText = `${house.sqft.toLocaleString()} Sq Ft Dimensions`;
+            document.getElementById('modal-type').innerText = house.tier === 'luxury' ? 'Premium Mansion Asset' : 'Affordable Housing Unit';
+
+            document.getElementById('gallery-main').src = house.front;
+            document.getElementById('gallery-left').src = house.left;
+            document.getElementById('gallery-right').src = house.right;
+            document.getElementById('gallery-interior').src = house.interior;
+
+            document.getElementById('details-modal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('details-modal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        window.addEventListener('DOMContentLoaded', buildAssetDatabase);
+    </script>
+</body>
+</html>
