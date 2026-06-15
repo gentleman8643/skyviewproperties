@@ -6,24 +6,35 @@
     <title>Skyview Properties | Nationwide Portfolios</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+    </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
 
-    <main class="py-12 max-w-7xl mx-auto px-4">
-        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <span class="text-xl font-bold">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow">
+        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
     </main>
 
-    <div id="details-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-2xl w-full p-8 relative">
+    <div id="details-modal" class="fixed inset-0 bg-slate-950/60 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-8 relative">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500">Close</button>
-            <h2 id="modal-title" class="text-2xl font-bold"></h2>
-            <p id="modal-type" class="text-indigo-600 font-bold"></p>
+            <h2 id="modal-title" class="text-2xl font-extrabold"></h2>
+            <p id="modal-type" class="text-indigo-600 font-bold uppercase text-xs"></p>
             <div id="modal-price" class="text-3xl font-black text-indigo-600 my-4"></div>
-            <div class="grid grid-cols-3 gap-4 text-center">
-                <div id="modal-beds"></div>
-                <div id="modal-baths"></div>
-                <div id="modal-sqft"></div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="text-center"><span id="modal-beds" class="block font-bold"></span>Beds</div>
+                <div class="text-center"><span id="modal-baths" class="block font-bold"></span>Baths</div>
+                <div class="text-center"><span id="modal-sqft" class="block font-bold"></span>Sqft</div>
             </div>
         </div>
     </div>
@@ -32,14 +43,10 @@
         let masterDatabase = [];
 
         function buildAssetDatabase() {
-            // Generating 6 test items to match your spreadsheet count
+            // Your updated database
             masterDatabase = [
-                {id: "SVP30000", priceDisplay: "$280,000", title: "16 Forest Dr", beds: 3, baths: 1, sqft: 1326, tier: "affordable", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
-                {id: "SVP30001", priceDisplay: "$200,000", title: "1 Southwest Way", beds: 1, baths: 1.5, sqft: 1318, tier: "affordable", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
-                {id: "SVP30002", priceDisplay: "$900,000", title: "18 Burton Lane", beds: 4, baths: 2.5, sqft: 3140, tier: "luxury", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
-                {id: "SVP30003", priceDisplay: "$1,000,000", title: "1025 White Knoll", beds: 3, baths: 3, sqft: 2660, tier: "luxury", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
-                {id: "SVP30004", priceDisplay: "$400,000", title: "253 S Broadway", beds: 1, baths: 1, sqft: 940, tier: "affordable", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
-                {id: "SVP30005", priceDisplay: "$1,300,000", title: "811 Madison Ave", beds: 32, baths: 12, sqft: 8592, tier: "commercial", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"}
+                {id: "SVP30000", priceDisplay: "$280,000", title: "Forest Estate", beds: 3, baths: 1, sqft: 1326, tier: "affordable", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
+                {id: "SVP30005", priceDisplay: "$1,300,000", title: "Madison Facility", beds: 32, baths: 12, sqft: 8592, tier: "commercial", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"}
             ];
             renderCatalogGrid();
         }
@@ -49,18 +56,16 @@
             grid.innerHTML = "";
             masterDatabase.forEach(house => {
                 grid.innerHTML += `
-                    <div class="bg-white rounded-xl shadow p-4 border border-gray-200">
+                    <div class="bg-white rounded-2xl shadow border p-6">
                         <img src="${house.front}" class="w-full h-40 object-cover rounded-lg">
-                        <div class="mt-4">
-                            <div class="text-xl font-bold text-indigo-600">${house.priceDisplay}</div>
-                            <h3 class="font-bold">${house.title}</h3>
-                            <div class="flex gap-4 text-sm mt-2">
-                                <span>${house.beds} Beds</span>
-                                <span>${house.baths} Baths</span>
-                                <span>${house.sqft} SqFt</span>
-                            </div>
-                            <button onclick="openModal('${house.id}')" class="w-full mt-4 bg-slate-900 text-white py-2 rounded-lg">Inspect</button>
+                        <div class="text-2xl font-bold text-indigo-600 mt-4">${house.priceDisplay}</div>
+                        <h3 class="font-bold text-lg">${house.title}</h3>
+                        <div class="grid grid-cols-3 gap-2 mt-4 text-xs">
+                            <div>${house.beds} Beds</div>
+                            <div>${house.baths} Baths</div>
+                            <div>${house.sqft} Sqft</div>
                         </div>
+                        <button onclick="openModal('${house.id}')" class="w-full mt-4 bg-slate-900 text-white py-2 rounded-lg">Inspect</button>
                     </div>
                 `;
             });
@@ -70,10 +75,14 @@
             const house = masterDatabase.find(item => item.id === id);
             document.getElementById('modal-title').innerText = house.title;
             document.getElementById('modal-price').innerText = house.priceDisplay;
-            document.getElementById('modal-beds').innerText = house.beds + " Beds";
-            document.getElementById('modal-baths').innerText = house.baths + " Baths";
-            document.getElementById('modal-sqft').innerText = house.sqft + " SqFt";
-            document.getElementById('modal-type').innerText = house.tier.toUpperCase();
+            document.getElementById('modal-beds').innerText = house.beds;
+            document.getElementById('modal-baths').innerText = house.baths;
+            document.getElementById('modal-sqft').innerText = house.sqft;
+            
+            // Handle Commercial Tier Label
+            let type = house.tier === 'commercial' ? 'Commercial Facility' : house.tier.toUpperCase();
+            document.getElementById('modal-type').innerText = type;
+            
             document.getElementById('details-modal').classList.remove('hidden');
         }
 
@@ -81,7 +90,7 @@
             document.getElementById('details-modal').classList.add('hidden');
         }
 
-        // Initialize immediately
+        // Initialize perfectly
         window.onload = buildAssetDatabase;
     </script>
 </body>
