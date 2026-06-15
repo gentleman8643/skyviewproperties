@@ -10,7 +10,7 @@
         html { scroll-behavior: smooth; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
 
     <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,36 +20,30 @@
         </div>
     </nav>
 
-    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow">
-        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
+    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 flex-grow">
+        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
     </main>
 
     <div id="details-modal" class="fixed inset-0 bg-slate-950/60 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-4xl w-full p-8 relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500">Close</button>
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-8 relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 font-bold">Close</button>
             <h2 id="modal-title" class="text-2xl font-extrabold"></h2>
-            <p id="modal-type" class="text-indigo-600 font-bold uppercase text-xs"></p>
+            <p id="modal-type" class="text-indigo-600 font-bold text-xs uppercase"></p>
             <div id="modal-price" class="text-3xl font-black text-indigo-600 my-4"></div>
-            <div class="grid grid-cols-3 gap-4">
-                <div class="text-center"><span id="modal-beds" class="block font-bold"></span>Beds</div>
-                <div class="text-center"><span id="modal-baths" class="block font-bold"></span>Baths</div>
-                <div class="text-center"><span id="modal-sqft" class="block font-bold"></span>Sqft</div>
+            <div class="grid grid-cols-3 gap-4 text-center font-bold">
+                <div><span id="modal-beds" class="block"></span>Beds</div>
+                <div><span id="modal-baths" class="block"></span>Baths</div>
+                <div><span id="modal-sqft" class="block"></span>Sqft</div>
             </div>
         </div>
     </div>
 
     <script>
-        let masterDatabase = [];
-
-        function buildAssetDatabase() {
-            // Your updated database
-            masterDatabase = [
-                {id: "SVP30000", priceDisplay: "$280,000", title: "Forest Estate", beds: 3, baths: 1, sqft: 1326, tier: "affordable", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
-                {id: "SVP30005", priceDisplay: "$1,300,000", title: "Madison Facility", beds: 32, baths: 12, sqft: 8592, tier: "commercial", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"}
-            ];
-            renderCatalogGrid();
-        }
+        // Your database defined correctly without extra quotes
+        let masterDatabase = [
+            {id: "SVP30000", priceDisplay: "$280,000", title: "Forest Estate", beds: 3, baths: 1, sqft: 1326, tier: "affordable", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
+            {id: "SVP30005", priceDisplay: "$1,300,000", title: "Madison Facility", beds: 32, baths: 12, sqft: 8592, tier: "commercial", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"}
+        ];
 
         function renderCatalogGrid() {
             const grid = document.getElementById('master-catalog-grid');
@@ -65,7 +59,7 @@
                             <div>${house.baths} Baths</div>
                             <div>${house.sqft} Sqft</div>
                         </div>
-                        <button onclick="openModal('${house.id}')" class="w-full mt-4 bg-slate-900 text-white py-2 rounded-lg">Inspect</button>
+                        <button onclick="openModal('${house.id}')" class="w-full mt-4 bg-slate-900 text-white py-2 rounded-lg cursor-pointer">Inspect</button>
                     </div>
                 `;
             });
@@ -78,11 +72,7 @@
             document.getElementById('modal-beds').innerText = house.beds;
             document.getElementById('modal-baths').innerText = house.baths;
             document.getElementById('modal-sqft').innerText = house.sqft;
-            
-            // Handle Commercial Tier Label
-            let type = house.tier === 'commercial' ? 'Commercial Facility' : house.tier.toUpperCase();
-            document.getElementById('modal-type').innerText = type;
-            
+            document.getElementById('modal-type').innerText = house.tier === 'commercial' ? 'Commercial Facility' : house.tier.toUpperCase();
             document.getElementById('details-modal').classList.remove('hidden');
         }
 
@@ -90,8 +80,8 @@
             document.getElementById('details-modal').classList.add('hidden');
         }
 
-        // Initialize perfectly
-        window.onload = buildAssetDatabase;
+        // Initialize when page loads
+        window.onload = renderCatalogGrid;
     </script>
 </body>
 </html>
