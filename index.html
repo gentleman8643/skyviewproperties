@@ -6,93 +6,46 @@
     <title>Skyview Properties | Nationwide Portfolios</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        html { scroll-behavior: smooth; }
-        @keyframes pulse-gentle {
-            0%, 100% { transform: scale(1); box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4); }
-            50% { transform: scale(1.03); box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.6); }
-        }
-        .animate-pulse-gentle { animation: pulse-gentle 3s infinite ease-in-out; }
-    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
+<body class="bg-gray-50 text-gray-800">
 
-    <a href="https://wa.me/12139420224" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3.5 rounded-full shadow-xl transition-all hover:scale-105 flex items-center gap-3 border border-emerald-400/20 animate-pulse-gentle group">
-        <span class="text-xs font-black uppercase tracking-wider">Contact Us</span>
-        <i class="fa-brands fa-whatsapp text-2xl font-bold"></i>
-    </a>
-
-    <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-building-user text-indigo-600 text-2xl"></i>
-                    <span class="text-xl font-bold tracking-tight text-gray-950">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
-                </div>
-            </div>
+    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4">
+        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Data will load here -->
         </div>
-    </nav>
-
-    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
     <script>
-        let masterDatabase = [];
-
         async function buildAssetDatabase() {
             const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Dudb7PfN8IwcrGz8GuKIpPtWymiJNG4bmoCcLiq-z_x2hDmuF3psbI6rDAhMpe0RCopMfdHUuyb1/pub?output=csv';
             
             try {
                 const response = await fetch(csvUrl);
                 const data = await response.text();
-                const rows = data.split('\n').slice(1);
+                // Split by line and filter out empty rows
+                const rows = data.split('\n').filter(row => row.trim() !== '').slice(1);
                 
-                masterDatabase = rows.map(row => {
+                const grid = document.getElementById('master-catalog-grid');
+                grid.innerHTML = rows.map(row => {
                     const cols = row.split(',');
-                    // Mapping columns: 0:ID, 1:Status, 2:Tier, 3:PriceRaw, 4:PriceDisplay, 5:Beds, 6:Baths, 7:SqFt, 8:Address, 9:Description
-                    return {
-                        id: cols[0],
-                        status: cols[1],
-                        tier: (cols[2] || "").toLowerCase().trim(),
-                        priceDisplay: cols[4],
-                        beds: cols[5],
-                        baths: cols[6],
-                        sqft: cols[7],
-                        address: cols[8],
-                        description: cols[9],
-                        tagColor: (cols[2] || "").toLowerCase().trim() === 'luxury' ? 'bg-indigo-600' : 
-                                  ((cols[2] || "").toLowerCase().trim() === 'commercial' ? 'bg-blue-600' : 'bg-emerald-600'),
-                        front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80"
-                    };
-                });
-                renderCatalogGrid();
+                    // Mapping indices: 0:ID, 1:Status, 2:Tier, 3:PriceRaw, 4:PriceDisplay, 5:Beds, 6:Baths, 7:SqFt, 8:Address, 9:Description
+                    return `
+                    <div class="bg-white rounded-2xl overflow-hidden shadow border border-gray-200">
+                        <div class="p-6">
+                            <span class="bg-indigo-600 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase">${cols[2] || 'Property'}</span>
+                            <div class="text-indigo-600 font-extrabold text-2xl mt-2">${cols[4] || '$0'}</div>
+                            <h3 class="text-sm font-bold mt-1">${cols[8] || 'Location Unavailable'}</h3>
+                            <p class="text-xs text-gray-500 mt-2">${cols[9] || 'No description provided.'}</p>
+                            <div class="border-t mt-4 pt-4 text-xs font-bold">
+                                ${cols[5]} Beds | ${cols[6]} Baths | ${cols[7]} sqft
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
             } catch (e) {
-                console.error("Error loading data:", e);
+                console.error("Data error:", e);
             }
         }
-
-        function renderCatalogGrid() {
-            const grid = document.getElementById('master-catalog-grid');
-            grid.innerHTML = masterDatabase.map(house => `
-                <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200">
-                    <img src="${house.front}" class="w-full h-56 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="${house.tagColor} text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">${house.status}</span>
-                            <span class="text-xs font-medium text-gray-400">${house.tier}</span>
-                        </div>
-                        <div class="text-indigo-600 font-extrabold text-2xl">${house.priceDisplay}</div>
-                        <h3 class="text-sm font-bold text-gray-950 mt-1">${house.address}</h3>
-                        <p class="text-xs text-gray-500 mt-2 mb-4 line-clamp-2">${house.description}</p>
-                        <div class="border-t pt-4 text-xs text-gray-600 font-semibold">
-                            ${house.beds} Beds | ${house.baths} Baths | ${house.sqft} sqft
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
         window.addEventListener('DOMContentLoaded', buildAssetDatabase);
     </script>
 </body>
