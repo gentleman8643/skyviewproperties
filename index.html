@@ -10,64 +10,98 @@
     
     <style>
         html { scroll-behavior: smooth; }
-        .gallery-item { transition: all 0.3s; }
-        .gallery-item:hover { transform: scale(1.04); }
+        @keyframes pulse-gentle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-pulse-gentle { animation: pulse-gentle 3s infinite ease-in-out; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
 
-    <!-- Floating WhatsApp -->
+    <!-- FLOATING WHATSAPP -->
     <a href="https://wa.me/12139420224" target="_blank" 
-       class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-4 rounded-full shadow-xl flex items-center gap-3 font-bold">
+       class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3.5 rounded-full shadow-xl flex items-center gap-3 border border-emerald-400/20 animate-pulse-gentle">
+        <span class="text-xs font-black uppercase tracking-wider">Contact Us</span>
         <i class="fa-brands fa-whatsapp text-2xl"></i>
-        <span>Contact Us</span>
     </a>
 
     <!-- NAV -->
-    <nav class="bg-white shadow sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-building-user text-3xl text-indigo-600"></i>
-                <span class="text-2xl font-bold tracking-tight">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
+    <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-building-user text-indigo-600 text-2xl"></i>
+                    <span class="text-xl font-bold tracking-tight text-gray-950">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="bg-slate-900 text-white py-16 text-center">
-        <h1 class="text-4xl md:text-5xl font-extrabold">Nationwide Property Portfolio</h1>
+    <!-- HEADER -->
+    <header class="bg-slate-900 text-white py-12 text-center relative overflow-hidden">
+        <div class="max-w-3xl mx-auto px-4 relative">
+            <h1 class="text-4xl font-extrabold tracking-tight">Unified United States Housing Index</h1>
+            <p class="text-indigo-200 mt-2">Verified Portfolio of Active Residential Assets</p>
+        </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-12">
+    <!-- FILTERS -->
+    <section class="bg-white border-b sticky top-16 z-40">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">MIN PRICE</label>
+                    <input type="number" id="min-price" class="w-full p-3 border rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">MAX PRICE</label>
+                    <input type="number" id="max-price" class="w-full p-3 border rounded-xl text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 mb-1">BEDROOMS</label>
+                    <select id="beds-filter" class="w-full p-3 border rounded-xl text-sm">
+                        <option value="all">Any Bedrooms</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                    </select>
+                </div>
+                <button onclick="applyFilters()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl">
+                    APPLY FILTERS
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATALOG -->
+    <main id="catalog-section" class="max-w-7xl mx-auto px-6 py-12 flex-1">
         <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
     <!-- MODAL -->
-    <div id="modal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-6xl max-h-[95vh] overflow-hidden flex flex-col">
-            <div class="p-6 border-b flex justify-between items-center bg-white sticky top-0">
+    <div id="details-modal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[95vh] overflow-hidden flex flex-col">
+            <div class="p-6 border-b flex justify-between bg-gray-50">
                 <div>
-                    <span id="modal-tag" class="px-5 py-2 text-white rounded-full text-sm font-bold"></span>
-                    <span id="modal-id" class="ml-4 font-mono text-gray-500"></span>
+                    <span id="modal-tag" class="px-4 py-1 text-white rounded-full text-sm font-bold"></span>
+                    <span id="modal-id" class="ml-3 font-mono text-gray-500"></span>
                 </div>
-                <button onclick="closeModal()" class="text-4xl text-gray-400 hover:text-black">×</button>
+                <button onclick="closeModal()" class="text-3xl">×</button>
             </div>
-
             <div class="p-6 overflow-auto flex-1">
-                <h2 id="modal-title" class="text-3xl font-bold mb-1"></h2>
-                <div id="modal-price" class="text-4xl font-black text-indigo-600 mb-4"></div>
+                <h2 id="modal-title" class="text-2xl font-bold"></h2>
+                <div id="modal-price" class="text-4xl font-black text-indigo-600 my-4"></div>
                 <p id="modal-address" class="text-gray-600 mb-6"></p>
 
-                <!-- Auto Gallery -->
-                <div id="modal-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+                <div id="modal-gallery" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8"></div>
 
-                <div id="modal-description" class="prose text-gray-700"></div>
+                <div id="modal-description" class="text-gray-700 leading-relaxed"></div>
             </div>
-
             <div class="p-6 border-t bg-gray-50">
-                <button onclick="contactViaWhatsApp()" 
-                        class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-5 rounded-2xl text-lg flex items-center justify-center gap-3">
-                    <i class="fa-brands fa-whatsapp text-2xl"></i>
-                    SEND INQUIRY VIA WHATSAPP
+                <button onclick="contactViaWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-bold">
+                    💬 Confidential Inquiry via WhatsApp
                 </button>
             </div>
         </div>
@@ -75,6 +109,7 @@
 
     <script>
         let masterDatabase = [];
+        let filteredSelection = [];
 
         async function loadProperties() {
             const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Dudb7PfN8IwcrGz8GuKIpPtWymiJNG4bmoCcLiq-z_x2hDmuF3psbI6rDAhMpe0RCopMfdHUuyb1/pub?output=csv";
@@ -93,16 +128,15 @@
                                 id: row.ID.trim(),
                                 title: row.Title || "Skyview Property",
                                 priceRaw: parseFloat(row.PriceRaw) || 0,
-                                priceDisplay: row.PriceDisplay || "$" + Number(row.PriceRaw || 0).toLocaleString(),
+                                priceDisplay: row.PriceDisplay || "$0",
                                 tagText: row.Status || "FOR SALE",
-                                tier: (row.Tier || "luxury").toLowerCase(),
                                 beds: parseInt(row.Beds) || 3,
                                 baths: parseInt(row.Baths) || 2,
                                 sqft: parseInt(row.SqFt) || 1500,
                                 address: row.Address || "",
                                 description: row.Description || ""
                             }));
-
+                        filteredSelection = [...masterDatabase];
                         renderCatalog();
                     }
                 });
@@ -115,20 +149,21 @@
             const grid = document.getElementById('catalog-grid');
             grid.innerHTML = '';
 
-            masterDatabase.forEach(prop => {
-                const imgPath = `/properties/${prop.id}/front.jpg`;
-
+            filteredSelection.forEach(prop => {
                 grid.innerHTML += `
-                    <div onclick="openModal('${prop.id}')" class="bg-white rounded-3xl overflow-hidden shadow hover:shadow-2xl transition cursor-pointer">
+                    <div onclick="openModal('${prop.id}')" class="bg-white rounded-3xl overflow-hidden shadow hover:shadow-xl transition cursor-pointer">
                         <div class="h-64 bg-gray-100">
-                            <img src="${imgPath}" class="w-full h-full object-cover" 
+                            <img src="/properties/${prop.id}/front.jpg" class="w-full h-full object-cover" 
                                  onerror="this.src='https://via.placeholder.com/600x400?text=${prop.id}'">
                         </div>
                         <div class="p-6">
                             <div class="text-3xl font-bold text-indigo-600">${prop.priceDisplay}</div>
-                            <h3 class="font-semibold mt-2 mb-3">${prop.title}</h3>
-                            <div class="text-sm text-gray-600">
-                                ${prop.beds} Bed • ${prop.baths} Bath • ${prop.sqft} sqft
+                            <h3 class="font-semibold mt-2">${prop.title}</h3>
+                            <p class="text-sm text-gray-600 mt-1">${prop.address}</p>
+                            <div class="mt-4 flex gap-4 text-sm">
+                                <span>${prop.beds} Bed</span>
+                                <span>${prop.baths} Bath</span>
+                                <span>${prop.sqft} sqft</span>
                             </div>
                         </div>
                     </div>
@@ -144,45 +179,52 @@
             document.getElementById('modal-title').textContent = prop.title;
             document.getElementById('modal-price').textContent = prop.priceDisplay;
             document.getElementById('modal-address').textContent = prop.address;
-            document.getElementById('modal-tag').textContent = prop.tagText;
-            document.getElementById('modal-tag').className = `px-5 py-2 text-white rounded-full text-sm font-bold ${prop.tier === 'affordable' ? 'bg-emerald-600' : 'bg-indigo-600'}`;
             document.getElementById('modal-description').innerHTML = `<p>${prop.description}</p>`;
 
-            const gallery = document.getElementById('modal-gallery');
-            gallery.innerHTML = `<p class="col-span-full text-center py-12 text-gray-400">Loading all photos & videos...</p>`;
+            const tag = document.getElementById('modal-tag');
+            tag.textContent = prop.tagText;
+            tag.className = `px-4 py-1 text-white rounded-full text-sm font-bold ${prop.tagText === "SOLD" ? "bg-red-600" : "bg-indigo-600"}`;
 
-            // Try common file names
-            const names = ["front", "main", "1", "2", "3", "4", "5", "living", "kitchen", "bedroom", "bath", "exterior", "back"];
-            const exts = [".jpg", ".jpeg", ".png", ".webp", ".mp4"];
+            // Auto load images & videos
+            const gallery = document.getElementById('modal-gallery');
+            gallery.innerHTML = "<p class='col-span-full text-gray-400 text-center py-8'>Loading media from folder...</p>";
+
+            const common = ["front","1","2","3","4","5","main","living","kitchen","bedroom","bath","exterior"];
+            const exts = [".jpg",".jpeg",".png",".webp",".mp4"];
 
             let html = '';
-            names.forEach(name => {
+            common.forEach(name => {
                 exts.forEach(ext => {
                     const url = `/properties/${prop.id}/${name}${ext}`;
                     if (ext === ".mp4") {
-                        html += `
-                            <div class="rounded-2xl overflow-hidden border">
-                                <video src="${url}" controls class="w-full"></video>
-                            </div>`;
+                        html += `<video src="${url}" controls class="w-full rounded-2xl"></video>`;
                     } else {
-                        html += `
-                            <div class="rounded-2xl overflow-hidden border gallery-item">
-                                <img src="${url}" class="w-full h-64 object-cover" onerror="this.parentElement.style.display='none'">
-                            </div>`;
+                        html += `<img src="${url}" class="w-full rounded-2xl" onerror="this.style.display='none'">`;
                     }
                 });
             });
-
-            gallery.innerHTML = html || "<p class='col-span-full text-gray-400'>No media files found in this folder.</p>";
-            document.getElementById('modal').classList.remove('hidden');
+            gallery.innerHTML = html;
+            document.getElementById('details-modal').classList.remove('hidden');
         }
 
         function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('details-modal').classList.add('hidden');
         }
 
         function contactViaWhatsApp() {
             window.open('https://wa.me/12139420224', '_blank');
+        }
+
+        function applyFilters() {
+            const min = parseFloat(document.getElementById('min-price').value) || 0;
+            const max = parseFloat(document.getElementById('max-price').value) || Infinity;
+            const beds = document.getElementById('beds-filter').value;
+
+            filteredSelection = masterDatabase.filter(p => {
+                return p.priceRaw >= min && p.priceRaw <= max &&
+                       (beds === "all" || p.beds >= parseInt(beds));
+            });
+            renderCatalog();
         }
 
         window.onload = loadProperties;
