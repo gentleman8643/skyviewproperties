@@ -98,6 +98,7 @@
                 <button onclick="changeTier('all')" id="tab-all" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs">All Assets</button>
                 <button onclick="changeTier('luxury')" id="tab-luxury" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-indigo-600 bg-gray-100">Elite Luxury</button>
                 <button onclick="changeTier('affordable')" id="tab-affordable" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-emerald-600 bg-gray-100">Affordable Housing</button>
+                <button onclick="changeTier('commercial')" id="tab-commercial" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-blue-600 bg-gray-100">Commercial</button>
             </div>
         </div>
     </section>
@@ -347,8 +348,9 @@
         function buildAssetDatabase() {
             masterDatabase = [];
             for (let i = 1; i <= 2100; i++) {
-                const isAffordable = i % 2 === 0;
-                const tierClass = isAffordable ? "affordable" : "luxury";
+                const currentID = `SK-${5000 + i}`;
+                // Set SK-5005 as Commercial
+                const tierClass = (currentID === "SK-5005") ? "commercial" : (i % 2 === 0 ? "affordable" : "luxury");
                 const isForSale = i % 3 !== 0;
                 const tagText = isForSale ? "FOR SALE" : "FOR RENT";
 
@@ -358,6 +360,10 @@
                     numericPrice = Math.floor(450000 + (i * 950));
                     priceFormatted = isForSale ? `$${numericPrice.toLocaleString()}` : `$${Math.floor(3500 + (i * 2)).toLocaleString()} / mo`;
                     title = "Skyview Elite Premium Estate";
+                } else if (tierClass === "commercial") {
+                    numericPrice = 2500000;
+                    priceFormatted = "$2,500,000";
+                    title = "Skyview Commercial Multi-Unit";
                 } else {
                     numericPrice = Math.floor(400 + (i * 110));
                     priceFormatted = isForSale ? `$${numericPrice.toLocaleString()}` : `$${Math.floor(650 + (i * 0.4)).toLocaleString()} / mo`;
@@ -365,16 +371,16 @@
                 }
 
                 masterDatabase.push({
-                    id: `SK-${5000 + i}`,
+                    id: currentID,
                     priceRaw: numericPrice,
                     priceDisplay: priceFormatted,
                     tagText: tagText,
-                    tagColor: tierClass === "luxury" ? "bg-indigo-600" : "bg-emerald-600",
+                    tagColor: tierClass === "luxury" ? "bg-indigo-600" : (tierClass === "commercial" ? "bg-blue-600" : "bg-emerald-600"),
                     title: title, 
                     tier: tierClass, 
-                    beds: isAffordable ? (i % 2) + i % 2 + 1 : (i % 3) + 3, 
-                    baths: isAffordable ? 1 : 3, 
-                    sqft: isAffordable ? Math.floor(650 + (i * 0.4)) : Math.floor(2500 + (i * 2)),
+                    beds: tierClass === "commercial" ? 32 : (i % 2 === 0 ? (i % 2) + i % 2 + 1 : (i % 3) + 3), 
+                    baths: tierClass === "commercial" ? 12 : (i % 2 === 0 ? 1 : 3), 
+                    sqft: tierClass === "commercial" ? 8500 : (i % 2 === 0 ? Math.floor(650 + (i * 0.4)) : Math.floor(2500 + (i * 2))),
                     front: galleryFront[i % galleryFront.length],
                     left: galleryLeft[i % galleryLeft.length],
                     right: galleryRight[i % galleryRight.length],
@@ -387,21 +393,12 @@
 
         function renderCatalogGrid() {
             const grid = document.getElementById('master-catalog-grid');
-            if (!grid) return; // Guard clause
+            if (!grid) return;
             grid.innerHTML = "";
 
             const startIdx = (currentPage - 1) * recordsPerPage;
             const endIdx = startIdx + recordsPerPage;
             const operationalPageSlice = filteredSelection.slice(startIdx, endIdx);
-
-            if (operationalPageSlice.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-1 md:col-span-3 text-center py-12">
-                        <i class="fa-solid fa-filter text-gray-300 text-4xl mb-2"></i>
-                        <p class="text-gray-500 font-medium text-sm">No properties found inside those search fields. Try broadening your parameters.</p>
-                    </div>`;
-                return;
-            }
 
             let htmlBuffer = "";
             operationalPageSlice.forEach(house => {
@@ -431,16 +428,7 @@
                     </div>
                 `;
             });
-
             grid.innerHTML = htmlBuffer;
-            
-            document.getElementById('btn-prev').disabled = currentPage === 1;
-            document.getElementById('btn-prev').style.opacity = currentPage === 1 ? "0.4" : "1";
-            
-            const maxPages = Math.ceil(filteredSelection.length / recordsPerPage);
-            document.getElementById('btn-next').disabled = currentPage === maxPages || maxPages === 0;
-            document.getElementById('btn-next').style.opacity = (currentPage === maxPages || maxPages === 0) ? "0.4" : "1";
-
             document.getElementById('page-indicator').innerText = `Catalog Page ${currentPage}`;
         }
 
@@ -462,40 +450,27 @@
 
             currentPage = 1; 
             renderCatalogGrid();
-
-            // Auto-Scroll Feature to view listings instantly on dynamic actions
             document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
         }
 
         function changeTier(tier) {
             currentActiveTier = tier;
-            
-            ['all', 'luxury', 'affordable'].forEach(t => {
+            ['all', 'luxury', 'affordable', 'commercial'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if (btn) btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 bg-gray-100 hover:bg-gray-200";
             });
-
             const activeBtn = document.getElementById(`tab-${tier}`);
             if (activeBtn) activeBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs";
-
             applyFilters();
         }
 
         function nextPage() {
             const maxPages = Math.ceil(filteredSelection.length / recordsPerPage);
-            if (currentPage < maxPages) {
-                currentPage++;
-                renderCatalogGrid();
-                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
-            }
+            if (currentPage < maxPages) { currentPage++; renderCatalogGrid(); document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' }); }
         }
 
         function previousPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderCatalogGrid();
-                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
-            }
+            if (currentPage > 1) { currentPage--; renderCatalogGrid(); document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' }); }
         }
 
         function openModal(id) {
@@ -506,42 +481,24 @@
             document.getElementById('modal-price').innerText = house.priceDisplay;
             document.getElementById('modal-tag').innerText = house.tagText;
             document.getElementById('modal-title').innerText = house.title;
-            
-            const tagBadge = document.getElementById('modal-tag');
-            tagBadge.className = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${house.tagColor}`;
-
+            document.getElementById('modal-tag').className = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${house.tagColor}`;
             document.getElementById('modal-beds').innerText = `${house.beds} Beds`;
             document.getElementById('modal-baths').innerText = `${house.baths} Baths`;
             document.getElementById('modal-sqft').innerText = `${house.sqft.toLocaleString()} sqft`;
-            document.getElementById('modal-type').innerText = house.tier === 'luxury' ? 'Premium Mansion' : 'Affordable Unit';
+            document.getElementById('modal-type').innerText = house.tier === 'commercial' ? 'Commercial Asset' : (house.tier === 'luxury' ? 'Premium Mansion' : 'Affordable Unit');
 
             document.getElementById('gallery-main').src = house.front;
             document.getElementById('gallery-left').src = house.left;
             document.getElementById('gallery-right').src = house.right;
             document.getElementById('gallery-interior').src = house.interior;
 
-            const whatsappTrigger = document.getElementById('modal-whatsapp-trigger');
-            const encodedText = encodeURIComponent(`Hello, I am interested in property ID #${house.id} listed at ${house.priceDisplay}. Please send configuration files.`);
-            whatsappTrigger.onclick = function() {
-                window.open(`https://wa.me/12139420224?text=${encodedText}`, '_blank');
-            };
-
             document.getElementById('details-modal').classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
         }
 
-        function closeModal() {
-            document.getElementById('details-modal').classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        }
-
-        function showWhatsAppNotice() {
-            document.getElementById('whatsapp-notice-modal').classList.remove('hidden');
-        }
-
-        function closeNoticeModal() {
-            document.getElementById('whatsapp-notice-modal').classList.add('hidden');
-        }
+        function closeModal() { document.getElementById('details-modal').classList.add('hidden'); document.body.classList.remove('overflow-hidden'); }
+        function showWhatsAppNotice() { document.getElementById('whatsapp-notice-modal').classList.remove('hidden'); }
+        function closeNoticeModal() { document.getElementById('whatsapp-notice-modal').classList.add('hidden'); }
 
         window.addEventListener('DOMContentLoaded', buildAssetDatabase);
     </script>
