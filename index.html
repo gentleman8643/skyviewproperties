@@ -4,84 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skyview Properties | Nationwide Portfolios</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
     <style>
         html { scroll-behavior: smooth; }
+        .gallery-item { transition: all 0.3s; }
+        .gallery-item:hover { transform: scale(1.04); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
 
-    <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <span class="text-xl font-bold">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/12139420224" target="_blank" 
+       class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-4 rounded-full shadow-xl flex items-center gap-3 font-bold">
+        <i class="fa-brands fa-whatsapp text-2xl"></i>
+        <span>Contact Us</span>
+    </a>
+
+    <!-- NAV -->
+    <nav class="bg-white shadow sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-building-user text-3xl text-indigo-600"></i>
+                <span class="text-2xl font-bold tracking-tight">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
             </div>
         </div>
     </nav>
 
-    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 flex-grow">
-        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    <header class="bg-slate-900 text-white py-16 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold">Nationwide Property Portfolio</h1>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </main>
 
-    <div id="details-modal" class="fixed inset-0 bg-slate-950/60 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-2xl w-full p-8 relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 font-bold">Close</button>
-            <h2 id="modal-title" class="text-2xl font-extrabold"></h2>
-            <p id="modal-type" class="text-indigo-600 font-bold text-xs uppercase"></p>
-            <div id="modal-price" class="text-3xl font-black text-indigo-600 my-4"></div>
-            <div class="grid grid-cols-3 gap-4 text-center font-bold">
-                <div><span id="modal-beds" class="block"></span>Beds</div>
-                <div><span id="modal-baths" class="block"></span>Baths</div>
-                <div><span id="modal-sqft" class="block"></span>Sqft</div>
+    <!-- MODAL -->
+    <div id="modal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-6xl max-h-[95vh] overflow-hidden flex flex-col">
+            <div class="p-6 border-b flex justify-between items-center bg-white sticky top-0">
+                <div>
+                    <span id="modal-tag" class="px-5 py-2 text-white rounded-full text-sm font-bold"></span>
+                    <span id="modal-id" class="ml-4 font-mono text-gray-500"></span>
+                </div>
+                <button onclick="closeModal()" class="text-4xl text-gray-400 hover:text-black">×</button>
+            </div>
+
+            <div class="p-6 overflow-auto flex-1">
+                <h2 id="modal-title" class="text-3xl font-bold mb-1"></h2>
+                <div id="modal-price" class="text-4xl font-black text-indigo-600 mb-4"></div>
+                <p id="modal-address" class="text-gray-600 mb-6"></p>
+
+                <!-- Auto Gallery -->
+                <div id="modal-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+
+                <div id="modal-description" class="prose text-gray-700"></div>
+            </div>
+
+            <div class="p-6 border-t bg-gray-50">
+                <button onclick="contactViaWhatsApp()" 
+                        class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-5 rounded-2xl text-lg flex items-center justify-center gap-3">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    SEND INQUIRY VIA WHATSAPP
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Your database defined correctly without extra quotes
-        let masterDatabase = [
-            {id: "SVP30000", priceDisplay: "$280,000", title: "Forest Estate", beds: 3, baths: 1, sqft: 1326, tier: "affordable", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"},
-            {id: "SVP30005", priceDisplay: "$1,300,000", title: "Madison Facility", beds: 32, baths: 12, sqft: 8592, tier: "commercial", front: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600"}
-        ];
+        let masterDatabase = [];
 
-        function renderCatalogGrid() {
-            const grid = document.getElementById('master-catalog-grid');
-            grid.innerHTML = "";
-            masterDatabase.forEach(house => {
+        async function loadProperties() {
+            const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Dudb7PfN8IwcrGz8GuKIpPtWymiJNG4bmoCcLiq-z_x2hDmuF3psbI6rDAhMpe0RCopMfdHUuyb1/pub?output=csv";
+            
+            try {
+                const res = await fetch(csvUrl);
+                const text = await res.text();
+
+                Papa.parse(text, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: (result) => {
+                        masterDatabase = result.data
+                            .filter(row => row.ID && row.ID.trim() !== "")
+                            .map(row => ({
+                                id: row.ID.trim(),
+                                title: row.Title || "Skyview Property",
+                                priceRaw: parseFloat(row.PriceRaw) || 0,
+                                priceDisplay: row.PriceDisplay || "$" + Number(row.PriceRaw || 0).toLocaleString(),
+                                tagText: row.Status || "FOR SALE",
+                                tier: (row.Tier || "luxury").toLowerCase(),
+                                beds: parseInt(row.Beds) || 3,
+                                baths: parseInt(row.Baths) || 2,
+                                sqft: parseInt(row.SqFt) || 1500,
+                                address: row.Address || "",
+                                description: row.Description || ""
+                            }));
+
+                        renderCatalog();
+                    }
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-grid');
+            grid.innerHTML = '';
+
+            masterDatabase.forEach(prop => {
+                const imgPath = `/properties/${prop.id}/front.jpg`;
+
                 grid.innerHTML += `
-                    <div class="bg-white rounded-2xl shadow border p-6">
-                        <img src="${house.front}" class="w-full h-40 object-cover rounded-lg">
-                        <div class="text-2xl font-bold text-indigo-600 mt-4">${house.priceDisplay}</div>
-                        <h3 class="font-bold text-lg">${house.title}</h3>
-                        <div class="grid grid-cols-3 gap-2 mt-4 text-xs">
-                            <div>${house.beds} Beds</div>
-                            <div>${house.baths} Baths</div>
-                            <div>${house.sqft} Sqft</div>
+                    <div onclick="openModal('${prop.id}')" class="bg-white rounded-3xl overflow-hidden shadow hover:shadow-2xl transition cursor-pointer">
+                        <div class="h-64 bg-gray-100">
+                            <img src="${imgPath}" class="w-full h-full object-cover" 
+                                 onerror="this.src='https://via.placeholder.com/600x400?text=${prop.id}'">
                         </div>
-                        <button onclick="openModal('${house.id}')" class="w-full mt-4 bg-slate-900 text-white py-2 rounded-lg cursor-pointer">Inspect</button>
+                        <div class="p-6">
+                            <div class="text-3xl font-bold text-indigo-600">${prop.priceDisplay}</div>
+                            <h3 class="font-semibold mt-2 mb-3">${prop.title}</h3>
+                            <div class="text-sm text-gray-600">
+                                ${prop.beds} Bed • ${prop.baths} Bath • ${prop.sqft} sqft
+                            </div>
+                        </div>
                     </div>
                 `;
             });
         }
 
         function openModal(id) {
-            const house = masterDatabase.find(item => item.id === id);
-            document.getElementById('modal-title').innerText = house.title;
-            document.getElementById('modal-price').innerText = house.priceDisplay;
-            document.getElementById('modal-beds').innerText = house.beds;
-            document.getElementById('modal-baths').innerText = house.baths;
-            document.getElementById('modal-sqft').innerText = house.sqft;
-            document.getElementById('modal-type').innerText = house.tier === 'commercial' ? 'Commercial Facility' : house.tier.toUpperCase();
-            document.getElementById('details-modal').classList.remove('hidden');
+            const prop = masterDatabase.find(p => p.id === id);
+            if (!prop) return;
+
+            document.getElementById('modal-id').textContent = prop.id;
+            document.getElementById('modal-title').textContent = prop.title;
+            document.getElementById('modal-price').textContent = prop.priceDisplay;
+            document.getElementById('modal-address').textContent = prop.address;
+            document.getElementById('modal-tag').textContent = prop.tagText;
+            document.getElementById('modal-tag').className = `px-5 py-2 text-white rounded-full text-sm font-bold ${prop.tier === 'affordable' ? 'bg-emerald-600' : 'bg-indigo-600'}`;
+            document.getElementById('modal-description').innerHTML = `<p>${prop.description}</p>`;
+
+            const gallery = document.getElementById('modal-gallery');
+            gallery.innerHTML = `<p class="col-span-full text-center py-12 text-gray-400">Loading all photos & videos...</p>`;
+
+            // Try common file names
+            const names = ["front", "main", "1", "2", "3", "4", "5", "living", "kitchen", "bedroom", "bath", "exterior", "back"];
+            const exts = [".jpg", ".jpeg", ".png", ".webp", ".mp4"];
+
+            let html = '';
+            names.forEach(name => {
+                exts.forEach(ext => {
+                    const url = `/properties/${prop.id}/${name}${ext}`;
+                    if (ext === ".mp4") {
+                        html += `
+                            <div class="rounded-2xl overflow-hidden border">
+                                <video src="${url}" controls class="w-full"></video>
+                            </div>`;
+                    } else {
+                        html += `
+                            <div class="rounded-2xl overflow-hidden border gallery-item">
+                                <img src="${url}" class="w-full h-64 object-cover" onerror="this.parentElement.style.display='none'">
+                            </div>`;
+                    }
+                });
+            });
+
+            gallery.innerHTML = html || "<p class='col-span-full text-gray-400'>No media files found in this folder.</p>";
+            document.getElementById('modal').classList.remove('hidden');
         }
 
         function closeModal() {
-            document.getElementById('details-modal').classList.add('hidden');
+            document.getElementById('modal').classList.add('hidden');
         }
 
-        // Initialize when page loads
-        window.onload = renderCatalogGrid;
+        function contactViaWhatsApp() {
+            window.open('https://wa.me/12139420224', '_blank');
+        }
+
+        window.onload = loadProperties;
     </script>
 </body>
 </html>
