@@ -1,0 +1,17 @@
+{
+  "SVP30001": [
+    "/public/properties/properties/SVP30001/abc123.jpg",
+    "/public/properties/properties/SVP30001/house-front.webp",
+    "/public/properties/properties/SVP30001/IMG8899.jpg",
+    "/public/properties/properties/SVP30001/video1.mp4"
+  ],
+  "SVP30002": [
+    "/public/properties/properties/SVP30002/image1.jpg",
+    "/public/properties/properties/SVP30002/image2.jpg"
+  ],
+  "SVP30003": [
+    "/public/properties/properties/SVP30003/front.jpg",
+    "/public/properties/properties/SVP30003/kitchen.png",
+    "/public/properties/properties/SVP30003/tour.mp4"
+  ]
+}
