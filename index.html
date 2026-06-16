@@ -13,13 +13,18 @@
             50% { transform: scale(1.03); box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.6); }
         }
         .animate-pulse-gentle { animation: pulse-gentle 3s infinite ease-in-out; }
+        .thumb-btn { transition: border-color .15s, opacity .15s; }
+        .thumb-btn:hover { opacity: .85; }
+        .thumb-btn.ring-active { border-color: #4f46e5 !important; }
+        #gallery-strip::-webkit-scrollbar { height: 4px; }
+        #gallery-strip::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
 
     <!-- FLOATING WHATSAPP CONTACT BUTTON -->
-    <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20am%20interested%20in%20inquiring%20about%20your%20available%20listings." 
-       target="_blank" rel="noopener noreferrer" 
+    <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20am%20interested%20in%20inquiring%20about%20your%20available%20listings."
+       target="_blank" rel="noopener noreferrer"
        class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3.5 rounded-full shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-3 border border-emerald-400/20 animate-pulse-gentle group">
         <span class="text-xs font-black uppercase tracking-wider">Contact Us</span>
         <div class="h-5 w-px bg-white/20"></div>
@@ -37,6 +42,7 @@
                 <div class="hidden md:flex space-x-8 font-semibold text-sm">
                     <a href="#" class="text-indigo-600">Home</a>
                     <a href="#catalog-section" class="text-gray-600 hover:text-indigo-600 transition">Marketplace Catalog</a>
+                    <a href="#intake-section" class="text-gray-600 hover:text-indigo-600 transition">Buy / Sell / Mortgage</a>
                     <a href="#corporate-office-section" class="text-gray-600 hover:text-indigo-600 transition">Corporate Office</a>
                 </div>
                 <div>
@@ -89,24 +95,18 @@
                 <button onclick="changeTier('all')" id="tab-all" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs">All Assets</button>
                 <button onclick="changeTier('luxury')" id="tab-luxury" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-indigo-600 bg-gray-100">Elite Luxury</button>
                 <button onclick="changeTier('affordable')" id="tab-affordable" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-emerald-600 bg-gray-100">Affordable Housing</button>
-            <button type="button" id="tab-commercial" onclick="changeTier('commercial')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 bg-gray-100 hover:bg-gray-200">Commercial</button>
+                <button onclick="changeTier('commercial')" id="tab-commercial" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-amber-600 bg-gray-100">Commercial</button>
             </div>
         </div>
     </section>
 
     <!-- LIVE CATALOG GRID -->
     <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow scroll-mt-36">
-
-        <!-- Loading State -->
-        <div id="loading-state" class="col-span-3 text-center py-20">
+        <div id="loading-state" class="text-center py-20">
             <i class="fa-solid fa-circle-notch fa-spin text-indigo-500 text-4xl mb-4"></i>
             <p class="text-gray-500 font-medium text-sm mt-4">Loading property listings...</p>
         </div>
-
-        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden">
-        </div>
-
-        <!-- PAGINATION CONTROLS -->
+        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden"></div>
         <div class="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
             <button onclick="previousPage()" id="btn-prev" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
                 <i class="fa-solid fa-arrow-left"></i> Prev
@@ -117,6 +117,86 @@
             </button>
         </div>
     </main>
+
+    <!-- BUY / SELL / MORTGAGE INTAKE SECTION -->
+    <section id="intake-section" class="bg-slate-900 py-16 scroll-mt-24">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 px-3 py-1 rounded-md text-xxs font-extrabold uppercase tracking-wider mb-4">
+                    <i class="fa-solid fa-handshake"></i> Client Services Portal
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-white mb-2">Buy &bull; Sell &bull; Mortgage</h2>
+                <p class="text-slate-400 text-sm max-w-xl mx-auto">Tell us what you need. Our team will follow up within 24 hours through your preferred channel.</p>
+            </div>
+
+            <!-- Service Type Tabs -->
+            <div class="flex justify-center gap-3 mb-8">
+                <button type="button" onclick="setIntakeService('buy')" id="intake-tab-buy"
+                    class="intake-tab px-5 py-2 text-xs font-bold rounded-xl border transition cursor-pointer bg-indigo-600 border-indigo-500 text-white">
+                    <i class="fa-solid fa-house-circle-check mr-1.5"></i>Buy
+                </button>
+                <button type="button" onclick="setIntakeService('sell')" id="intake-tab-sell"
+                    class="intake-tab px-5 py-2 text-xs font-bold rounded-xl border transition cursor-pointer bg-slate-800 border-slate-700 text-slate-300 hover:border-indigo-500 hover:text-white">
+                    <i class="fa-solid fa-tag mr-1.5"></i>Sell
+                </button>
+                <button type="button" onclick="setIntakeService('mortgage')" id="intake-tab-mortgage"
+                    class="intake-tab px-5 py-2 text-xs font-bold rounded-xl border transition cursor-pointer bg-slate-800 border-slate-700 text-slate-300 hover:border-indigo-500 hover:text-white">
+                    <i class="fa-solid fa-file-invoice-dollar mr-1.5"></i>Mortgage
+                </button>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 sm:p-8">
+                <p id="intake-service-label" class="text-indigo-300 text-xs font-bold uppercase tracking-widest mb-6">
+                    <i class="fa-solid fa-house-circle-check mr-1.5"></i>I want to Buy a Property
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">Full Name *</label>
+                        <input type="text" id="intake-name" placeholder="Your full name"
+                            class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">Email Address *</label>
+                        <input type="email" id="intake-email" placeholder="your@email.com"
+                            class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">WhatsApp Number *</label>
+                        <input type="tel" id="intake-whatsapp" placeholder="+1 (555) 000-0000"
+                            class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">Phone Number</label>
+                        <input type="tel" id="intake-phone" placeholder="+1 (555) 000-0000"
+                            class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">City of Interest *</label>
+                        <input type="text" id="intake-city" placeholder="e.g. Los Angeles"
+                            class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">State *</label>
+                        <input type="text" id="intake-state" placeholder="e.g. California"
+                            class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">Additional Details</label>
+                        <textarea id="intake-details" rows="3" placeholder="Budget range, property type, timeline, specific requirements..."
+                            class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none"></textarea>
+                    </div>
+                </div>
+                <div id="intake-error" class="hidden mt-4 text-xs text-rose-400 font-semibold bg-rose-400/10 border border-rose-400/30 rounded-lg px-3 py-2">
+                    <i class="fa-solid fa-circle-exclamation mr-1.5"></i><span></span>
+                </div>
+                <button type="button" onclick="submitIntakeForm()"
+                    class="mt-6 w-full bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black uppercase tracking-wider py-3.5 rounded-xl transition shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Submit &amp; Connect via WhatsApp
+                </button>
+                <p class="text-xxs text-slate-500 text-center mt-3">Your details are sent directly and securely via WhatsApp to our team.</p>
+            </div>
+        </div>
+    </section>
 
     <!-- DETAILED CORPORATE OFFICE PROFILE SECTION -->
     <section id="corporate-office-section" class="bg-white border-t border-b border-gray-200 py-16 scroll-mt-32">
@@ -190,8 +270,9 @@
 
     <!-- PROPERTY INSPECTION DETAILS MODAL -->
     <div id="details-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition duration-300 transform scale-95 relative flex flex-col">
-            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 rounded-t-3xl">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col">
+            <!-- Modal header -->
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 rounded-t-3xl flex-shrink-0">
                 <div>
                     <span id="modal-tag" class="text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2">TAG</span>
                     <span id="modal-id" class="text-gray-400 text-xs font-bold font-mono">ID</span>
@@ -200,53 +281,66 @@
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-            <div class="p-6 overflow-y-auto space-y-6">
+            <!-- Modal body -->
+            <div class="p-6 space-y-6 overflow-y-auto">
+                <!-- Title + price row -->
                 <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
                     <div>
-                        <h2 id="modal-title" class="text-xl sm:text-2xl font-extrabold text-gray-950">Skyview Architectural Estate</h2>
-                        <p class="text-indigo-600 font-bold text-xs uppercase tracking-wide mt-1">Location Verified Portfolio • <span class="text-rose-500 bg-rose-50 text-xs px-2 py-0.5 rounded-sm font-semibold">Address Restricted</span></p>
+                        <h2 id="modal-title" class="text-xl sm:text-2xl font-extrabold text-gray-950"></h2>
+                        <p class="text-indigo-600 font-bold text-xs uppercase tracking-wide mt-1">
+                            Location Verified Portfolio &bull;
+                            <span class="text-rose-500 bg-rose-50 text-xs px-2 py-0.5 rounded-sm font-semibold">Address Restricted</span>
+                        </p>
                     </div>
-                    <div id="modal-price" class="text-2xl sm:text-3xl font-black text-indigo-600 tracking-tight">PRICE</div>
+                    <div id="modal-price" class="text-2xl sm:text-3xl font-black text-indigo-600 tracking-tight flex-shrink-0"></div>
                 </div>
+
+                <!-- Gallery -->
                 <div>
-                    <h3 class="text-sm font-extrabold text-gray-950 uppercase tracking-wider mb-3"><i class="fa-solid fa-camera-retro mr-1.5 text-indigo-600"></i> Structural Elevations</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="md:col-span-3 h-48 sm:h-72 rounded-2xl overflow-hidden bg-gray-100 relative">
-                            <img id="gallery-main" src="" class="w-full h-full object-cover" alt="Front Elevation">
-                        </div>
-                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
-                            <img id="gallery-left" src="" class="w-full h-full object-cover" alt="Left View">
-                        </div>
-                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
-                            <img id="gallery-right" src="" class="w-full h-full object-cover" alt="Right View">
-                        </div>
-                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
-                            <img id="gallery-interior" src="" class="w-full h-full object-cover" alt="Interior View">
-                        </div>
+                    <h3 class="text-sm font-extrabold text-gray-950 uppercase tracking-wider mb-3">
+                        <i class="fa-solid fa-camera-retro mr-1.5 text-indigo-600"></i> Structural Elevations
+                    </h3>
+                    <!-- Main stage -->
+                    <div id="gallery-stage" class="h-56 sm:h-80 rounded-2xl overflow-hidden bg-gray-100 relative">
+                        <!-- filled by JS -->
                     </div>
+                    <!-- Thumbnail strip -->
+                    <div id="gallery-strip" class="flex gap-2 mt-3 overflow-x-auto pb-1"></div>
                 </div>
+
+                <!-- Property stats -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                     <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
                         <i class="fa-solid fa-bed text-indigo-600 text-sm mb-1 block"></i>
-                        <span id="modal-beds" class="font-extrabold text-gray-950">X Beds</span>
+                        <span id="modal-beds" class="font-extrabold text-gray-950"></span>
                     </div>
                     <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
                         <i class="fa-solid fa-bath text-indigo-600 text-sm mb-1 block"></i>
-                        <span id="modal-baths" class="font-extrabold text-gray-950">X Baths</span>
+                        <span id="modal-baths" class="font-extrabold text-gray-950"></span>
                     </div>
                     <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
                         <i class="fa-solid fa-ruler-combined text-indigo-600 text-sm mb-1 block"></i>
-                        <span id="modal-sqft" class="font-extrabold text-gray-950">X sqft</span>
+                        <span id="modal-sqft" class="font-extrabold text-gray-950"></span>
                     </div>
                     <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
                         <i class="fa-solid fa-compass-drafting text-indigo-600 text-sm mb-1 block"></i>
-                        <span id="modal-type" class="font-extrabold text-gray-950">Type</span>
+                        <span id="modal-type" class="font-extrabold text-gray-950"></span>
                     </div>
                 </div>
+
+                <!-- Description -->
+                <div id="modal-desc-block" class="hidden">
+                    <h3 class="text-sm font-extrabold text-gray-950 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-file-lines mr-1.5 text-indigo-600"></i> Property Description
+                    </h3>
+                    <p id="modal-description" class="text-xs text-gray-600 leading-relaxed"></p>
+                </div>
             </div>
-            <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-3xl flex gap-3">
+            <!-- Modal footer -->
+            <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-3xl flex gap-3 flex-shrink-0">
                 <button onclick="closeModal()" class="w-1/3 bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-xs py-3 rounded-xl transition cursor-pointer">Close</button>
-                <button id="modal-whatsapp-trigger" type="button" class="w-2/3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer flex items-center justify-center gap-2">
+                <button id="modal-whatsapp-trigger" type="button"
+                    class="w-2/3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp text-base"></i> Confidential Inquiry
                 </button>
             </div>
@@ -255,7 +349,7 @@
 
     <!-- WHATSAPP REDIRECT NOTICE MODAL -->
     <div id="whatsapp-notice-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-md w-full text-center text-white space-y-6 shadow-2xl transform scale-95 transition-all">
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-md w-full text-center text-white space-y-6 shadow-2xl">
             <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
                 <i class="fa-brands fa-whatsapp text-4xl font-bold animate-pulse"></i>
             </div>
@@ -264,7 +358,7 @@
                 <p class="text-xs text-slate-400 leading-relaxed">For an immediate reply from our operational desk, please scroll down slightly and execute your communication directly through our secure WhatsApp channels.</p>
             </div>
             <div class="pt-2">
-                <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20just%20completed%20the%20intake%20desk%20form%20and%20would%20like%20to%20connect%20for%20a%20swift%20response." 
+                <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20just%20completed%20the%20intake%20desk%20form%20and%20would%20like%20to%20connect%20for%20a%20swift%20response."
                    target="_blank" onclick="closeNoticeModal()"
                    class="w-full bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black uppercase tracking-wider py-3 px-4 rounded-xl block transition duration-200 shadow-md">
                     Open Secure WhatsApp Chat
@@ -318,413 +412,493 @@
         </div>
     </footer>
 
-    <!-- REAL ESTATE ENGINE CODE (LOCAL LISTING SYSTEM) -->
-<script>
-// ═══════════════════════════════════════════════════════════════════════
-//  SKYVIEW LOCAL LISTING ENGINE
-//  Reads: (1) your Google Sheet CSV   (2) media-manifest.json
-//  Matches each property by its ID and loads ONLY that ID's media folder.
-// ═══════════════════════════════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════════════════════════
+         REAL ESTATE ENGINE  —  reads Google Sheets CSV + media-manifest.json
+         Column names (exact, case-insensitive):
+           ID | Status | Tier | PriceRaw | PriceDisplay | Beds | Baths | SqFt | Address | Description
+    ════════════════════════════════════════════════════════════════════ -->
+    <script>
+    // ── CONFIGURATION ───────────────────────────────────────────────────────
+    const CSV_URL        = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Dudb7PfN8IwcrGz8GuKIpPtWymiJNG4bmoCcLiq-z_x2hDmuF3psbI6rDAhMpe0RCopMfdHUuyb1/pub?output=csv";
+    const MANIFEST_URL   = "/media-manifest.json";
+    const WHATSAPP_NUM   = "12139420224";
+    const CACHE_MS       = 24 * 60 * 60 * 1000;   // 24 hours
+    const PER_PAGE       = 8;
+    const FALLBACK_IMG   = "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80";
 
-// ── CONFIGURATION (the only lines you may ever need to change) ──────────
-const CSV_URL       = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Dudb7PfN8IwcrGz8GuKIpPtWymiJNG4bmoCcLiq-z_x2hDmuF3psbI6rDAhMpe0RCopMfdHUuyb1/pub?output=csv";
-const MANIFEST_URL  = "/media-manifest.json";   // sits next to your index.html
-const WHATSAPP_NUM  = "12139420224";            // your WhatsApp number, no + sign
-const CACHE_MINUTES = 5;                        // re-check spreadsheet every 5 min
-const RECORDS_PER_PAGE = 8;
+    const CACHE_KEY      = "svp_listings_v3";
+    const CACHE_MAN_KEY  = "svp_manifest_v3";
+    const CACHE_TIME_KEY = "svp_cache_time_v3";
 
-// Shown only when a property has NO media at all in the manifest
-const FALLBACK_IMG = "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80";
+    // ── STATE ───────────────────────────────────────────────────────────────
+    let db              = [];   // full parsed database
+    let filtered        = [];   // current filtered view
+    let page            = 1;
+    let activeTier      = "all";
+    let manifest        = {};
+    let modalMedia      = [];   // media list for the open modal
+    let modalMediaIdx   = 0;    // current index in modalMedia
+    let intakeService   = "buy";
 
-// localStorage keys used for caching
-const CACHE_KEY_DATA     = "skyview_cache_v1";
-const CACHE_KEY_MANIFEST = "skyview_manifest_v1";
-const CACHE_KEY_TIME     = "skyview_cache_time_v1";
-
-// ── GLOBAL STATE ────────────────────────────────────────────────────────
-let masterDatabase    = [];
-let filteredSelection = [];
-let currentPage       = 1;
-let currentActiveTier = "all";
-let mediaManifest     = {};
-let activeMedia       = [];   // media list for the property currently open in the modal
-
-// Remember the gallery container in the modal BEFORE we ever rebuild it
-let galleryContainer  = null;
-
-// ── SMALL HELPERS ─────────────────────────────────────────────────────────
-
-// Read a value from a CSV row by trying several possible column names
-function getField(row, names) {
-    for (const n of names) {
-        const key = n.toLowerCase().trim();
-        if (row[key] !== undefined && row[key] !== "") return row[key];
-    }
-    return "";
-}
-
-// Is this file a video?
-function isVideo(path) {
-    return /\.(mp4|webm|ogg|mov|m4v)$/i.test(path);
-}
-
-// ── CSV PARSER (handles commas inside quotes) ───────────────────────────
-function parseCSV(text) {
-    const lines = text.trim().split(/\r?\n/);
-    if (lines.length < 2) return [];
-    const headers = splitCSVLine(lines[0]).map(h => h.toLowerCase().trim());
-    const rows = [];
-    for (let i = 1; i < lines.length; i++) {
-        if (!lines[i].trim()) continue;
-        const vals = splitCSVLine(lines[i]);
-        const obj  = {};
-        headers.forEach((h, idx) => { obj[h] = (vals[idx] || "").trim(); });
-        rows.push(obj);
-    }
-    return rows;
-}
-
-function splitCSVLine(line) {
-    const result = [];
-    let cur = "", inQuote = false;
-    for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (ch === '"') {
-            if (inQuote && line[i + 1] === '"') { cur += '"'; i++; }
-            else inQuote = !inQuote;
-        } else if (ch === ',' && !inQuote) {
-            result.push(cur); cur = "";
-        } else {
-            cur += ch;
+    // ── CSV HELPERS ──────────────────────────────────────────────────────────
+    function parseCSV(text) {
+        const lines = text.trim().split(/\r?\n/);
+        if (lines.length < 2) return [];
+        const headers = csvSplitLine(lines[0]).map(h => h.toLowerCase().trim());
+        const rows = [];
+        for (let i = 1; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            const vals = csvSplitLine(lines[i]);
+            const obj  = {};
+            headers.forEach((h, idx) => { obj[h] = (vals[idx] || "").trim(); });
+            rows.push(obj);
         }
+        return rows;
     }
-    result.push(cur);
-    return result;
-}
 
-// ── TURN A SPREADSHEET ROW + MANIFEST INTO A PROPERTY OBJECT ────────────
-function rowToProperty(row) {
-    const id = getField(row, ["property id", "property_id", "id"]).trim();
+    function csvSplitLine(line) {
+        const out = [];
+        let cur = "", inQ = false;
+        for (let i = 0; i < line.length; i++) {
+            const c = line[i];
+            if (c === '"') {
+                if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+                else inQ = !inQ;
+            } else if (c === ',' && !inQ) {
+                out.push(cur); cur = "";
+            } else cur += c;
+        }
+        out.push(cur);
+        return out;
+    }
 
-    const title = getField(row, ["title", "name"]) || "Skyview Property";
+    // ── ROW → PROPERTY ───────────────────────────────────────────────────────
+    // Reads the exact column names from the spreadsheet (lowercased):
+    //   id  status  tier  priceraw  pricedisplay  beds  baths  sqft  address  description
+    function toProperty(row) {
+        const id = (row["id"] || "").trim();
+        if (!id) return null;   // skip rows with no ID
 
-    // Status -> FOR SALE / FOR RENT (taken EXACTLY from the spreadsheet)
-    let status = getField(row, ["status", "tag"]).toUpperCase().trim();
-    if (status === "SALE") status = "FOR SALE";
-    if (status === "RENT") status = "FOR RENT";
+        const status = (row["status"] || "FOR SALE").toUpperCase().trim();
+        // normalise SOLD to its own label (keeps it visible in listings)
+        const displayStatus = status;
 
-    // Category -> luxury / commercial / affordable
-    const categoryRaw = getField(row, ["category", "tier"]).toLowerCase();
-    let tier = "affordable";
-    if (categoryRaw.includes("luxury")) tier = "luxury";
-    else if (categoryRaw.includes("commercial")) tier = "commercial";
+        const tierRaw = (row["tier"] || "affordable").toLowerCase().trim();
+        let tier = "affordable";
+        if (tierRaw === "luxury")     tier = "luxury";
+        else if (tierRaw === "commercial") tier = "commercial";
 
-    // Price — your sheet provides PriceRaw (number) and PriceDisplay (text)
-    const priceRaw = parseFloat(getField(row, ["priceraw", "price"]).replace(/[^0-9.]/g, "")) || 0;
-    let priceDisplay = getField(row, ["pricedisplay"]) || `$${priceRaw.toLocaleString()}`;
-    if (status === "FOR RENT" && !/\/\s*mo/i.test(priceDisplay)) priceDisplay += " / mo";
+        // Price — use PriceDisplay column from sheet exactly, or build from PriceRaw
+        const priceRaw = parseFloat((row["priceraw"] || "0").replace(/[^0-9.]/g, "")) || 0;
+        let priceDisplay = (row["pricedisplay"] || "").trim();
+        if (!priceDisplay) {
+            priceDisplay = status === "FOR RENT"
+                ? `$${priceRaw.toLocaleString()} / mo`
+                : `$${priceRaw.toLocaleString()}`;
+        }
 
-    const beds  = parseInt(getField(row, ["bedrooms", "beds"]) || "0") || 0;
-    const baths = parseInt(getField(row, ["bathrooms", "baths"]) || "0") || 0;
-    const sqft  = parseInt(getField(row, ["square feet", "square_feet", "sqft"]).replace(/[^0-9]/g, "")) || 0;
-    const type  = getField(row, ["property type", "property_type", "type"]) || (tier === "luxury" ? "Premium Estate" : "Standard Unit");
+        // SqFt column is exactly "sqft" after lowercasing
+        const sqft = parseInt((row["sqft"] || "0").replace(/[^0-9]/g, "")) || 0;
 
-    // MEDIA — comes ONLY from this property's own ID folder in the manifest
-    const media  = Array.isArray(mediaManifest[id]) ? mediaManifest[id] : [];
-    const images = media.filter(m => !isVideo(m));
-    const thumb  = images[0] || media[0] || FALLBACK_IMG;
+        const beds  = parseFloat(row["beds"]  || "0") || 0;
+        const baths = parseFloat(row["baths"] || "0") || 0;
+        const description = (row["description"] || "").trim();
 
-    return {
-        id, title, tier, status,
-        tagColor: tier === "luxury" ? "bg-indigo-600" : tier === "commercial" ? "bg-amber-600" : "bg-emerald-600",
-        priceRaw, priceDisplay,
-        beds, baths, sqft, type,
-        media,      // every image/video for this property
-        thumb       // first image = card thumbnail
-    };
-}
+        // Tag colour by tier
+        const tagColor = tier === "luxury" ? "bg-indigo-600"
+                       : tier === "commercial" ? "bg-amber-600"
+                       : status === "SOLD" ? "bg-gray-500"
+                       : "bg-emerald-600";
 
-// ── VALIDATION (warnings only, shown in the browser Console) ────────────
-function validateProperty(p, row) {
-    const where = `Property "${p.id || "(MISSING ID)"}"`;
-    if (!p.id)                          console.warn(`[VALIDATION] ${where}: missing Property ID.`);
-    if (!p.media || p.media.length===0) console.warn(`[VALIDATION] ${where}: no media found in manifest (folder may be empty or ID mismatch).`);
-    if (!p.priceRaw)                    console.warn(`[VALIDATION] ${where}: missing or zero price.`);
-    if (p.priceRaw < 0 || p.priceRaw > 1000000000)
-                                        console.warn(`[VALIDATION] ${where}: impossible price (${p.priceRaw}).`);
-    if (p.status !== "FOR SALE" && p.status !== "FOR RENT")
-                                        console.warn(`[VALIDATION] ${where}: status is "${p.status}" — expected FOR SALE or FOR RENT.`);
-    if (!p.beds)                        console.warn(`[VALIDATION] ${where}: missing bedrooms.`);
-    if (!p.baths)                       console.warn(`[VALIDATION] ${where}: missing bathrooms.`);
-}
+        // Media from manifest — only this property's folder
+        const media  = Array.isArray(manifest[id]) ? manifest[id] : [];
+        const images = media.filter(m => !isVideo(m));
+        const thumb  = images[0] || media[0] || FALLBACK_IMG;
 
-// ── CACHE HELPERS ────────────────────────────────────────────────────────
-function saveCache(rows, manifest) {
-    try {
-        localStorage.setItem(CACHE_KEY_DATA,     JSON.stringify(rows));
-        localStorage.setItem(CACHE_KEY_MANIFEST, JSON.stringify(manifest));
-        localStorage.setItem(CACHE_KEY_TIME,     Date.now().toString());
-    } catch (e) { console.warn("[CACHE] Could not save cache:", e.message); }
-}
+        return { id, status: displayStatus, tier, tagColor, priceRaw, priceDisplay,
+                 beds, baths, sqft, description, media, thumb };
+    }
 
-function cacheIsFresh() {
-    const t = parseInt(localStorage.getItem(CACHE_KEY_TIME) || "0");
-    return t && (Date.now() - t) < CACHE_MINUTES * 60 * 1000;
-}
+    function isVideo(path) {
+        return /\.(mp4|webm|ogg|mov|m4v)$/i.test(path);
+    }
 
-function buildFromRows(rows) {
-    masterDatabase = rows.map(r => {
-        const p = rowToProperty(r);
-        validateProperty(p, r);
-        return p;
-    });
-    filteredSelection = [...masterDatabase];
-}
+    // ── VALIDATION ───────────────────────────────────────────────────────────
+    function validate(p) {
+        if (!p.priceRaw)          console.warn(`[SVP] ${p.id}: missing price`);
+        if (!p.beds)              console.warn(`[SVP] ${p.id}: missing beds`);
+        if (!p.baths)             console.warn(`[SVP] ${p.id}: missing baths`);
+        if (!p.sqft)              console.warn(`[SVP] ${p.id}: missing sqft`);
+        if (!p.media.length)      console.warn(`[SVP] ${p.id}: no media in manifest`);
+        if (p.priceRaw > 5e8)     console.warn(`[SVP] ${p.id}: suspicious price ${p.priceRaw}`);
+        if (!["FOR SALE","FOR RENT","SOLD"].includes(p.status))
+                                  console.warn(`[SVP] ${p.id}: unexpected status "${p.status}"`);
+    }
 
-// ── LOAD EVERYTHING (cache first, then refresh) ─────────────────────────
-async function loadListings() {
-    galleryContainer = document.getElementById('gallery-main').closest('.grid');
-
-    // 1) Show cached data instantly if we have any
-    const cachedRows     = localStorage.getItem(CACHE_KEY_DATA);
-    const cachedManifest = localStorage.getItem(CACHE_KEY_MANIFEST);
-    if (cachedRows && cachedManifest) {
+    // ── CACHE ────────────────────────────────────────────────────────────────
+    function cacheIsFresh() {
+        const t = parseInt(localStorage.getItem(CACHE_TIME_KEY) || "0");
+        return t && (Date.now() - t) < CACHE_MS;
+    }
+    function readCache() {
         try {
-            mediaManifest = JSON.parse(cachedManifest);
-            buildFromRows(JSON.parse(cachedRows));
-            showGrid();
-            renderCatalogGrid();
-            console.log("[CACHE] Showing cached listings while checking for updates...");
-        } catch (e) { console.warn("[CACHE] Cache was corrupt, ignoring."); }
+            const d = localStorage.getItem(CACHE_KEY);
+            const m = localStorage.getItem(CACHE_MAN_KEY);
+            return d && m ? { rows: JSON.parse(d), man: JSON.parse(m) } : null;
+        } catch { return null; }
+    }
+    function writeCache(rows, man) {
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(rows));
+            localStorage.setItem(CACHE_MAN_KEY, JSON.stringify(man));
+            localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+        } catch(e) { console.warn("[SVP] Cache write failed:", e.message); }
     }
 
-    // 2) If cache is still fresh, don't re-fetch (saves bandwidth / cost)
-    if (cacheIsFresh() && masterDatabase.length) {
-        console.log("[CACHE] Cache is fresh — skipping network fetch.");
-        return;
-    }
+    // ── BOOTSTRAP ────────────────────────────────────────────────────────────
+    async function loadListings() {
+        // Show cache immediately if available
+        const cached = readCache();
+        if (cached) {
+            manifest = cached.man;
+            buildDB(cached.rows);
+            showGrid(); renderGrid();
+        }
 
-    // 3) Otherwise fetch fresh CSV + manifest
-    try {
-        const [csvRes, manRes] = await Promise.all([
-            fetch(CSV_URL, { cache: "no-store" }),
-            fetch(MANIFEST_URL, { cache: "no-store" })
-        ]);
-        if (!csvRes.ok) throw new Error(`Spreadsheet HTTP ${csvRes.status}`);
+        if (cacheIsFresh() && cached) { console.log("[SVP] Cache fresh, skipping fetch."); return; }
 
-        const csvText = await csvRes.text();
-        const rows    = parseCSV(csvText);
-        if (rows.length === 0) throw new Error("Spreadsheet is empty or column names are wrong.");
+        try {
+            const [csvRes, manRes] = await Promise.all([
+                fetch(CSV_URL,       { cache: "no-store" }),
+                fetch(MANIFEST_URL,  { cache: "no-store" })
+            ]);
+            if (!csvRes.ok) throw new Error(`CSV HTTP ${csvRes.status}`);
+            const csvText = await csvRes.text();
+            const rows    = parseCSV(csvText);
+            if (!rows.length) throw new Error("Spreadsheet returned no rows.");
 
-        mediaManifest = manRes.ok ? await manRes.json() : {};
-        if (!manRes.ok) console.warn("[MANIFEST] media-manifest.json not found — properties will show the fallback image.");
+            manifest = manRes.ok ? await manRes.json() : {};
+            if (!manRes.ok) console.warn("[SVP] media-manifest.json not found — images will show placeholder.");
 
-        saveCache(rows, mediaManifest);
-        buildFromRows(rows);
-
-        showGrid();
-        renderCatalogGrid();
-        console.log(`[ENGINE] Loaded ${masterDatabase.length} live properties.`);
-
-    } catch (err) {
-        // If we already showed cache, just warn. Otherwise show the error screen.
-        if (masterDatabase.length) {
-            console.warn("[ENGINE] Refresh failed, keeping cached listings:", err.message);
-        } else {
-            document.getElementById("loading-state").innerHTML = `
-                <div class="col-span-3 text-center py-20">
-                    <i class="fa-solid fa-triangle-exclamation text-rose-400 text-4xl mb-4"></i>
-                    <p class="text-gray-700 font-bold text-sm mt-4">Could not load listings</p>
-                    <p class="text-gray-400 text-xs mt-1">${err.message}</p>
-                    <p class="text-gray-400 text-xs mt-2">Check that your Google Sheet is published and media-manifest.json exists.</p>
-                </div>`;
+            writeCache(rows, manifest);
+            buildDB(rows);
+            showGrid(); renderGrid();
+            console.log(`[SVP] ${db.length} properties loaded.`);
+        } catch(err) {
+            if (db.length) {
+                console.warn("[SVP] Refresh failed, using cache:", err.message);
+            } else {
+                document.getElementById("loading-state").innerHTML = `
+                    <div class="text-center py-20">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 text-4xl mb-4"></i>
+                        <p class="text-gray-700 font-bold text-sm mt-4">Could not load listings</p>
+                        <p class="text-gray-400 text-xs mt-1">${err.message}</p>
+                        <button type="button" onclick="clearCacheAndReload()"
+                            class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 px-4 rounded-lg transition cursor-pointer">
+                            Retry
+                        </button>
+                    </div>`;
+            }
         }
     }
-}
 
-function showGrid() {
-    const loading = document.getElementById("loading-state");
-    if (loading) loading.classList.add("hidden");
-    document.getElementById("master-catalog-grid").classList.remove("hidden");
-}
+    function clearCacheAndReload() {
+        [CACHE_KEY, CACHE_MAN_KEY, CACHE_TIME_KEY].forEach(k => localStorage.removeItem(k));
+        location.reload();
+    }
 
-// ── RENDER THE CARD GRID ─────────────────────────────────────────────────
-function renderCatalogGrid() {
-    const grid = document.getElementById('master-catalog-grid');
-    if (!grid) return;
-    grid.innerHTML = "";
+    function buildDB(rows) {
+        db = rows.map(toProperty).filter(Boolean);
+        db.forEach(validate);
+        filtered = [...db];
+    }
 
-    const startIdx = (currentPage - 1) * RECORDS_PER_PAGE;
-    const slice    = filteredSelection.slice(startIdx, startIdx + RECORDS_PER_PAGE);
+    function showGrid() {
+        document.getElementById("loading-state").classList.add("hidden");
+        document.getElementById("master-catalog-grid").classList.remove("hidden");
+    }
 
-    if (slice.length === 0) {
-        grid.innerHTML = `
-            <div class="col-span-1 md:col-span-3 text-center py-12">
-                <i class="fa-solid fa-filter text-gray-300 text-4xl mb-2"></i>
-                <p class="text-gray-500 font-medium text-sm">No properties found inside those search fields. Try broadening your parameters.</p>
-            </div>`;
-    } else {
-        let html = "";
-        slice.forEach(house => {
-            html += `
-            <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200 hover:shadow-md transition duration-300 flex flex-col justify-between">
-                <div class="relative h-56 bg-gray-100">
-                    <img src="${house.thumb}" alt="Property Elevation Preview" class="w-full h-full object-cover" onerror="this.src='${FALLBACK_IMG}'">
-                    <span class="absolute top-4 left-4 ${house.tagColor} text-white text-xxs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs">${house.status}</span>
-                    <span class="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md font-mono">ID #${house.id}</span>
-                </div>
-                <div class="p-6 flex-grow flex flex-col justify-between">
-                    <div>
-                        <div class="text-indigo-600 font-extrabold text-2xl mb-1">${house.priceDisplay}</div>
-                        <h3 class="text-base font-bold text-gray-950 mb-4 truncate">${house.title}</h3>
+    // ── RENDER CARD GRID ─────────────────────────────────────────────────────
+    function renderGrid() {
+        const grid = document.getElementById("master-catalog-grid");
+        grid.innerHTML = "";
+
+        const start = (page - 1) * PER_PAGE;
+        const slice = filtered.slice(start, start + PER_PAGE);
+
+        if (!slice.length) {
+            grid.innerHTML = `
+                <div class="col-span-1 md:col-span-3 text-center py-12">
+                    <i class="fa-solid fa-filter text-gray-300 text-4xl mb-2"></i>
+                    <p class="text-gray-500 font-medium text-sm mt-2">No properties match your search. Try broadening your parameters.</p>
+                </div>`;
+        } else {
+            grid.innerHTML = slice.map(h => {
+                const mediaCount = h.media.length;
+                const countBadge = mediaCount > 0
+                    ? `<span class="absolute top-4 right-4 bg-black/60 text-white text-xxs font-bold px-2 py-0.5 rounded-md"><i class="fa-solid fa-images mr-1"></i>${mediaCount}</span>`
+                    : "";
+                return `
+                <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200 hover:shadow-md transition duration-300 flex flex-col">
+                    <div class="relative h-56 bg-gray-100">
+                        <img src="${h.thumb}" alt="${h.id}" class="w-full h-full object-cover" onerror="this.src='${FALLBACK_IMG}'">
+                        <span class="absolute top-4 left-4 ${h.tagColor} text-white text-xxs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs">${h.status}</span>
+                        ${countBadge}
+                        <span class="absolute bottom-4 right-4 bg-slate-900/80 text-white text-xs px-2.5 py-1 rounded-md font-mono">ID #${h.id}</span>
                     </div>
-                    <div>
-                        <div class="grid grid-cols-3 gap-1 text-center text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium mb-5">
-                            <div class="bg-gray-50 py-1.5 rounded-lg"><span>${house.beds} Bed</span></div>
-                            <div class="bg-gray-50 py-1.5 rounded-lg"><span>${house.baths} Bath</span></div>
-                            <div class="bg-gray-50 py-1.5 rounded-lg"><span>${house.sqft.toLocaleString()} sqft</span></div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="text-indigo-600 font-extrabold text-2xl mb-1">${h.priceDisplay}</div>
+                            <h3 class="text-base font-bold text-gray-950 mb-4 truncate">${h.id}</h3>
                         </div>
-                        <button type="button" onclick="openModal('${house.id}')" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs py-2.5 rounded-xl transition duration-200 shadow-xs cursor-pointer tracking-wider uppercase">
-                            Inspect Metrics
-                        </button>
+                        <div>
+                            <div class="grid grid-cols-3 gap-1 text-center text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium mb-5">
+                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.beds} Bed</div>
+                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.baths} Bath</div>
+                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.sqft.toLocaleString()} sqft</div>
+                            </div>
+                            <button type="button" onclick="openModal('${h.id}')"
+                                class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs py-2.5 rounded-xl transition shadow-xs cursor-pointer tracking-wider uppercase">
+                                Inspect Metrics
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>`;
+                </div>`;
+            }).join("");
+        }
+
+        const maxPages = Math.ceil(filtered.length / PER_PAGE) || 1;
+        document.getElementById("btn-prev").disabled      = page === 1;
+        document.getElementById("btn-prev").style.opacity = page === 1 ? "0.4" : "1";
+        document.getElementById("btn-next").disabled      = page >= maxPages;
+        document.getElementById("btn-next").style.opacity = page >= maxPages ? "0.4" : "1";
+        document.getElementById("page-indicator").textContent = `Catalog Page ${page} of ${maxPages}`;
+    }
+
+    // ── FILTERS ──────────────────────────────────────────────────────────────
+    function applyFilters() {
+        const minP = parseInt(document.getElementById("filter-min-price").value) || 0;
+        const maxP = parseInt(document.getElementById("filter-max-price").value) || Infinity;
+        const bVal = document.getElementById("filter-beds").value;
+
+        let base = activeTier === "all" ? [...db] : db.filter(h => h.tier === activeTier);
+
+        filtered = base.filter(h => {
+            const okP = h.priceRaw >= minP && h.priceRaw <= maxP;
+            const okB = bVal === "all" || h.beds >= parseInt(bVal);
+            return okP && okB;
         });
-        grid.innerHTML = html;
+
+        page = 1;
+        renderGrid();
+        document.getElementById("catalog-section").scrollIntoView({ behavior: "smooth" });
     }
 
-    const maxPages = Math.ceil(filteredSelection.length / RECORDS_PER_PAGE) || 1;
-    document.getElementById('btn-prev').disabled      = currentPage === 1;
-    document.getElementById('btn-prev').style.opacity = currentPage === 1 ? "0.4" : "1";
-    document.getElementById('btn-next').disabled      = currentPage >= maxPages;
-    document.getElementById('btn-next').style.opacity = currentPage >= maxPages ? "0.4" : "1";
-    document.getElementById('page-indicator').innerText = `Catalog Page ${currentPage} of ${maxPages}`;
-}
+    function changeTier(tier) {
+        activeTier = tier;
+        ["all","luxury","affordable","commercial"].forEach(t => {
+            const el = document.getElementById(`tab-${t}`);
+            if (el) el.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 bg-gray-100 hover:bg-gray-200";
+        });
+        const active = document.getElementById(`tab-${tier}`);
+        if (active) active.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs";
+        applyFilters();
+    }
 
-// ── FILTERS (kept exactly as before) ────────────────────────────────────
-function applyFilters() {
-    const minPrice   = parseInt(document.getElementById('filter-min-price').value) || 0;
-    const maxPrice   = parseInt(document.getElementById('filter-max-price').value) || Infinity;
-    const bedsFilter = document.getElementById('filter-beds').value;
+    // ── PAGINATION ───────────────────────────────────────────────────────────
+    function nextPage() {
+        if (page < Math.ceil(filtered.length / PER_PAGE)) {
+            page++;
+            renderGrid();
+            document.getElementById("catalog-section").scrollIntoView({ behavior: "smooth" });
+        }
+    }
+    function previousPage() {
+        if (page > 1) {
+            page--;
+            renderGrid();
+            document.getElementById("catalog-section").scrollIntoView({ behavior: "smooth" });
+        }
+    }
 
-    let base = currentActiveTier === "all"
-        ? [...masterDatabase]
-        : masterDatabase.filter(h => h.tier === currentActiveTier);
+    // ── GALLERY HELPERS ───────────────────────────────────────────────────────
+    function renderGalleryStage(idx) {
+        const src   = modalMedia[idx];
+        const stage = document.getElementById("gallery-stage");
+        if (!stage) return;
 
-    filteredSelection = base.filter(h => {
-        const okPrice = h.priceRaw >= minPrice && h.priceRaw <= maxPrice;
-        const okBeds  = bedsFilter === "all" || h.beds >= parseInt(bedsFilter);
-        return okPrice && okBeds;
+        if (isVideo(src)) {
+            stage.innerHTML = `<video src="${src}" class="w-full h-full object-cover" controls playsinline></video>`;
+        } else {
+            stage.innerHTML = `<img src="${src}" class="w-full h-full object-cover" alt="Property media" onerror="this.src='${FALLBACK_IMG}'">`;
+        }
+
+        // Highlight active thumb
+        document.querySelectorAll(".thumb-btn").forEach((el, i) => {
+            el.classList.toggle("ring-active", i === idx);
+            el.style.borderColor = i === idx ? "#4f46e5" : "transparent";
+        });
+
+        modalMediaIdx = idx;
+    }
+
+    function buildGallery(house) {
+        modalMedia = house.media && house.media.length ? house.media : [FALLBACK_IMG];
+
+        // Stage
+        renderGalleryStage(0);
+
+        // Thumbnail strip
+        const strip = document.getElementById("gallery-strip");
+        strip.innerHTML = modalMedia.map((src, i) => {
+            const inner = isVideo(src)
+                ? `<div class="w-full h-full bg-slate-800 flex items-center justify-center"><i class="fa-solid fa-play text-white text-xs"></i></div>`
+                : `<img src="${src}" class="w-full h-full object-cover" alt="thumb ${i+1}" onerror="this.src='${FALLBACK_IMG}'">`;
+            return `<button type="button" class="thumb-btn flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 cursor-pointer"
+                        style="border-color:${i===0?'#4f46e5':'transparent'}"
+                        onclick="renderGalleryStage(${i})">${inner}</button>`;
+        }).join("");
+    }
+
+    // ── MODAL ─────────────────────────────────────────────────────────────────
+    function openModal(id) {
+        const h = db.find(p => p.id === id);
+        if (!h) return;
+
+        document.getElementById("modal-id").textContent    = `ID #${h.id}`;
+        document.getElementById("modal-price").textContent = h.priceDisplay;
+        document.getElementById("modal-title").textContent = h.id;
+        document.getElementById("modal-beds").textContent  = `${h.beds} Beds`;
+        document.getElementById("modal-baths").textContent = `${h.baths} Baths`;
+        document.getElementById("modal-sqft").textContent  = `${h.sqft.toLocaleString()} sqft`;
+
+        const tierLabel = h.tier === "luxury" ? "Premium Estate"
+                        : h.tier === "commercial" ? "Commercial Asset"
+                        : "Affordable Unit";
+        document.getElementById("modal-type").textContent = tierLabel;
+
+        const tag = document.getElementById("modal-tag");
+        tag.textContent = h.status;
+        tag.className   = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${h.tagColor}`;
+
+        // Description
+        const descBlock = document.getElementById("modal-desc-block");
+        const descEl    = document.getElementById("modal-description");
+        if (h.description) {
+            descEl.textContent = h.description;
+            descBlock.classList.remove("hidden");
+        } else {
+            descBlock.classList.add("hidden");
+        }
+
+        // Gallery
+        buildGallery(h);
+
+        // WhatsApp button
+        const msg = encodeURIComponent(`Hello, I am interested in property ID #${h.id} listed at ${h.priceDisplay}. Please send more details.`);
+        document.getElementById("modal-whatsapp-trigger").onclick = () =>
+            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`, "_blank");
+
+        document.getElementById("details-modal").classList.remove("hidden");
+        document.body.classList.add("overflow-hidden");
+    }
+
+    function closeModal() {
+        // Stop any video
+        const video = document.querySelector("#gallery-stage video");
+        if (video) { video.pause(); video.src = ""; }
+        document.getElementById("details-modal").classList.add("hidden");
+        document.body.classList.remove("overflow-hidden");
+    }
+
+    // Keyboard nav for gallery
+    document.addEventListener("keydown", e => {
+        if (document.getElementById("details-modal").classList.contains("hidden")) return;
+        if (e.key === "ArrowRight") renderGalleryStage((modalMediaIdx + 1) % modalMedia.length);
+        if (e.key === "ArrowLeft")  renderGalleryStage((modalMediaIdx - 1 + modalMedia.length) % modalMedia.length);
+        if (e.key === "Escape")     closeModal();
     });
 
-    currentPage = 1;
-    renderCatalogGrid();
-    document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
-}
-
-function changeTier(tier) {
-    currentActiveTier = tier;
-    ['all', 'luxury', 'commercial', 'affordable'].forEach(t => {
-        const btn = document.getElementById(`tab-${t}`);
-        if (btn) btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 bg-gray-100 hover:bg-gray-200";
-    });
-    const active = document.getElementById(`tab-${tier}`);
-    if (active) active.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs";
-    applyFilters();
-}
-
-// ── PAGINATION (kept exactly as before) ─────────────────────────────────
-function nextPage() {
-    if (currentPage < Math.ceil(filteredSelection.length / RECORDS_PER_PAGE)) {
-        currentPage++;
-        renderCatalogGrid();
-        document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
-    }
-}
-function previousPage() {
-    if (currentPage > 1) {
-        currentPage--;
-        renderCatalogGrid();
-        document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-// ── MODAL ────────────────────────────────────────────────────────────────
-function openModal(id) {
-    const house = masterDatabase.find(h => h.id === id);
-    if (!house) return;
-
-    document.getElementById('modal-id').innerText    = `ID #${house.id}`;
-    document.getElementById('modal-price').innerText = house.priceDisplay;
-    document.getElementById('modal-title').innerText = house.title;
-    document.getElementById('modal-beds').innerText  = `${house.beds} Beds`;
-    document.getElementById('modal-baths').innerText = `${house.baths} Baths`;
-    document.getElementById('modal-sqft').innerText  = `${house.sqft.toLocaleString()} sqft`;
-    document.getElementById('modal-type').innerText  = house.type;
-
-    const tagBadge = document.getElementById('modal-tag');
-    tagBadge.innerText = house.status;
-    tagBadge.className  = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${house.tagColor}`;
-
-    // Build the FULL gallery (all images + videos from this ID's folder only)
-    renderGallery(house);
-
-    const encoded = encodeURIComponent(`Hello, I am interested in property ID #${house.id} listed at ${house.priceDisplay}. Please send more details.`);
-    document.getElementById('modal-whatsapp-trigger').onclick = () => {
-        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encoded}`, '_blank');
+    // ── INTAKE FORM (Buy / Sell / Mortgage) ───────────────────────────────────
+    const INTAKE_LABELS = {
+        buy:      { icon: "fa-house-circle-check", text: "I want to Buy a Property" },
+        sell:     { icon: "fa-tag",                text: "I want to Sell a Property" },
+        mortgage: { icon: "fa-file-invoice-dollar", text: "I need Mortgage Assistance" }
     };
 
-    document.getElementById('details-modal').classList.remove('hidden');
-    document.body.classList.add('overflow-hidden');
-}
+    function setIntakeService(svc) {
+        intakeService = svc;
+        // Update tab styles
+        ["buy","sell","mortgage"].forEach(t => {
+            const btn = document.getElementById(`intake-tab-${t}`);
+            if (t === svc) {
+                btn.className = "intake-tab px-5 py-2 text-xs font-bold rounded-xl border transition cursor-pointer bg-indigo-600 border-indigo-500 text-white";
+            } else {
+                btn.className = "intake-tab px-5 py-2 text-xs font-bold rounded-xl border transition cursor-pointer bg-slate-800 border-slate-700 text-slate-300 hover:border-indigo-500 hover:text-white";
+            }
+        });
+        const lbl = INTAKE_LABELS[svc];
+        document.getElementById("intake-service-label").innerHTML =
+            `<i class="fa-solid ${lbl.icon} mr-1.5"></i>${lbl.text}`;
+        hideIntakeError();
+    }
 
-// Fills the modal gallery container with a big stage + a thumbnail for every file
-function renderGallery(house) {
-    activeMedia = (house.media && house.media.length) ? house.media : [FALLBACK_IMG];
+    function hideIntakeError() {
+        document.getElementById("intake-error").classList.add("hidden");
+    }
 
-    let html = `<div id="gallery-stage" class="md:col-span-3 h-48 sm:h-72 rounded-2xl overflow-hidden bg-gray-100 relative"></div>`;
+    function showIntakeError(msg) {
+        const el = document.getElementById("intake-error");
+        el.querySelector("span").textContent = msg;
+        el.classList.remove("hidden");
+    }
 
-    activeMedia.forEach((src, i) => {
-        const inner = isVideo(src)
-            ? `<div class="w-full h-full flex items-center justify-center bg-slate-900 text-white"><i class="fa-solid fa-play"></i></div>`
-            : `<img src="${src}" class="w-full h-full object-cover" alt="View ${i + 1}" onerror="this.src='${FALLBACK_IMG}'">`;
-        html += `
-            <button type="button" onclick="setGalleryStage(${i})"
-                class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative cursor-pointer border-2 border-transparent hover:border-indigo-500 transition">
-                ${inner}
-            </button>`;
-    });
+    function submitIntakeForm() {
+        const name      = document.getElementById("intake-name").value.trim();
+        const email     = document.getElementById("intake-email").value.trim();
+        const whatsapp  = document.getElementById("intake-whatsapp").value.trim();
+        const phone     = document.getElementById("intake-phone").value.trim();
+        const city      = document.getElementById("intake-city").value.trim();
+        const state     = document.getElementById("intake-state").value.trim();
+        const details   = document.getElementById("intake-details").value.trim();
 
-    galleryContainer.innerHTML = html;
-    setGalleryStage(0); // show the first item big
-}
+        if (!name)     return showIntakeError("Full name is required.");
+        if (!email)    return showIntakeError("Email address is required.");
+        if (!whatsapp) return showIntakeError("WhatsApp number is required.");
+        if (!city)     return showIntakeError("City of interest is required.");
+        if (!state)    return showIntakeError("State is required.");
 
-// Shows one media item in the big stage area
-function setGalleryStage(i) {
-    const src   = activeMedia[i];
-    const stage = document.getElementById('gallery-stage');
-    if (!stage) return;
-    stage.innerHTML = isVideo(src)
-        ? `<video src="${src}" class="w-full h-full object-cover" controls playsinline></video>`
-        : `<img src="${src}" class="w-full h-full object-cover" alt="Selected view" onerror="this.src='${FALLBACK_IMG}'">`;
-}
+        hideIntakeError();
 
-function closeModal() {
-    document.getElementById('details-modal').classList.add('hidden');
-    document.body.classList.remove('overflow-hidden');
-}
+        const serviceLabel = INTAKE_LABELS[intakeService].text;
+        const lines = [
+            `Hello Skyview Properties!`,
+            ``,
+            `SERVICE REQUEST: ${serviceLabel.toUpperCase()}`,
+            ``,
+            `Full Name: ${name}`,
+            `Email: ${email}`,
+            `WhatsApp: ${whatsapp}`,
+            phone ? `Phone: ${phone}` : null,
+            `City: ${city}`,
+            `State: ${state}`,
+            details ? `Additional Details: ${details}` : null,
+        ].filter(l => l !== null).join("\n");
 
-// ── WHATSAPP NOTICE (kept exactly as before) ────────────────────────────
-function showWhatsAppNotice() {
-    document.getElementById('whatsapp-notice-modal').classList.remove('hidden');
-}
-function closeNoticeModal() {
-    document.getElementById('whatsapp-notice-modal').classList.add('hidden');
-}
+        const url = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(lines)}`;
+        window.open(url, "_blank");
+    }
 
-// ── BOOT ────────────────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', loadListings);
-</script>
+    // ── WHATSAPP NOTICE MODAL ──────────────────────────────────────────────────
+    function showWhatsAppNotice() {
+        document.getElementById("whatsapp-notice-modal").classList.remove("hidden");
+    }
+    function closeNoticeModal() {
+        document.getElementById("whatsapp-notice-modal").classList.add("hidden");
+    }
+
+    // ── BOOT ──────────────────────────────────────────────────────────────────
+    window.addEventListener("DOMContentLoaded", loadListings);
+    </script>
 </body>
 </html>

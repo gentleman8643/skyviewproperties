@@ -6,9 +6,9 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = __dirname;                 // repo root (where this file + index.html live)
-const OUTPUT = path.join(ROOT, "media-manifest.json");
+const OUTPUT = path.join(ROOT, "public", "media-manifest.json");
 const MEDIA_RE = /\.(jpe?g|png|webp|gif|avif|mp4|webm|ogg|mov|m4v)$/i;
-const IGNORE = new Set(["node_modules", ".git", ".netlify", ".github"]);
+const IGNORE = new Set(["node_modules", ".git", ".netlify", ".github", "dist"]);
 
 const manifest = {};
 
@@ -31,8 +31,15 @@ function walk(dir) {
 
     if (mediaFiles.length > 0) {
         const id = path.basename(dir);                 // folder name = Property ID
-        const webBase = "/" + path.relative(ROOT, dir).split(path.sep).join("/");
-        // Images first (so first item = thumbnail), then videos, both alphabetical
+
+        // Build the web-accessible path.
+        // Files under public/ are served at the root URL by both Vite and Netlify,
+        // so we strip the leading "public/" segment from the path.
+        let relPath = path.relative(ROOT, dir).split(path.sep).join("/");
+        if (relPath.startsWith("public/")) relPath = relPath.slice("public/".length);
+        const webBase = "/" + relPath;
+
+        // Images first (thumbnail = first entry), then videos — both alphabetical
         mediaFiles.sort((a, b) => {
             const av = /\.(mp4|webm|ogg|mov|m4v)$/i.test(a) ? 1 : 0;
             const bv = /\.(mp4|webm|ogg|mov|m4v)$/i.test(b) ? 1 : 0;
