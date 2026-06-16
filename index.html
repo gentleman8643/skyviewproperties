@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyview Properties | Nationwide Portfolios</title>
+    <!-- Tailwind CSS for high-fidelity styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for layout icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        @keyframes pulse-gentle {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4); }
+            50% { transform: scale(1.03); box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.6); }
+        }
+        .animate-pulse-gentle {
+            animation: pulse-gentle 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col relative">
+
+    <!-- FLOATING WHATSAPP CONTACT BUTTON -->
+    <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20am%20interested%20in%20inquiring%20about%20your%20available%20listings." 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       class="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3.5 rounded-full shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-3 border border-emerald-400/20 animate-pulse-gentle group">
+        <span class="text-xs font-black uppercase tracking-wider">Contact Us</span>
+        <div class="h-5 w-px bg-white/20"></div>
+        <i class="fa-brands fa-whatsapp text-2xl font-bold"></i>
+    </a>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="bg-white shadow-xs sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-building-user text-indigo-600 text-2xl"></i>
+                    <span class="text-xl font-bold tracking-tight text-gray-950">SKYVIEW <span class="text-indigo-600">PROPERTIES</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 font-semibold text-sm">
+                    <a href="#" class="text-indigo-600">Home</a>
+                    <a href="#catalog-section" class="text-gray-600 hover:text-indigo-600 transition">Marketplace Catalog</a>
+                    <a href="#corporate-office-section" class="text-gray-600 hover:text-indigo-600 transition">Corporate Office</a>
+                </div>
+                <div>
+                    <button class="bg-slate-900 hover:bg-indigo-600 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs">Secure Vault Portal</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER TITLE BANNER -->
+    <header class="bg-slate-900 text-white py-12 text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover" alt="Banner background">
+        </div>
+        <div class="relative max-w-3xl mx-auto px-4">
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">Unified United States Housing Index</h1>
+            <p class="text-indigo-200 text-sm sm:text-base">Inspecting a verified portfolio of active residential assets spanning premium tiers and community assistance classes.</p>
+        </div>
+    </header>
+
+    <!-- INTERACTIVE FILTER CONSOLE -->
+    <section class="bg-white border-b border-gray-200 md:sticky md:top-16 z-40 shadow-2xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+                <div>
+                    <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Minimum Budget ($)</label>
+                    <input type="number" id="filter-min-price" placeholder="e.g. 500" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Maximum Budget ($)</label>
+                    <input type="number" id="filter-max-price" placeholder="e.g. 1500000" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Size Requirements</label>
+                    <select id="filter-beds" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
+                        <option value="all">Any Bedroom Count</option>
+                        <option value="1">1+ Bedrooms</option>
+                        <option value="2">2+ Bedrooms</option>
+                        <option value="3">3+ Bedrooms</option>
+                        <option value="4">4+ Bedrooms</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="button" onclick="applyFilters()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg transition uppercase tracking-wider shadow-2xs cursor-pointer h-[34px]">
+                        <i class="fa-solid fa-sliders mr-1"></i> Apply Parameters
+                    </button>
+                </div>
+            </div>
+
+            <!-- TIER TOGGLE SWITCHES -->
+            <div class="flex flex-wrap gap-2 mt-4 border-t border-gray-100 pt-3">
+                <button onclick="changeTier('all')" id="tab-all" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs">All Assets</button>
+                <button onclick="changeTier('luxury')" id="tab-luxury" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-indigo-600 bg-gray-100">Elite Luxury</button>
+                <button onclick="changeTier('affordable')" id="tab-affordable" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 hover:text-emerald-600 bg-gray-100">Affordable Housing</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE CATALOG GRID -->
+    <main id="catalog-section" class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow scroll-mt-36">
+        <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Dynamic data cards render here instantly -->
+        </div>
+
+        <!-- PAGINATION CONTROLS -->
+        <div class="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
+            <button onclick="previousPage()" id="btn-prev" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Prev
+            </button>
+            <span id="page-indicator" class="text-xs font-bold text-gray-500 bg-gray-100 px-4 py-1.5 rounded-full border border-gray-200">
+                Page 1
+            </span>
+            <button onclick="nextPage()" id="btn-next" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
+                Next <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- DETAILED CORPORATE OFFICE PROFILE SECTION -->
+    <section id="corporate-office-section" class="bg-white border-t border-b border-gray-200 py-16 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-1 rounded-md text-xxs font-extrabold uppercase tracking-wider">
+                        <i class="fa-solid fa-building"></i> Skyview Operations Hub
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-gray-900">National Headquarters & Brokerage Desk</h2>
+                    <p class="text-sm text-gray-600 leading-relaxed max-w-2xl">
+                        Our primary corporate office orchestrates algorithmic market pacing, secure physical custody processing, and high-level client verification across all fifty states. Designed as a strict privacy environment, walk-in broker routing is restricted exclusively to pre-vetted legal entities.
+                    </p>
+                    
+                    <!-- EXECUTIVE ROSTER DIRECTORY -->
+                    <div class="border-t border-b border-gray-100 py-4">
+                        <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Corporate Leadership Profile</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="bg-gray-50/60 p-3 rounded-xl border border-gray-100">
+                                <div class="text-xs font-black text-gray-950">Marilyn Alvarado</div>
+                                <div class="text-xxs text-indigo-600 font-bold uppercase tracking-wide">Managing Principal & Owner</div>
+                            </div>
+                            <div class="bg-gray-50/60 p-3 rounded-xl border border-gray-100">
+                                <div class="text-xs font-black text-gray-950">Marcus Vance</div>
+                                <div class="text-xxs text-gray-500 font-bold uppercase tracking-wide">Chief Logistics Officer</div>
+                            </div>
+                            <div class="bg-gray-50/60 p-3 rounded-xl border border-gray-100">
+                                <div class="text-xs font-black text-gray-950">Elena Rostova</div>
+                                <div class="text-xxs text-gray-500 font-bold uppercase tracking-wide">Director of Assisting Housing</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                        <div class="flex gap-3 items-start">
+                            <div class="bg-gray-100 p-2.5 rounded-lg text-indigo-600"><i class="fa-solid fa-map-location-dot"></i></div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-900 uppercase">Physical Inquiries</h4>
+                                <p class="text-xs text-gray-500 mt-0.5">750 Lexington Avenue, Floor 24<br>New York, NY 10022</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 items-start">
+                            <div class="bg-gray-100 p-2.5 rounded-lg text-indigo-600"><i class="fa-solid fa-clock"></i></div>
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-900 uppercase">Operational Window</h4>
+                                <p class="text-xs text-gray-500 mt-0.5">Mon - Fri: 08:00 EST - 18:00 EST<br>Sat - Sun: Secured Digital Intercom Only</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl border border-slate-800 space-y-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400"><i class="fa-solid fa-network-wired mr-2"></i>Branch Node Directory</h3>
+                    <div class="divide-y divide-slate-800 text-xs">
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">Midwest Operations Desk</span>
+                            <span class="text-slate-400 font-mono text-xxs">Chicago, IL</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">Pacific Logistics Bureau</span>
+                            <span class="text-slate-400 font-mono text-xxs">Los Angeles, CA</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">Southern Housing Intake</span>
+                            <span class="text-slate-400 font-mono text-xxs">Austin, TX</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/60 text-xxs text-slate-400 leading-normal">
+                        <i class="fa-solid fa-circle-info text-indigo-400 mr-1"></i> For instantaneous brokerage alignment, execute an intake dispatch down via the secure terminal widget directly below or touch our direct wire channels.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROPERTY INSPECTION DETAILS MODAL -->
+    <div id="details-modal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition duration-300 transform scale-95 relative flex flex-col">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50 rounded-t-3xl">
+                <div>
+                    <span id="modal-tag" class="text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2">TAG</span>
+                    <span id="modal-id" class="text-gray-400 text-xs font-bold font-mono">ID</span>
+                </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-rose-600 transition bg-white p-2 rounded-full border border-gray-200 shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
+                    <div>
+                        <h2 id="modal-title" class="text-xl sm:text-2xl font-extrabold text-gray-950">Skyview Architectural Estate</h2>
+                        <p class="text-indigo-600 font-bold text-xs uppercase tracking-wide mt-1">Location Verified Portfolio • <span class="text-rose-500 bg-rose-50 text-xs px-2 py-0.5 rounded-sm font-semibold">Address Restricted</span></p>
+                    </div>
+                    <div id="modal-price" class="text-2xl sm:text-3xl font-black text-indigo-600 tracking-tight">PRICE</div>
+                </div>
+                <div>
+                    <h3 class="text-sm font-extrabold text-gray-950 uppercase tracking-wider mb-3"><i class="fa-solid fa-camera-retro mr-1.5 text-indigo-600"></i> Structural Elevations</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-3 h-48 sm:h-72 rounded-2xl overflow-hidden bg-gray-100 relative">
+                            <img id="gallery-main" src="" class="w-full h-full object-cover" alt="Front Elevation">
+                        </div>
+                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
+                            <img id="gallery-left" src="" class="w-full h-full object-cover" alt="Left View">
+                        </div>
+                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
+                            <img id="gallery-right" src="" class="w-full h-full object-cover" alt="Right View">
+                        </div>
+                        <div class="h-32 rounded-2xl overflow-hidden bg-gray-100 relative">
+                            <img id="gallery-interior" src="" class="w-full h-full object-cover" alt="Interior View">
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-bed text-indigo-600 text-sm mb-1 block"></i>
+                        <span id="modal-beds" class="font-extrabold text-gray-950">X Beds</span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-bath text-indigo-600 text-sm mb-1 block"></i>
+                        <span id="modal-baths" class="font-extrabold text-gray-950">X Baths</span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-ruler-combined text-indigo-600 text-sm mb-1 block"></i>
+                        <span id="modal-sqft" class="font-extrabold text-gray-950">X sqft</span>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 text-center">
+                        <i class="fa-solid fa-compass-drafting text-indigo-600 text-sm mb-1 block"></i>
+                        <span id="modal-type" class="font-extrabold text-gray-950">Type</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-3xl flex gap-3">
+                <button onclick="closeModal()" class="w-1/3 bg-white hover:bg-gray-100 border border-gray-200 text-gray-700 font-bold text-xs py-3 rounded-xl transition cursor-pointer">Close</button>
+                <button id="modal-whatsapp-trigger" type="button" class="w-2/3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-3 rounded-xl transition tracking-wide shadow-xs cursor-pointer flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Confidential Inquiry
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHATSAPP REDIRECT NOTICE MODAL -->
+    <div id="whatsapp-notice-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-md w-full text-center text-white space-y-6 shadow-2xl transform scale-95 transition-all">
+            <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
+                <i class="fa-brands fa-whatsapp text-4xl font-bold animate-pulse"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-black tracking-tight">Swift Response Connection</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">For an immediate reply from our operational desk, please scroll down slightly and execute your communication directly through our secure WhatsApp channels.</p>
+            </div>
+            <div class="pt-2">
+                <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20just%20completed%20the%20intake%20desk%20form%20and%20would%20like%20to%20connect%20for%20a%20swift%20response." 
+                   target="_blank" 
+                   onclick="closeNoticeModal()"
+                   class="w-full bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black uppercase tracking-wider py-3 px-4 rounded-xl block transition duration-200 shadow-md">
+                    Open Secure WhatsApp Chat
+                </a>
+                <button onclick="closeNoticeModal()" class="text-slate-500 hover:text-slate-300 text-xxs uppercase tracking-widest font-bold mt-4 transition cursor-pointer block mx-auto">Stay on Website</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORPORATE FOOTER -->
+    <footer id="footer-contact" class="bg-slate-900 text-gray-300 pt-16 pb-8 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            <div class="space-y-4">
+                <div>
+                    <div class="flex items-center gap-2 text-white mb-2">
+                        <i class="fa-solid fa-building-user text-indigo-400 text-xl"></i>
+                        <span class="text-lg font-bold tracking-tight">SKYVIEW PROPERTIES</span>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed max-w-sm">Marilyn Alvarado's corporate desk coordinates low-latency acquisition protocols for luxury estate portfolios and domestic housing tiers.</p>
+                </div>
+                <div class="space-y-2 text-xs border-t border-slate-800/80 pt-3">
+                    <div class="flex items-center gap-2 text-gray-300">
+                        <i class="fa-solid fa-phone text-indigo-400 w-4"></i>
+                        <span>Direct Wire: <a href="tel:2139420224" class="hover:text-white underline font-semibold">213-942-0224</a></span>
+                    </div>
+                    <div class="flex items-center gap-2 text-gray-300">
+                        <i class="fa-brands fa-whatsapp text-emerald-400 w-4 font-bold text-sm"></i>
+                        <span>WhatsApp Desk: <a href="https://wa.me/12139420224" target="_blank" class="hover:text-emerald-400 underline font-semibold text-emerald-300">Start Direct Secure Chat</a></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Regulatory & Privacy Disclaimers</h4>
+                <ul class="space-y-2 text-xs text-gray-400">
+                    <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-shield mr-2 text-indigo-400"></i>Privacy Security Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-scale-balanced mr-2 text-indigo-400"></i>Terms of Transactional Escrow</a></li>
+                    <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-building-shield mr-2 text-indigo-400"></i>Fair Housing Act Compliance Statement</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Secure Intake Messaging Desk</h4>
+                <form class="space-y-3" onsubmit="event.preventDefault(); showWhatsAppNotice();">
+                    <input type="email" placeholder="Corporate Encryption Email..." required class="w-full text-xs p-2.5 rounded-lg bg-slate-800 border border-slate-700 focus:outline-hidden text-white placeholder-gray-500 focus:border-indigo-500">
+                    <textarea rows="2" placeholder="Input Asset Code ID and contact phone..." required class="w-full text-xs p-2.5 rounded-lg bg-slate-800 border border-slate-700 focus:outline-hidden text-white placeholder-gray-500 focus:border-indigo-500"></textarea>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg transition tracking-wider uppercase cursor-pointer">Transmit Inquiry Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 text-center border-t border-slate-800 pt-8 text-xxs tracking-wider text-gray-500 font-medium">
+            &copy; 2026 SKYVIEW PROPERTIES GLOBAL INC. ALL LOGISTICAL MARKS REGISTERED. HIGH-PRIVACY OUTLET STANDARDS ENFORCED.
+        </div>
+    </footer>
+
+    <!-- REAL ESTATE ENGINE CODE -->
+    <script>
+        const galleryFront = [
+            "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80"
+        ];
+        const galleryLeft = ["https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=600&q=80"];
+        const galleryRight = ["https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80"];
+        const galleryIn = ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80"];
+
+        let masterDatabase = [];
+        let filteredSelection = [];
+        let currentPage = 1;
+        const recordsPerPage = 12; 
+        let currentActiveTier = "all";
+
+        function buildAssetDatabase() {
+            masterDatabase = [];
+            for (let i = 1; i <= 2100; i++) {
+                const isAffordable = i % 2 === 0;
+                const tierClass = isAffordable ? "affordable" : "luxury";
+                const isForSale = i % 3 !== 0;
+                const tagText = isForSale ? "FOR SALE" : "FOR RENT";
+
+                let numericPrice, priceFormatted, title;
+                
+                if (tierClass === "luxury") {
+                    numericPrice = Math.floor(450000 + (i * 950));
+                    priceFormatted = isForSale ? `$${numericPrice.toLocaleString()}` : `$${Math.floor(3500 + (i * 2)).toLocaleString()} / mo`;
+                    title = "Skyview Elite Premium Estate";
+                } else {
+                    numericPrice = Math.floor(400 + (i * 110));
+                    priceFormatted = isForSale ? `$${numericPrice.toLocaleString()}` : `$${Math.floor(650 + (i * 0.4)).toLocaleString()} / mo`;
+                    title = "Skyview Community Urban Residence";
+                }
+
+                masterDatabase.push({
+                    id: `SK-${5000 + i}`,
+                    priceRaw: numericPrice,
+                    priceDisplay: priceFormatted,
+                    tagText: tagText,
+                    tagColor: tierClass === "luxury" ? "bg-indigo-600" : "bg-emerald-600",
+                    title: title, 
+                    tier: tierClass, 
+                    beds: isAffordable ? (i % 2) + i % 2 + 1 : (i % 3) + 3, 
+                    baths: isAffordable ? 1 : 3, 
+                    sqft: isAffordable ? Math.floor(650 + (i * 0.4)) : Math.floor(2500 + (i * 2)),
+                    front: galleryFront[i % galleryFront.length],
+                    left: galleryLeft[i % galleryLeft.length],
+                    right: galleryRight[i % galleryRight.length],
+                    interior: galleryIn[i % galleryIn.length]
+                });
+            }
+            filteredSelection = [...masterDatabase];
+            renderCatalogGrid();
+        }
+
+        function renderCatalogGrid() {
+            const grid = document.getElementById('master-catalog-grid');
+            if (!grid) return; // Guard clause
+            grid.innerHTML = "";
+
+            const startIdx = (currentPage - 1) * recordsPerPage;
+            const endIdx = startIdx + recordsPerPage;
+            const operationalPageSlice = filteredSelection.slice(startIdx, endIdx);
+
+            if (operationalPageSlice.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-1 md:col-span-3 text-center py-12">
+                        <i class="fa-solid fa-filter text-gray-300 text-4xl mb-2"></i>
+                        <p class="text-gray-500 font-medium text-sm">No properties found inside those search fields. Try broadening your parameters.</p>
+                    </div>`;
+                return;
+            }
+
+            let htmlBuffer = "";
+            operationalPageSlice.forEach(house => {
+                htmlBuffer += `
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200 hover:shadow-md transition duration-300 flex flex-col justify-between">
+                        <div class="relative h-56 bg-gray-100">
+                            <img src="${house.front}" alt="Property Elevation Preview" class="w-full h-full object-cover">
+                            <span class="absolute top-4 left-4 ${house.tagColor} text-white text-xxs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs">${house.tagText}</span>
+                            <span class="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-xs text-white text-xs px-2.5 py-1 rounded-md font-mono">ID #${house.id}</span>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <div class="text-indigo-600 font-extrabold text-2xl mb-1">${house.priceDisplay}</div>
+                                <h3 class="text-base font-bold text-gray-950 mb-4 truncate">${house.title}</h3>
+                            </div>
+                            <div>
+                                <div class="grid grid-cols-3 gap-1 text-center text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium mb-5">
+                                    <div class="bg-gray-50 py-1.5 rounded-lg"><span>${house.beds} Bed</span></div>
+                                    <div class="bg-gray-50 py-1.5 rounded-lg"><span>${house.baths} Bath</span></div>
+                                    <div class="bg-gray-50 py-1.5 rounded-lg"><span>${house.sqft.toLocaleString()} sqft</span></div>
+                                </div>
+                                <button type="button" onclick="openModal('${house.id}')" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs py-2.5 rounded-xl transition duration-200 shadow-xs cursor-pointer tracking-wider uppercase">
+                                    Inspect Metrics
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = htmlBuffer;
+            
+            document.getElementById('btn-prev').disabled = currentPage === 1;
+            document.getElementById('btn-prev').style.opacity = currentPage === 1 ? "0.4" : "1";
+            
+            const maxPages = Math.ceil(filteredSelection.length / recordsPerPage);
+            document.getElementById('btn-next').disabled = currentPage === maxPages || maxPages === 0;
+            document.getElementById('btn-next').style.opacity = (currentPage === maxPages || maxPages === 0) ? "0.4" : "1";
+
+            document.getElementById('page-indicator').innerText = `Catalog Page ${currentPage}`;
+        }
+
+        function applyFilters() {
+            const minPrice = parseInt(document.getElementById('filter-min-price').value) || 0;
+            const maxPrice = parseInt(document.getElementById('filter-max-price').value) || Infinity;
+            const bedsSelect = document.getElementById('filter-beds').value;
+
+            let initialSlice = [...masterDatabase];
+            if (currentActiveTier !== "all") {
+                initialSlice = masterDatabase.filter(house => house.tier === currentActiveTier);
+            }
+
+            filteredSelection = initialSlice.filter(house => {
+                const matchesPrice = house.priceRaw >= minPrice && house.priceRaw <= maxPrice;
+                const matchesBeds = bedsSelect === "all" || house.beds >= parseInt(bedsSelect);
+                return matchesPrice && matchesBeds;
+            });
+
+            currentPage = 1; 
+            renderCatalogGrid();
+
+            // Auto-Scroll Feature to view listings instantly on dynamic actions
+            document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function changeTier(tier) {
+            currentActiveTier = tier;
+            
+            ['all', 'luxury', 'affordable'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer text-gray-600 bg-gray-100 hover:bg-gray-200";
+            });
+
+            const activeBtn = document.getElementById(`tab-${tier}`);
+            if (activeBtn) activeBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-slate-900 text-white shadow-2xs";
+
+            applyFilters();
+        }
+
+        function nextPage() {
+            const maxPages = Math.ceil(filteredSelection.length / recordsPerPage);
+            if (currentPage < maxPages) {
+                currentPage++;
+                renderCatalogGrid();
+                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderCatalogGrid();
+                document.getElementById('catalog-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function openModal(id) {
+            const house = masterDatabase.find(item => item.id === id);
+            if (!house) return;
+
+            document.getElementById('modal-id').innerText = `ID #${house.id}`;
+            document.getElementById('modal-price').innerText = house.priceDisplay;
+            document.getElementById('modal-tag').innerText = house.tagText;
+            document.getElementById('modal-title').innerText = house.title;
+            
+            const tagBadge = document.getElementById('modal-tag');
+            tagBadge.className = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${house.tagColor}`;
+
+            document.getElementById('modal-beds').innerText = `${house.beds} Beds`;
+            document.getElementById('modal-baths').innerText = `${house.baths} Baths`;
+            document.getElementById('modal-sqft').innerText = `${house.sqft.toLocaleString()} sqft`;
+            document.getElementById('modal-type').innerText = house.tier === 'luxury' ? 'Premium Mansion' : 'Affordable Unit';
+
+            document.getElementById('gallery-main').src = house.front;
+            document.getElementById('gallery-left').src = house.left;
+            document.getElementById('gallery-right').src = house.right;
+            document.getElementById('gallery-interior').src = house.interior;
+
+            const whatsappTrigger = document.getElementById('modal-whatsapp-trigger');
+            const encodedText = encodeURIComponent(`Hello, I am interested in property ID #${house.id} listed at ${house.priceDisplay}. Please send configuration files.`);
+            whatsappTrigger.onclick = function() {
+                window.open(`https://wa.me/12139420224?text=${encodedText}`, '_blank');
+            };
+
+            document.getElementById('details-modal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('details-modal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        function showWhatsAppNotice() {
+            document.getElementById('whatsapp-notice-modal').classList.remove('hidden');
+        }
+
+        function closeNoticeModal() {
+            document.getElementById('whatsapp-notice-modal').classList.add('hidden');
+        }
+
+        window.addEventListener('DOMContentLoaded', buildAssetDatabase);
+    </script>
+</body>
+</html>
