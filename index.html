@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyview Properties | Nationwide Portfolios</title>
+    <title>Skyview Properties | International Real Estate Portfolios</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -43,6 +43,7 @@
                     <a href="#" class="text-indigo-600">Home</a>
                     <a href="#catalog-section" class="text-gray-600 hover:text-indigo-600 transition">Marketplace Catalog</a>
                     <a href="#intake-section" class="text-gray-600 hover:text-indigo-600 transition">Buy / Sell / Mortgage</a>
+                    <a href="#branches-section" class="text-gray-600 hover:text-indigo-600 transition">Global Branches</a>
                     <a href="#corporate-office-section" class="text-gray-600 hover:text-indigo-600 transition">Corporate Office</a>
                 </div>
                 <div>
@@ -58,15 +59,32 @@
             <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover" alt="Banner background">
         </div>
         <div class="relative max-w-3xl mx-auto px-4">
-            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">Unified United States Housing Index</h1>
-            <p class="text-indigo-200 text-sm sm:text-base">Inspecting a verified portfolio of active residential assets spanning premium tiers and community assistance classes.</p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">Global Property Portfolio Index</h1>
+            <p class="text-indigo-200 text-sm sm:text-base">Verified residential and commercial assets across the United States, Canada, UK, Australia, Netherlands, Europe, and Asia — premium tiers and community assistance classes.</p>
+            <div class="flex flex-wrap justify-center gap-2 mt-4">
+                <span class="bg-white/10 border border-white/20 text-white text-xxs font-bold px-3 py-1 rounded-full">USA & Canada — Primary Markets</span>
+                <span class="bg-white/5 border border-white/10 text-indigo-200 text-xxs font-bold px-3 py-1 rounded-full">UK &bull; Australia &bull; Netherlands &bull; Europe &bull; Asia</span>
+            </div>
         </div>
     </header>
 
     <!-- INTERACTIVE FILTER CONSOLE -->
     <section class="bg-white border-b border-gray-200 md:sticky md:top-16 z-40 shadow-2xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 items-end">
+                <div>
+                    <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Country / Region</label>
+                    <select id="filter-country" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
+                        <option value="all">All Regions</option>
+                        <option value="usa">USA</option>
+                        <option value="canada">Canada</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="australia">Australia</option>
+                        <option value="netherlands">Netherlands</option>
+                        <option value="europe">Europe (Other)</option>
+                        <option value="asia">Asia</option>
+                    </select>
+                </div>
                 <div>
                     <label class="block text-xxs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Minimum Budget ($)</label>
                     <input type="number" id="filter-min-price" placeholder="e.g. 500" class="w-full text-xs p-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-hidden focus:border-indigo-500">
@@ -171,13 +189,26 @@
                             class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">Country / Region *</label>
+                        <select id="intake-country" class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white focus:outline-none focus:border-indigo-500">
+                            <option value="">Select country...</option>
+                            <option value="USA">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Netherlands">Netherlands</option>
+                            <option value="Europe">Europe (Other)</option>
+                            <option value="Asia">Asia</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">City of Interest *</label>
-                        <input type="text" id="intake-city" placeholder="e.g. Los Angeles"
+                        <input type="text" id="intake-city" placeholder="e.g. New York / Toronto / London"
                             class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">State *</label>
-                        <input type="text" id="intake-state" placeholder="e.g. California"
+                        <label class="block text-xxs font-extrabold text-slate-400 uppercase tracking-wider mb-1">State / Province</label>
+                        <input type="text" id="intake-state" placeholder="e.g. California / Ontario"
                             class="w-full text-xs p-2.5 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
                     </div>
                     <div class="sm:col-span-2">
@@ -198,6 +229,135 @@
         </div>
     </section>
 
+    <!-- GLOBAL BRANCH DIRECTORY -->
+    <section id="branches-section" class="bg-gray-50 border-t border-b border-gray-200 py-16 scroll-mt-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-1 rounded-md text-xxs font-extrabold uppercase tracking-wider mb-4">
+                    <i class="fa-solid fa-globe"></i> International Operations
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-gray-900 mb-2">Global Branch Network</h2>
+                <p class="text-gray-500 text-sm max-w-xl mx-auto">Skyview Properties operates across multiple countries with dedicated regional desks — primarily focused on USA and Canada, with growing operations worldwide.</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- USA — Primary -->
+                <div class="bg-white rounded-2xl p-5 border-2 border-indigo-200 shadow-sm relative">
+                    <span class="absolute top-3 right-3 bg-indigo-600 text-white text-xxs font-bold px-2 py-0.5 rounded-full">PRIMARY</span>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-3xl">🇺🇸</span>
+                        <div>
+                            <h3 class="text-sm font-black text-gray-950">United States</h3>
+                            <p class="text-xxs text-indigo-600 font-bold uppercase tracking-wide">Headquarters Market</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-gray-600">
+                        <li class="flex justify-between"><span>New York, NY</span><span class="text-xxs text-gray-400 font-mono">HQ</span></li>
+                        <li class="flex justify-between"><span>Chicago, IL</span><span class="text-xxs text-gray-400 font-mono">Midwest</span></li>
+                        <li class="flex justify-between"><span>Los Angeles, CA</span><span class="text-xxs text-gray-400 font-mono">Pacific</span></li>
+                        <li class="flex justify-between"><span>Austin, TX</span><span class="text-xxs text-gray-400 font-mono">Southern</span></li>
+                    </ul>
+                </div>
+                <!-- Canada — Primary -->
+                <div class="bg-white rounded-2xl p-5 border-2 border-emerald-200 shadow-sm relative">
+                    <span class="absolute top-3 right-3 bg-emerald-600 text-white text-xxs font-bold px-2 py-0.5 rounded-full">PRIMARY</span>
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-3xl">🇨🇦</span>
+                        <div>
+                            <h3 class="text-sm font-black text-gray-950">Canada</h3>
+                            <p class="text-xxs text-emerald-600 font-bold uppercase tracking-wide">Core Market</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-gray-600">
+                        <li class="flex justify-between"><span>Toronto, ON</span><span class="text-xxs text-gray-400 font-mono">Central</span></li>
+                        <li class="flex justify-between"><span>Vancouver, BC</span><span class="text-xxs text-gray-400 font-mono">Pacific</span></li>
+                        <li class="flex justify-between"><span>Montreal, QC</span><span class="text-xxs text-gray-400 font-mono">Eastern</span></li>
+                    </ul>
+                </div>
+                <!-- UK -->
+                <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-3xl">🇬🇧</span>
+                        <div>
+                            <h3 class="text-sm font-black text-gray-950">United Kingdom</h3>
+                            <p class="text-xxs text-gray-400 font-bold uppercase tracking-wide">European Desk</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-gray-600">
+                        <li class="flex justify-between"><span>London</span><span class="text-xxs text-gray-400 font-mono">EMEA</span></li>
+                        <li class="flex justify-between"><span>Manchester</span><span class="text-xxs text-gray-400 font-mono">North</span></li>
+                    </ul>
+                </div>
+                <!-- Australia -->
+                <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-3xl">🇦🇺</span>
+                        <div>
+                            <h3 class="text-sm font-black text-gray-950">Australia</h3>
+                            <p class="text-xxs text-gray-400 font-bold uppercase tracking-wide">APAC Desk</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-gray-600">
+                        <li class="flex justify-between"><span>Sydney, NSW</span><span class="text-xxs text-gray-400 font-mono">APAC</span></li>
+                        <li class="flex justify-between"><span>Melbourne, VIC</span><span class="text-xxs text-gray-400 font-mono">South</span></li>
+                    </ul>
+                </div>
+                <!-- Netherlands -->
+                <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-3xl">🇳🇱</span>
+                        <div>
+                            <h3 class="text-sm font-black text-gray-950">Netherlands</h3>
+                            <p class="text-xxs text-gray-400 font-bold uppercase tracking-wide">EU Gateway</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-gray-600">
+                        <li class="flex justify-between"><span>Amsterdam</span><span class="text-xxs text-gray-400 font-mono">EU Hub</span></li>
+                    </ul>
+                </div>
+                <!-- Europe (Other) -->
+                <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-3xl">🇪🇺</span>
+                        <div>
+                            <h3 class="text-sm font-black text-gray-950">Europe</h3>
+                            <p class="text-xxs text-gray-400 font-bold uppercase tracking-wide">Continental Desk</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-gray-600">
+                        <li class="flex justify-between"><span>Paris, FR</span><span class="text-xxs text-gray-400 font-mono">Western</span></li>
+                        <li class="flex justify-between"><span>Frankfurt, DE</span><span class="text-xxs text-gray-400 font-mono">Central</span></li>
+                        <li class="flex justify-between"><span>Madrid, ES</span><span class="text-xxs text-gray-400 font-mono">Southern</span></li>
+                    </ul>
+                </div>
+                <!-- Asia -->
+                <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-3xl">🌏</span>
+                        <div>
+                            <h3 class="text-sm font-black text-gray-950">Asia</h3>
+                            <p class="text-xxs text-gray-400 font-bold uppercase tracking-wide">Asia-Pacific Desk</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-1.5 text-xs text-gray-600">
+                        <li class="flex justify-between"><span>Singapore</span><span class="text-xxs text-gray-400 font-mono">SE Asia</span></li>
+                        <li class="flex justify-between"><span>Tokyo, JP</span><span class="text-xxs text-gray-400 font-mono">East Asia</span></li>
+                        <li class="flex justify-between"><span>Mumbai, IN</span><span class="text-xxs text-gray-400 font-mono">South Asia</span></li>
+                    </ul>
+                </div>
+                <!-- Expand CTA -->
+                <div class="bg-slate-900 rounded-2xl p-5 flex flex-col items-center justify-center text-center">
+                    <i class="fa-solid fa-earth-americas text-indigo-400 text-3xl mb-3"></i>
+                    <h3 class="text-sm font-black text-white mb-1">Expanding Worldwide</h3>
+                    <p class="text-xxs text-slate-400 leading-relaxed">New regional desks opening. Contact us for market coverage in your country.</p>
+                    <a href="https://wa.me/12139420224?text=Hello%20Skyview%20Properties,%20I%20am%20interested%20in%20your%20international%20listings."
+                       target="_blank" class="mt-3 bg-emerald-500 hover:bg-emerald-600 text-white text-xxs font-bold px-4 py-1.5 rounded-lg transition">
+                        <i class="fa-brands fa-whatsapp mr-1"></i> Inquire
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- DETAILED CORPORATE OFFICE PROFILE SECTION -->
     <section id="corporate-office-section" class="bg-white border-t border-b border-gray-200 py-16 scroll-mt-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -206,9 +366,9 @@
                     <div class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-1 rounded-md text-xxs font-extrabold uppercase tracking-wider">
                         <i class="fa-solid fa-building"></i> Skyview Operations Hub
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-gray-900">National Headquarters & Brokerage Desk</h2>
+                    <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-gray-900">Global Headquarters & Brokerage Desk</h2>
                     <p class="text-sm text-gray-600 leading-relaxed max-w-2xl">
-                        Our primary corporate office orchestrates algorithmic market pacing, secure physical custody processing, and high-level client verification across all fifty states. Designed as a strict privacy environment, walk-in broker routing is restricted exclusively to pre-vetted legal entities.
+                        Our primary corporate office orchestrates algorithmic market pacing, secure physical custody processing, and high-level client verification across the United States, Canada, and international markets. Designed as a strict privacy environment, walk-in broker routing is restricted exclusively to pre-vetted legal entities.
                     </p>
                     <div class="border-t border-b border-gray-100 py-4">
                         <h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-3">Corporate Leadership Profile</h3>
@@ -248,16 +408,36 @@
                     <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400"><i class="fa-solid fa-network-wired mr-2"></i>Branch Node Directory</h3>
                     <div class="divide-y divide-slate-800 text-xs">
                         <div class="py-2.5 flex justify-between items-center">
-                            <span class="font-medium">Midwest Operations Desk</span>
+                            <span class="font-medium">🇺🇸 Midwest Operations</span>
                             <span class="text-slate-400 font-mono text-xxs">Chicago, IL</span>
                         </div>
                         <div class="py-2.5 flex justify-between items-center">
-                            <span class="font-medium">Pacific Logistics Bureau</span>
+                            <span class="font-medium">🇺🇸 Pacific Logistics Bureau</span>
                             <span class="text-slate-400 font-mono text-xxs">Los Angeles, CA</span>
                         </div>
                         <div class="py-2.5 flex justify-between items-center">
-                            <span class="font-medium">Southern Housing Intake</span>
+                            <span class="font-medium">🇺🇸 Southern Housing Intake</span>
                             <span class="text-slate-400 font-mono text-xxs">Austin, TX</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">🇨🇦 Central Canada Desk</span>
+                            <span class="text-slate-400 font-mono text-xxs">Toronto, ON</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">🇨🇦 Pacific Canada Bureau</span>
+                            <span class="text-slate-400 font-mono text-xxs">Vancouver, BC</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">🇬🇧 UK & Europe Desk</span>
+                            <span class="text-slate-400 font-mono text-xxs">London, UK</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">🇦🇺 Australia & APAC Desk</span>
+                            <span class="text-slate-400 font-mono text-xxs">Sydney, NSW</span>
+                        </div>
+                        <div class="py-2.5 flex justify-between items-center">
+                            <span class="font-medium">🇳🇱 EU Gateway</span>
+                            <span class="text-slate-400 font-mono text-xxs">Amsterdam, NL</span>
                         </div>
                     </div>
                     <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/60 text-xxs text-slate-400 leading-normal">
@@ -377,7 +557,7 @@
                         <i class="fa-solid fa-building-user text-indigo-400 text-xl"></i>
                         <span class="text-lg font-bold tracking-tight">SKYVIEW PROPERTIES</span>
                     </div>
-                    <p class="text-xs text-gray-400 leading-relaxed max-w-sm">Marilyn Alvarado's corporate desk coordinates low-latency acquisition protocols for luxury estate portfolios and domestic housing tiers.</p>
+                    <p class="text-xs text-gray-400 leading-relaxed max-w-sm">Marilyn Alvarado's corporate desk coordinates acquisition protocols for luxury estate portfolios and housing tiers across the USA, Canada, UK, Australia, Netherlands, Europe, and Asia.</p>
                 </div>
                 <div class="space-y-2 text-xs border-t border-slate-800/80 pt-3">
                     <div class="flex items-center gap-2 text-gray-300">
@@ -408,7 +588,7 @@
             </div>
         </div>
         <div class="max-w-7xl mx-auto px-4 text-center border-t border-slate-800 pt-8 text-xxs tracking-wider text-gray-500 font-medium">
-            &copy; 2026 SKYVIEW PROPERTIES GLOBAL INC. ALL LOGISTICAL MARKS RESERVED. HIGH-PRIVACY OUTLET STANDARDS ENFORCED.
+            &copy; 2026 SKYVIEW PROPERTIES GLOBAL INC. ALL LOGISTICAL MARKS RESERVED. OPERATIONS ACROSS USA, CANADA, UK, AUSTRALIA, NETHERLANDS, EUROPE & ASIA.
         </div>
     </footer>
 
@@ -474,10 +654,33 @@
 
     // ── ROW → PROPERTY ───────────────────────────────────────────────────────
     // Reads the exact column names from the spreadsheet (lowercased):
-    //   id  status  tier  priceraw  pricedisplay  beds  baths  sqft  address  description
+    //   id  status  tier  country  priceraw  pricedisplay  beds  baths  sqft  address  description
     function toProperty(row) {
         const id = (row["id"] || "").trim();
-        if (!id) return null;   // skip rows with no ID
+        if (!id) return null;
+        // Skip placeholder rows that have an ID but no actual listing data
+        if (!row["status"] && !row["priceraw"] && !row["pricedisplay"] && !row["beds"]) return null;
+
+        // Country — normalize for filtering (default to USA if not specified)
+        const countryRaw = (row["country"] || "usa").toLowerCase().trim();
+        const COUNTRY_MAP = {
+            "usa": "usa", "us": "usa", "united states": "usa", "america": "usa",
+            "canada": "canada", "ca": "canada",
+            "uk": "uk", "united kingdom": "uk", "britain": "uk", "england": "uk",
+            "australia": "australia", "au": "australia",
+            "netherlands": "netherlands", "nl": "netherlands", "holland": "netherlands",
+            "germany": "europe", "france": "europe", "spain": "europe", "italy": "europe",
+            "portugal": "europe", "belgium": "europe", "switzerland": "europe",
+            "ireland": "europe", "austria": "europe", "sweden": "europe",
+            "norway": "europe", "denmark": "europe", "finland": "europe",
+            "poland": "europe", "czech": "europe",
+            "japan": "asia", "singapore": "asia", "india": "asia", "china": "asia",
+            "south korea": "asia", "korea": "asia", "thailand": "asia",
+            "malaysia": "asia", "philippines": "asia", "indonesia": "asia",
+            "vietnam": "asia", "hong kong": "asia", "taiwan": "asia",
+            "uae": "asia", "dubai": "asia",
+        };
+        const country = COUNTRY_MAP[countryRaw] || "europe";
 
         const status = (row["status"] || "FOR SALE").toUpperCase().trim();
         // normalise SOLD to its own label (keeps it visible in listings)
@@ -515,13 +718,22 @@
         const images = media.filter(m => !isVideo(m));
         const thumb  = images[0] || media[0] || FALLBACK_IMG;
 
-        return { id, status: displayStatus, tier, tagColor, priceRaw, priceDisplay,
+        return { id, status: displayStatus, tier, country, tagColor, priceRaw, priceDisplay,
                  beds, baths, sqft, description, media, thumb };
     }
 
     function isVideo(path) {
         return /\.(mp4|webm|ogg|mov|m4v)$/i.test(path);
     }
+
+    const COUNTRY_FLAGS = {
+        usa: "🇺🇸", canada: "🇨🇦", uk: "🇬🇧", australia: "🇦🇺",
+        netherlands: "🇳🇱", europe: "🇪🇺", asia: "🌏"
+    };
+    const COUNTRY_LABELS = {
+        usa: "USA", canada: "Canada", uk: "UK", australia: "Australia",
+        netherlands: "Netherlands", europe: "Europe", asia: "Asia"
+    };
 
     // ── VALIDATION ───────────────────────────────────────────────────────────
     function validate(p) {
@@ -638,12 +850,16 @@
                 const countBadge = mediaCount > 0
                     ? `<span class="absolute top-4 right-4 bg-black/60 text-white text-xxs font-bold px-2 py-0.5 rounded-md"><i class="fa-solid fa-images mr-1"></i>${mediaCount}</span>`
                     : "";
+                const countryFlag  = COUNTRY_FLAGS[h.country] || "🌍";
+                const countryLabel = COUNTRY_LABELS[h.country] || h.country;
+
                 return `
                 <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-gray-200 hover:shadow-md transition duration-300 flex flex-col">
                     <div class="relative h-56 bg-gray-100">
                         <img src="${h.thumb}" alt="${h.id}" class="w-full h-full object-cover" onerror="this.src='${FALLBACK_IMG}'">
                         <span class="absolute top-4 left-4 ${h.tagColor} text-white text-xxs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs">${h.status}</span>
                         ${countBadge}
+                        <span class="absolute bottom-4 left-4 bg-white/90 text-gray-800 text-xxs font-bold px-2 py-0.5 rounded-md">${countryFlag} ${countryLabel}</span>
                         <span class="absolute bottom-4 right-4 bg-slate-900/80 text-white text-xs px-2.5 py-1 rounded-md font-mono">ID #${h.id}</span>
                     </div>
                     <div class="p-6 flex flex-col flex-grow justify-between">
@@ -677,16 +893,18 @@
 
     // ── FILTERS ──────────────────────────────────────────────────────────────
     function applyFilters() {
-        const minP = parseInt(document.getElementById("filter-min-price").value) || 0;
-        const maxP = parseInt(document.getElementById("filter-max-price").value) || Infinity;
-        const bVal = document.getElementById("filter-beds").value;
+        const minP    = parseInt(document.getElementById("filter-min-price").value) || 0;
+        const maxP    = parseInt(document.getElementById("filter-max-price").value) || Infinity;
+        const bVal    = document.getElementById("filter-beds").value;
+        const country = document.getElementById("filter-country").value;
 
         let base = activeTier === "all" ? [...db] : db.filter(h => h.tier === activeTier);
 
         filtered = base.filter(h => {
             const okP = h.priceRaw >= minP && h.priceRaw <= maxP;
             const okB = bVal === "all" || h.beds >= parseInt(bVal);
-            return okP && okB;
+            const okC = country === "all" || h.country === country;
+            return okP && okB && okC;
         });
 
         page = 1;
@@ -858,6 +1076,7 @@
         const email     = document.getElementById("intake-email").value.trim();
         const whatsapp  = document.getElementById("intake-whatsapp").value.trim();
         const phone     = document.getElementById("intake-phone").value.trim();
+        const country   = document.getElementById("intake-country").value;
         const city      = document.getElementById("intake-city").value.trim();
         const state     = document.getElementById("intake-state").value.trim();
         const details   = document.getElementById("intake-details").value.trim();
@@ -865,8 +1084,8 @@
         if (!name)     return showIntakeError("Full name is required.");
         if (!email)    return showIntakeError("Email address is required.");
         if (!whatsapp) return showIntakeError("WhatsApp number is required.");
+        if (!country)  return showIntakeError("Please select a country/region.");
         if (!city)     return showIntakeError("City of interest is required.");
-        if (!state)    return showIntakeError("State is required.");
 
         hideIntakeError();
 
@@ -880,8 +1099,9 @@
             `Email: ${email}`,
             `WhatsApp: ${whatsapp}`,
             phone ? `Phone: ${phone}` : null,
+            `Country: ${country}`,
             `City: ${city}`,
-            `State: ${state}`,
+            state ? `State/Province: ${state}` : null,
             details ? `Additional Details: ${details}` : null,
         ].filter(l => l !== null).join("\n");
 
