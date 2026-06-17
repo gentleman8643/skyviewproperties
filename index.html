@@ -129,6 +129,9 @@
             <i class="fa-solid fa-circle-notch fa-spin text-indigo-500 text-4xl mb-4"></i>
             <p class="text-gray-500 font-medium text-sm mt-4">Loading property listings...</p>
         </div>
+        <div id="listing-count" class="hidden text-center mb-6">
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider"><i class="fa-solid fa-database mr-1"></i> Showing <span id="count-num">0</span> of <span id="count-total">0</span> listings</span>
+        </div>
         <div id="master-catalog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 hidden"></div>
         <div class="mt-16 flex items-center justify-between border-t border-gray-200 pt-6">
             <button onclick="previousPage()" id="btn-prev" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-2xs cursor-pointer flex items-center gap-2">
@@ -600,30 +603,40 @@
     <!-- ═══════════════════════════════════════════════════════════════════
          REAL ESTATE ENGINE  —  reads Google Sheets CSV + media-manifest.json
          Column names (exact, case-insensitive):
-           ID | Status | Tier | PriceRaw | PriceDisplay | Beds | Baths | SqFt | Address | Description
+           ID | Status | Tier | PriceRaw | PriceDisplay | Beds | Baths | SqFt | Country | Address | Description
     ════════════════════════════════════════════════════════════════════ -->
     <script>
     // ── CONFIGURATION ───────────────────────────────────────────────────────
     const CSV_URL        = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Dudb7PfN8IwcrGz8GuKIpPtWymiJNG4bmoCcLiq-z_x2hDmuF3psbI6rDAhMpe0RCopMfdHUuyb1/pub?output=csv";
     const MANIFEST_URL   = "/media-manifest.json";
     const WHATSAPP_NUM   = "12139420224";
-    const CACHE_MS       = 24 * 60 * 60 * 1000;   // 24 hours
-    const PER_PAGE       = 8;
+    const CACHE_MS       = 5 * 60 * 1000;      // 5 minutes
+    const PER_PAGE       = 6;
     const FALLBACK_IMG   = "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=80";
 
-    const CACHE_KEY      = "svp_listings_v3";
-    const CACHE_MAN_KEY  = "svp_manifest_v3";
-    const CACHE_TIME_KEY = "svp_cache_time_v3";
+    // Bumped cache keys to invalidate ALL previous caches (v1-v4)
+    const CACHE_KEY      = "svp_listings_v5";
+    const CACHE_MAN_KEY  = "svp_manifest_v5";
+    const CACHE_TIME_KEY = "svp_cache_time_v5";
 
     // ── STATE ───────────────────────────────────────────────────────────────
-    let db              = [];   // full parsed database
-    let filtered        = [];   // current filtered view
+    let db              = [];
+    let filtered        = [];
     let page            = 1;
     let activeTier      = "all";
     let manifest        = {};
-    let modalMedia      = [];   // media list for the open modal
-    let modalMediaIdx   = 0;    // current index in modalMedia
+    let modalMedia      = [];
+    let modalMediaIdx   = 0;
     let intakeService   = "buy";
+
+    // ── PURGE OLD CACHES ────────────────────────────────────────────────────
+    (function purgeOldCaches() {
+        ["v1","v2","v3","v4"].forEach(v => {
+            localStorage.removeItem("svp_listings_" + v);
+            localStorage.removeItem("svp_manifest_" + v);
+            localStorage.removeItem("svp_cache_time_" + v);
+        });
+    })();
 
     // ── CSV HELPERS ──────────────────────────────────────────────────────────
     function parseCSV(text) {
@@ -657,16 +670,30 @@
         return out;
     }
 
+    // ── RANGE VALUE PARSER ──────────────────────────────────────────────────
+    // For FILTERING: returns the lower bound number from range values
+    // like "1800-3000" → 1800, "0-2" → 0, "737-1,268" → 737
+    function parseRangeLower(raw) {
+        if (!raw) return 0;
+        const s = String(raw).trim();
+        // Look for a range dash (must have digits before it)
+        const match = s.match(/^(\d[\d,.]*)\s*-\s*/);
+        if (match) {
+            const num = parseFloat(match[1].replace(/[^0-9.]/g, ""));
+            if (!isNaN(num)) return num;
+        }
+        const num = parseFloat(s.replace(/[^0-9.]/g, ""));
+        return isNaN(num) ? 0 : num;
+    }
+
     // ── ROW → PROPERTY ───────────────────────────────────────────────────────
-    // Reads the exact column names from the spreadsheet (lowercased):
-    //   id  status  tier  country  priceraw  pricedisplay  beds  baths  sqft  address  description
     function toProperty(row) {
         const id = (row["id"] || "").trim();
         if (!id) return null;
         // Skip placeholder rows that have an ID but no actual listing data
         if (!row["status"] && !row["priceraw"] && !row["pricedisplay"] && !row["beds"]) return null;
 
-        // Country — normalize for filtering (default to USA if not specified)
+        // Country — normalize for filtering
         const countryRaw = (row["country"] || "usa").toLowerCase().trim();
         const COUNTRY_MAP = {
             "usa": "usa", "us": "usa", "united states": "usa", "america": "usa",
@@ -685,19 +712,19 @@
             "vietnam": "asia", "hong kong": "asia", "taiwan": "asia",
             "uae": "asia", "dubai": "asia",
         };
-        const country = COUNTRY_MAP[countryRaw] || "europe";
+        const country = COUNTRY_MAP[countryRaw] || countryRaw; // preserve unknown countries as-is
 
         const status = (row["status"] || "FOR SALE").toUpperCase().trim();
-        // normalise SOLD to its own label (keeps it visible in listings)
-        const displayStatus = status;
 
         const tierRaw = (row["tier"] || "affordable").toLowerCase().trim();
         let tier = "affordable";
         if (tierRaw === "luxury")     tier = "luxury";
         else if (tierRaw === "commercial") tier = "commercial";
+        else if (tierRaw && tierRaw !== "affordable") tier = tierRaw;
 
-        // Price — use PriceDisplay column from sheet exactly, or build from PriceRaw
-        const priceRaw = parseFloat((row["priceraw"] || "0").replace(/[^0-9.]/g, "")) || 0;
+        // Numeric price for filtering only — display comes from PriceDisplay
+        const priceRaw = parseRangeLower(row["priceraw"]);
+        // Display price: use EXACTLY what's in the PriceDisplay column
         let priceDisplay = (row["pricedisplay"] || "").trim();
         if (!priceDisplay) {
             priceDisplay = status === "FOR RENT"
@@ -705,26 +732,31 @@
                 : `$${priceRaw.toLocaleString()}`;
         }
 
-        // SqFt column is exactly "sqft" after lowercasing
-        const sqft = parseInt((row["sqft"] || "0").replace(/[^0-9]/g, "")) || 0;
+        // Numeric values for filtering
+        const bedsNum  = parseRangeLower(row["beds"]);
+        const bathsNum = parseRangeLower(row["baths"]);
+        const sqftNum  = parseRangeLower(row["sqft"]);
 
-        const beds  = parseFloat(row["beds"]  || "0") || 0;
-        const baths = parseFloat(row["baths"] || "0") || 0;
+        // Display values: show EXACTLY what's in the sheet
+        const bedsDisplay  = (row["beds"]  || "").trim() || String(bedsNum);
+        const bathsDisplay = (row["baths"] || "").trim() || String(bathsNum);
+        const sqftDisplay  = (row["sqft"]  || "").trim() || String(sqftNum);
+
         const description = (row["description"] || "").trim();
 
-        // Tag colour by tier
         const tagColor = tier === "luxury" ? "bg-indigo-600"
                        : tier === "commercial" ? "bg-amber-600"
                        : status === "SOLD" ? "bg-gray-500"
                        : "bg-emerald-600";
 
-        // Media from manifest — only this property's folder
         const media  = Array.isArray(manifest[id]) ? manifest[id] : [];
         const images = media.filter(m => !isVideo(m));
         const thumb  = images[0] || media[0] || FALLBACK_IMG;
 
-        return { id, status: displayStatus, tier, country, tagColor, priceRaw, priceDisplay,
-                 beds, baths, sqft, description, media, thumb };
+        return { id, status, tier, country, tagColor, priceRaw, priceDisplay,
+                 bedsNum, bathsNum, sqftNum,
+                 bedsDisplay, bathsDisplay, sqftDisplay,
+                 description, media, thumb };
     }
 
     function isVideo(path) {
@@ -739,18 +771,6 @@
         usa: "USA", canada: "Canada", uk: "UK", australia: "Australia",
         netherlands: "Netherlands", europe: "Europe", asia: "Asia"
     };
-
-    // ── VALIDATION ───────────────────────────────────────────────────────────
-    function validate(p) {
-        if (!p.priceRaw)          console.warn(`[SVP] ${p.id}: missing price`);
-        if (!p.beds)              console.warn(`[SVP] ${p.id}: missing beds`);
-        if (!p.baths)             console.warn(`[SVP] ${p.id}: missing baths`);
-        if (!p.sqft)              console.warn(`[SVP] ${p.id}: missing sqft`);
-        if (!p.media.length)      console.warn(`[SVP] ${p.id}: no media in manifest`);
-        if (p.priceRaw > 5e8)     console.warn(`[SVP] ${p.id}: suspicious price ${p.priceRaw}`);
-        if (!["FOR SALE","FOR RENT","SOLD"].includes(p.status))
-                                  console.warn(`[SVP] ${p.id}: unexpected status "${p.status}"`);
-    }
 
     // ── CACHE ────────────────────────────────────────────────────────────────
     function cacheIsFresh() {
@@ -782,12 +802,17 @@
             showGrid(); renderGrid();
         }
 
-        if (cacheIsFresh() && cached) { console.log("[SVP] Cache fresh, skipping fetch."); return; }
+        // Always fetch fresh data unless cache is very recent
+        if (cacheIsFresh() && cached) {
+            console.log("[SVP] Cache fresh, skipping fetch.");
+            return;
+        }
 
         try {
+            const bust = `_t=${Date.now()}`;
             const [csvRes, manRes] = await Promise.all([
-                fetch(CSV_URL,       { cache: "no-store" }),
-                fetch(MANIFEST_URL,  { cache: "no-store" })
+                fetch(CSV_URL + `&${bust}`,      { cache: "no-store" }),
+                fetch(MANIFEST_URL + `?${bust}`, { cache: "no-store" })
             ]);
             if (!csvRes.ok) throw new Error(`CSV HTTP ${csvRes.status}`);
             const csvText = await csvRes.text();
@@ -795,12 +820,18 @@
             if (!rows.length) throw new Error("Spreadsheet returned no rows.");
 
             manifest = manRes.ok ? await manRes.json() : {};
+            // Filter out stray non-ID keys from manifest
+            const ID_RE = /^[A-Za-z]+\d+$/;
+            for (const key of Object.keys(manifest)) {
+                if (!ID_RE.test(key)) delete manifest[key];
+            }
+
             if (!manRes.ok) console.warn("[SVP] media-manifest.json not found — images will show placeholder.");
 
             writeCache(rows, manifest);
             buildDB(rows);
             showGrid(); renderGrid();
-            console.log(`[SVP] ${db.length} properties loaded.`);
+            console.log(`[SVP] ${db.length} properties loaded from fresh fetch.`);
         } catch(err) {
             if (db.length) {
                 console.warn("[SVP] Refresh failed, using cache:", err.message);
@@ -826,7 +857,7 @@
 
     function buildDB(rows) {
         db = rows.map(toProperty).filter(Boolean);
-        db.forEach(validate);
+        console.log(`[SVP] buildDB: ${db.length} active properties:`, db.map(p => `${p.id}(${p.tier},${p.country})`));
         filtered = [...db];
     }
 
@@ -839,6 +870,16 @@
     function renderGrid() {
         const grid = document.getElementById("master-catalog-grid");
         grid.innerHTML = "";
+
+        // Show listing count
+        const countEl = document.getElementById("listing-count");
+        const countNum = document.getElementById("count-num");
+        const countTotal = document.getElementById("count-total");
+        if (countEl && countNum && countTotal) {
+            countNum.textContent = filtered.length;
+            countTotal.textContent = db.length;
+            countEl.classList.remove("hidden");
+        }
 
         const start = (page - 1) * PER_PAGE;
         const slice = filtered.slice(start, start + PER_PAGE);
@@ -874,9 +915,9 @@
                         </div>
                         <div>
                             <div class="grid grid-cols-3 gap-1 text-center text-xs text-gray-600 border-t border-gray-100 pt-4 font-medium mb-5">
-                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.beds} Bed</div>
-                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.baths} Bath</div>
-                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.sqft.toLocaleString()} sqft</div>
+                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.bedsDisplay} Bed</div>
+                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.bathsDisplay} Bath</div>
+                                <div class="bg-gray-50 py-1.5 rounded-lg">${h.sqftDisplay} sqft</div>
                             </div>
                             <button type="button" onclick="openModal('${h.id}')"
                                 class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs py-2.5 rounded-xl transition shadow-xs cursor-pointer tracking-wider uppercase">
@@ -903,14 +944,21 @@
         const bVal    = document.getElementById("filter-beds").value;
         const country = document.getElementById("filter-country").value;
 
+        // "all" tier = show EVERY listing from db, no tier filter at all
+        // Specific tier = only that tier
         let base = activeTier === "all" ? [...db] : db.filter(h => h.tier === activeTier);
 
         filtered = base.filter(h => {
+            // Price filter uses numeric priceRaw (lower bound of range)
             const okP = h.priceRaw >= minP && h.priceRaw <= maxP;
-            const okB = bVal === "all" || h.beds >= parseInt(bVal);
+            // Beds filter uses numeric bedsNum (lower bound of range)
+            const okB = bVal === "all" || h.bedsNum >= parseInt(bVal);
+            // Country filter
             const okC = country === "all" || h.country === country;
             return okP && okB && okC;
         });
+
+        console.log(`[SVP] applyFilters: tier=${activeTier}, base=${base.length}, filtered=${filtered.length}, ids:`, filtered.map(p => p.id));
 
         page = 1;
         renderGrid();
@@ -956,7 +1004,6 @@
             stage.innerHTML = `<img src="${src}" class="w-full h-full object-cover" alt="Property media" onerror="this.src='${FALLBACK_IMG}'">`;
         }
 
-        // Highlight active thumb
         document.querySelectorAll(".thumb-btn").forEach((el, i) => {
             el.classList.toggle("ring-active", i === idx);
             el.style.borderColor = i === idx ? "#4f46e5" : "transparent";
@@ -968,10 +1015,8 @@
     function buildGallery(house) {
         modalMedia = house.media && house.media.length ? house.media : [FALLBACK_IMG];
 
-        // Stage
         renderGalleryStage(0);
 
-        // Thumbnail strip
         const strip = document.getElementById("gallery-strip");
         strip.innerHTML = modalMedia.map((src, i) => {
             const inner = isVideo(src)
@@ -991,20 +1036,21 @@
         document.getElementById("modal-id").textContent    = `ID #${h.id}`;
         document.getElementById("modal-price").textContent = h.priceDisplay;
         document.getElementById("modal-title").textContent = h.id;
-        document.getElementById("modal-beds").textContent  = `${h.beds} Beds`;
-        document.getElementById("modal-baths").textContent = `${h.baths} Baths`;
-        document.getElementById("modal-sqft").textContent  = `${h.sqft.toLocaleString()} sqft`;
+        // Show raw sheet values exactly as entered
+        document.getElementById("modal-beds").textContent  = `${h.bedsDisplay} Beds`;
+        document.getElementById("modal-baths").textContent = `${h.bathsDisplay} Baths`;
+        document.getElementById("modal-sqft").textContent  = `${h.sqftDisplay} sqft`;
 
         const tierLabel = h.tier === "luxury" ? "Premium Estate"
                         : h.tier === "commercial" ? "Commercial Asset"
-                        : "Affordable Unit";
+                        : h.tier === "affordable" ? "Affordable Unit"
+                        : h.tier.charAt(0).toUpperCase() + h.tier.slice(1);
         document.getElementById("modal-type").textContent = tierLabel;
 
         const tag = document.getElementById("modal-tag");
         tag.textContent = h.status;
         tag.className   = `text-white text-xs font-bold px-2.5 py-1 rounded-full tracking-wider shadow-xs mr-2 ${h.tagColor}`;
 
-        // Description
         const descBlock = document.getElementById("modal-desc-block");
         const descEl    = document.getElementById("modal-description");
         if (h.description) {
@@ -1014,10 +1060,8 @@
             descBlock.classList.add("hidden");
         }
 
-        // Gallery
         buildGallery(h);
 
-        // WhatsApp button
         const msg = encodeURIComponent(`Hello, I am interested in property ID #${h.id} listed at ${h.priceDisplay}. Please send more details.`);
         document.getElementById("modal-whatsapp-trigger").onclick = () =>
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`, "_blank");
@@ -1027,14 +1071,12 @@
     }
 
     function closeModal() {
-        // Stop any video
         const video = document.querySelector("#gallery-stage video");
         if (video) { video.pause(); video.src = ""; }
         document.getElementById("details-modal").classList.add("hidden");
         document.body.classList.remove("overflow-hidden");
     }
 
-    // Keyboard nav for gallery
     document.addEventListener("keydown", e => {
         if (document.getElementById("details-modal").classList.contains("hidden")) return;
         if (e.key === "ArrowRight") renderGalleryStage((modalMediaIdx + 1) % modalMedia.length);
@@ -1051,7 +1093,6 @@
 
     function setIntakeService(svc) {
         intakeService = svc;
-        // Update tab styles
         ["buy","sell","mortgage"].forEach(t => {
             const btn = document.getElementById(`intake-tab-${t}`);
             if (t === svc) {

@@ -2,9 +2,10 @@
   "name": "skyview-properties",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "node generate-manifest.js && vite",
-    "build": "node generate-manifest.js && vite build",
+    "dev": "node generate-manifest.cjs && vite",
+    "build": "node generate-manifest.cjs && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
