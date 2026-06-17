@@ -1,23 +1,23 @@
 // generate-manifest.js
 // 1. Fetches your Google Sheet to discover all Property IDs
-// 2. Scans public/ for media files in matching folders
-// 3. Writes public/media-manifest.json so every listing appears
+// 2. Scans the ENTIRE repo for media files in folders matching any Property ID
+// 3. Writes public/media-manifest.json with correct web paths
+// 4. Creates empty folders for any IDs that don't have media yet
 //
-// You NEVER edit the manifest by hand.
-// Just add photos to public/properties/<PROPERTY_ID>/ and push — done.
+// Works with ANY nesting depth (e.g. public/properties/SVP30001/,
+// public/properties/properties/SVP30001/, etc.)
+// You NEVER edit the manifest by hand — just push photos and the sheet row.
 
-const fs   = require("fs");
-const path = require("path");
+const fs    = require("fs");
+const path  = require("path");
 const https = require("https");
 
 const ROOT   = __dirname;
 const OUTPUT = path.join(ROOT, "public", "media-manifest.json");
-
-// Same CSV URL your website uses
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5Dudb7PfN8IwcrGz8GuKIpPtWymiJNG4bmoCcLiq-z_x2hDmuF3psbI6rDAhMpe0RCopMfdHUuyb1/pub?output=csv";
 
 const MEDIA_RE = /\.(jpe?g|png|webp|gif|avif|mp4|webm|ogg|mov|m4v)$/i;
-const IGNORE   = new Set(["node_modules", ".git", ".netlify", ".vercel", ".github", "dist"]);
+const IGNORE   = new Set(["node_modules", ".git", ".netlify", ".vercel", ".github", "dist", ".next", ".cache"]);
 
 const manifest = {};
 
@@ -37,7 +37,7 @@ function fetchCSV(url) {
     });
 }
 
-// ── Parse CSV (handles commas inside quotes) ─────────────────────────────
+// ── Parse CSV ────────────────────────────────────────────────────────────
 function parseCSV(text) {
     const lines = text.trim().split(/\r?\n/);
     if (lines.length < 2) return [];
@@ -69,22 +69,65 @@ function splitLine(line) {
     return out;
 }
 
-// ── Scan a directory for media files ──────────────────────────────────────
-function scanDir(dir) {
-    let entries;
-    try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
-    catch { return []; }
+// ── Scan entire repo for media files, group by Property ID folder ─────────
+// A "Property ID folder" is any folder whose name matches a sheet ID.
+// We scan the full tree so nesting like public/properties/properties/SVP30001 works.
+function scanRepoForMedia(sheetIDs) {
+    const idSet = new Set(sheetIDs);
+    const byID  = {};
 
-    const files = [];
-    for (const entry of entries) {
-        if (entry.isDirectory()) {
+    function walk(dir) {
+        let entries;
+        try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
+        catch { return; }
+
+        for (const entry of entries) {
             if (IGNORE.has(entry.name)) continue;
-            files.push(...scanDir(path.join(dir, entry.name)));
-        } else if (MEDIA_RE.test(entry.name)) {
-            files.push(path.join(dir, entry.name));
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                // If this folder name is a Property ID, grab all media inside it
+                if (idSet.has(entry.name)) {
+                    const media = collectMedia(full);
+                    if (media.length > 0) {
+                        byID[entry.name] = (byID[entry.name] || []).concat(media);
+                    }
+                }
+                // Always recurse deeper in case IDs are nested
+                walk(full);
+            }
         }
     }
-    return files;
+
+    function collectMedia(dir) {
+        let entries;
+        try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
+        catch { return []; }
+
+        const files = [];
+        for (const entry of entries) {
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                // Don't recurse into subdirectories that are themselves IDs
+                if (!idSet.has(entry.name)) {
+                    files.push(...collectMedia(full));
+                }
+            } else if (MEDIA_RE.test(entry.name)) {
+                files.push(full);
+            }
+        }
+        return files;
+    }
+
+    walk(ROOT);
+    return byID;
+}
+
+// ── Convert absolute path to web URL ─────────────────────────────────────
+// Files under public/ are served at root, so strip the "public/" prefix.
+function absToWebURL(absPath) {
+    let rel = path.relative(ROOT, absPath).split(path.sep).join("/");
+    if (rel.startsWith("public/")) rel = rel.slice("public/".length);
+    return "/" + rel;
 }
 
 // ── MAIN ─────────────────────────────────────────────────────────────────
@@ -95,38 +138,54 @@ async function main() {
         console.log("Fetching Google Sheet...");
         const csvText = await fetchCSV(CSV_URL);
         const rows    = parseCSV(csvText);
-        sheetIDs = rows
-            .map(r => (r["id"] || "").trim())
-            .filter(id => id.length > 0);
+        sheetIDs = rows.map(r => (r["id"] || "").trim()).filter(id => id.length > 0);
         console.log(`Found ${sheetIDs.length} IDs in spreadsheet: ${sheetIDs.join(", ")}`);
     } catch (err) {
-        console.warn("Could not fetch spreadsheet (will rely on folder scan only):", err.message);
+        console.warn("Could not fetch spreadsheet:", err.message);
+        // Try to find IDs from existing folders instead
+        console.log("Falling back to folder scan only...");
     }
 
-    // 2) Ensure every sheet ID has a folder under public/properties/
-    const propBase = path.join(ROOT, "public", "properties");
-    for (const id of sheetIDs) {
-        const folder = path.join(propBase, id);
-        if (!fs.existsSync(folder)) {
-            fs.mkdirSync(folder, { recursive: true });
-            console.log(`Created folder: public/properties/${id}`);
+    // 2) Scan the entire repo for media files grouped by property ID
+    const byID = scanRepoForMedia(sheetIDs);
+
+    // 3) Also scan for any folders with media that have IDs NOT in the sheet
+    //    (so new photos show up even before the sheet is updated)
+    function scanForOrphanIDs(dir) {
+        let entries;
+        try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
+        catch { return; }
+
+        for (const entry of entries) {
+            if (IGNORE.has(entry.name)) continue;
+            const full = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                // Check if this folder has media but isn't tracked
+                if (!sheetIDs.includes(entry.name) && !byID[entry.name]) {
+                    const media = (function collect(d) {
+                        let e; try { e = fs.readdirSync(d, { withFileTypes: true }); } catch { return []; }
+                        const f = [];
+                        for (const x of e) {
+                            const p = path.join(d, x.name);
+                            if (x.isDirectory() && !IGNORE.has(x.name)) f.push(...collect(p));
+                            else if (MEDIA_RE.test(x.name)) f.push(p);
+                        }
+                        return f;
+                    })(full);
+                    if (media.length > 0) {
+                        byID[entry.name] = media;
+                        console.log(`  Found orphan folder with media: ${entry.name}`);
+                    }
+                }
+                scanForOrphanIDs(full);
+            }
         }
     }
+    scanForOrphanIDs(ROOT);
 
-    // 3) Scan public/properties/ for media files and group by folder name
-    const allFiles = scanDir(propBase);
-    const byFolder = {};
-    for (const absPath of allFiles) {
-        // Figure out the property ID = the folder right under properties/
-        const rel = path.relative(propBase, absPath).split(path.sep);
-        const id  = rel[0];  // first segment is the property ID folder
-        if (!byFolder[id]) byFolder[id] = [];
-        byFolder[id].push(absPath);
-    }
-
-    // 4) Build the manifest — every sheet ID gets an entry
+    // 4) Build manifest — every sheet ID gets an entry
     for (const id of sheetIDs) {
-        const files = byFolder[id] || [];
+        const files = byID[id] || [];
 
         // Sort: images first (first = thumbnail), then videos, both alphabetical
         files.sort((a, b) => {
@@ -135,38 +194,47 @@ async function main() {
             return av - bv || path.basename(a).localeCompare(path.basename(b));
         });
 
-        // Convert absolute paths to web URLs.
-        // Files are under public/properties/<ID>/  →  web URL is /properties/<ID>/file.jpg
-        manifest[id] = files.map(absPath => {
-            let rel = path.relative(path.join(ROOT, "public"), absPath).split(path.sep).join("/");
-            return "/" + rel;
-        });
+        manifest[id] = files.map(absToWebURL);
 
         if (manifest[id].length === 0) {
-            console.log(`  ${id}: no media yet (folder is empty)`);
+            console.log(`  ${id}: no media yet`);
         } else {
-            console.log(`  ${id}: ${manifest[id].length} file(s)`);
+            console.log(`  ${id}: ${manifest[id].length} file(s) — ${manifest[id][0]}`);
         }
     }
 
-    // 5) Also include any folders with media that aren't in the sheet yet
-    //    (so newly-added photos show up even before the sheet is updated)
-    for (const id of Object.keys(byFolder)) {
-        if (manifest[id]) continue;  // already handled from sheet
-        const files = byFolder[id];
+    // 5) Add orphan IDs (folders with media not yet in sheet)
+    for (const id of Object.keys(byID)) {
+        if (manifest[id]) continue;
+        const files = byID[id];
         files.sort((a, b) => {
             const av = /\.(mp4|webm|ogg|mov|m4v)$/i.test(a) ? 1 : 0;
             const bv = /\.(mp4|webm|ogg|mov|m4v)$/i.test(b) ? 1 : 0;
             return av - bv || path.basename(a).localeCompare(path.basename(b));
         });
-        manifest[id] = files.map(absPath => {
-            let rel = path.relative(path.join(ROOT, "public"), absPath).split(path.sep).join("/");
-            return "/" + rel;
-        });
-        console.log(`  ${id}: ${manifest[id].length} file(s) [not in sheet yet, added from folder]`);
+        manifest[id] = files.map(absToWebURL);
+        console.log(`  ${id}: ${manifest[id].length} file(s) [not in sheet yet]`);
     }
 
-    // 6) Write the manifest
+    // 6) Ensure folder structure exists under public/ for every ID
+    //    This way users can just drop files in and git will track the folders
+    for (const id of sheetIDs) {
+        // Check both possible locations
+        const loc1 = path.join(ROOT, "public", "properties", id);
+        const loc2 = path.join(ROOT, "public", "properties", "properties", id);
+        [loc1, loc2].forEach(loc => {
+            if (!fs.existsSync(loc)) {
+                fs.mkdirSync(loc, { recursive: true });
+            }
+            // Add .gitkeep so git tracks the empty folder
+            const gitkeep = path.join(loc, ".gitkeep");
+            if (!fs.existsSync(gitkeep)) {
+                fs.writeFileSync(gitkeep, "");
+            }
+        });
+    }
+
+    // 7) Write the manifest
     fs.writeFileSync(OUTPUT, JSON.stringify(manifest, null, 2));
     console.log(`\nmedia-manifest.json written: ${Object.keys(manifest).length} properties.`);
 }
